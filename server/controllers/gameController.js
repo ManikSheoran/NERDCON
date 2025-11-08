@@ -18,6 +18,39 @@ const getHint = async (req, res) => {
   res.json({ currentHintIndex: team.gameState.currentHintIndex, hint });
 };
 
+// Return pins within ~200 meters of provided lat/lng (query params or body)
+const getNearbyPins = async (req, res) => {
+  try {
+    const lat = parseFloat(req.query.lat ?? req.body?.lat);
+    const lng = parseFloat(req.query.lng ?? req.body?.lng);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) return res.status(400).json({ message: 'lat and lng are required' });
+
+    // Use MongoDB geospatial query; $maxDistance is in meters for GeoJSON
+    const nearby = await Pin.find({
+      location: {
+        $nearSphere: {
+          $geometry: { type: 'Point', coordinates: [lng, lat] },
+          $maxDistance: 200,
+        },
+      },
+    })
+      .limit(50)
+      .lean();
+
+    const pins = nearby.map(p => ({
+      id: p._id,
+      name: p.name,
+      lat: p.location.coordinates[1],
+      lng: p.location.coordinates[0],
+      distance: haversineMeters(lat, lng, p.location.coordinates[1], p.location.coordinates[0]),
+    }));
+
+    res.json({ pins });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
 const submitAnswer = async (req, res) => {
   const { pinId, lat, lng } = req.body;
   const team = req.user;
