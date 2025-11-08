@@ -1,10 +1,9 @@
 const express = require('express');
+const { register, login } = require("../controllers/authController.js");
+
 const router = express.Router();
 
-// Minimal placeholder routes for auth
-router.get('/', (req, res) => {
-	res.json({ message: 'Auth route (placeholder)' });
-});
+router.post("/register", register);
+router.post("/login", login);
 
 module.exports = router;
-
