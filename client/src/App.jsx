@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import Navbar from "./components/Navbar";
-import HackathonCountdown from "./components/HackathonCountdown";
+import HackathonCountdown from "./components/QuestCountdown";
 import "./index.css";
 
 function App() {

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-const HACKATHON_START = new Date("2025-11-16T12:30:00Z");
-const HACKATHON_END = new Date("2025-11-16T14:30:00Z");
+const QUEST_START = new Date("2025-11-16T12:30:00Z");
+const QUEST_END = new Date("2025-11-16T14:30:00Z");
 
 const clampRemaining = (milliseconds) => (milliseconds > 0 ? milliseconds : 0);
 
@@ -15,30 +15,30 @@ const formatDuration = (milliseconds) => {
 };
 
 const getStatus = (now) => {
-  if (now < HACKATHON_START) {
+  if (now < QUEST_START) {
     return {
-      label: "Hackathon begins in",
-      remaining: clampRemaining(HACKATHON_START.getTime() - now.getTime()),
+      label: "Quest begins in",
+      remaining: clampRemaining(QUEST_START.getTime() - now.getTime()),
       phase: "pre",
     };
   }
 
-  if (now <= HACKATHON_END) {
+  if (now <= QUEST_END) {
     return {
-      label: "Hackathon ends in",
-      remaining: clampRemaining(HACKATHON_END.getTime() - now.getTime()),
+      label: "Quest ends in",
+      remaining: clampRemaining(QUEST_END.getTime() - now.getTime()),
       phase: "active",
     };
   }
 
   return {
-    label: "Hackathon concluded",
+    label: "Quest concluded",
     remaining: 0,
     phase: "post",
   };
 };
 
-export default function HackathonCountdown({ variant = "card" }) {
+export default function QuestCountdown({ variant = "card" }) {
   const [status, setStatus] = useState(() => getStatus(new Date()));
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function HackathonCountdown({ variant = "card" }) {
     return (
       <div className="flex flex-col items-center gap-2 text-center text-[0.65rem] uppercase tracking-[0.35em] text-brand-highlight/70">
         <span className="font-pixel text-[0.7rem] text-brand-accent">
-          {status.phase === "post" ? "Hackathon concluded" : status.label}
+          {status.phase === "post" ? "Quest concluded" : status.label}
         </span>
         {status.phase === "post" ? (
           <span className="text-[0.6rem] tracking-[0.25em] text-brand-highlight/50">
