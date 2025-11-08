@@ -6,13 +6,13 @@ export default function MapComponent({ pins, position, onSelect }) {
     <MapContainer
       center={[position.lat, position.lng]}
       zoom={18}
-      className="h-[26rem] w-full bg-brand-void"
+      className="h-[26rem] w-full bg-brand-base"
       scrollWheelZoom
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]}>
-          <Popup className="text-brand-void">
+          <Popup className="text-brand-base">
             <div className="space-y-2">
               <p className="font-semibold">{pin.name}</p>
               <button
@@ -27,7 +27,7 @@ export default function MapComponent({ pins, position, onSelect }) {
         </Marker>
       ))}
       <Marker position={[position.lat, position.lng]}>
-        <Popup className="text-brand-void">You are here</Popup>
+        <Popup className="text-brand-base">You are here</Popup>
       </Marker>
     </MapContainer>
   );

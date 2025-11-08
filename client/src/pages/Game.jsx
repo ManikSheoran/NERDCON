@@ -65,14 +65,14 @@ export default function Game() {
   return (
     <div className="space-y-10">
       <section className="pixel-card">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-gold drop-shadow-neon">
+        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Current Intel
         </h2>
-        <p className="mt-6 text-lg leading-relaxed text-brand-cyan">
+        <p className="mt-6 text-lg leading-relaxed text-brand-highlight">
           {hint?.text ? (
             hint.text
           ) : (
-            <span className="animate-pulse text-brand-magenta">
+            <span className="animate-pulse text-brand-accent">
               Calibrating scanners...
             </span>
           )}
@@ -81,11 +81,11 @@ export default function Game() {
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_minmax(0,0.75fr)]">
         <div className="pixel-card">
-          <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+          <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
             Mission Map
           </h3>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-            <span className="text-brand-cyan/70">
+            <span className="text-brand-highlight/70">
               Use your scanner to locate nearby pins and recon targets.
             </span>
             <button
@@ -97,7 +97,7 @@ export default function Game() {
               Refresh Pins
             </button>
           </div>
-          <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-emerald/80 shadow-pixel">
+          <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-primary/70 shadow-pixel">
             {position ? (
               <MapComponent
                 pins={pins}
@@ -105,7 +105,7 @@ export default function Game() {
                 onSelect={handlePinSelect}
               />
             ) : (
-              <div className="flex h-[24rem] items-center justify-center bg-brand-void/90 text-brand-cyan/70">
+              <div className="flex h-[24rem] items-center justify-center bg-brand-base/90 text-brand-highlight/70">
                 Enable location services to deploy your scanner.
               </div>
             )}
@@ -114,24 +114,24 @@ export default function Game() {
 
         <div className="flex flex-col gap-6">
           <div className="pixel-card">
-            <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+            <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Team Status
             </h3>
             <div className="mt-6 flex flex-wrap gap-4">
-              <span className="pixel-pill border-brand-emerald/90 bg-brand-emerald/20 text-brand-emerald">
+              <span className="pixel-pill border-brand-highlight/80 bg-brand-highlight/20 text-brand-highlight">
                 Score: {score}
               </span>
-              <span className="pixel-pill border-brand-magenta/90 bg-brand-magenta/20 text-brand-magenta">
+              <span className="pixel-pill border-brand-accent/80 bg-brand-accent/20 text-brand-accent">
                 Penalties: {penalties}
               </span>
             </div>
           </div>
 
-          <div className="pixel-card text-sm leading-relaxed text-brand-cyan/80">
-            <h3 className="font-pixel text-base uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+          <div className="pixel-card text-sm leading-relaxed text-brand-highlight/80">
+            <h3 className="font-pixel text-base uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Mission Briefing
             </h3>
-            <ul className="mt-6 list-disc space-y-3 pl-6 text-brand-cyan/80">
+            <ul className="mt-6 list-disc space-y-3 pl-6 text-brand-highlight/80">
               <li>Read the current intel and triangulate the target zone.</li>
               <li>
                 Move in the real world &amp; tap a pin to submit your guess.

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@300;400;500;700;900&display=swap");
 
+/* stylelint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,11 +11,11 @@
 
 @layer base {
   html {
-    @apply min-h-full bg-brand-void;
+    @apply min-h-full bg-brand-base;
   }
 
   body {
-    @apply min-h-screen bg-brand-void bg-starfield text-brand-cyan antialiased;
+    @apply min-h-screen bg-brand-base  text-brand-highlight antialiased;
   }
 
   #root {
@@ -22,28 +23,28 @@
   }
 
   ::selection {
-    @apply bg-brand-emerald text-brand-void;
+    @apply bg-brand-accent text-brand-base;
   }
 }
 
 @layer components {
   .pixel-card {
-    @apply rounded-3xl border-4 border-brand-emerald/80 bg-brand-obsidian/75 p-8 shadow-pixel backdrop-blur;
+    @apply rounded-3xl border-4 border-brand-primary/70 bg-brand-secondary/25 p-8 shadow-pixel backdrop-blur;
   }
 
   .pixel-label {
-    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-magenta;
+    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-accent;
   }
 
   .pixel-input {
-    @apply w-full rounded-2xl border-2 border-brand-emerald/70 bg-brand-void/70 px-4 py-3 font-sans text-brand-cyan shadow-inner transition focus:border-brand-gold focus:outline-none focus:ring-4 focus:ring-brand-emerald/30;
+    @apply w-full rounded-2xl border-2 border-brand-primary/70 bg-brand-base/80 px-4 py-3 font-sans text-brand-highlight shadow-inner transition focus:border-brand-mellow focus:outline-none focus:ring-4 focus:ring-brand-highlight/30;
   }
 
   .pixel-button {
-    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-emerald bg-brand-emerald px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-void transition duration-150 hover:-translate-y-0.5 hover:border-brand-gold hover:bg-brand-gold hover:text-brand-void focus:outline-none focus:ring-4 focus:ring-brand-gold/40 active:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-accent bg-brand-accent px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-base transition duration-150 hover:-translate-y-0.5 hover:border-brand-highlight hover:bg-brand-highlight hover:text-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-highlight/40 active:translate-y-0;
   }
 
   .pixel-pill {
-    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-magenta/70 bg-brand-magenta/20 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-brand-magenta;
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-accent/70 bg-brand-accent/15 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-brand-accent;
   }
 }

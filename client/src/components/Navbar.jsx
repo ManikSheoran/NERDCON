@@ -10,23 +10,23 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border-4 border-brand-emerald/80 bg-brand-obsidian/70 px-6 py-4 shadow-pixel backdrop-blur">
+    <nav className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border-4 border-brand-primary/70 bg-brand-secondary/30 px-6 py-4 shadow-pixel backdrop-blur">
       <Link
         to="/game"
-        className="font-pixel text-lg uppercase tracking-[0.35em] text-brand-gold drop-shadow-neon"
+        className="font-pixel text-lg uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight"
       >
         NerdCon Quest
       </Link>
-      <div className="flex flex-wrap items-center gap-3 font-pixel text-[0.68rem] uppercase tracking-[0.3em] text-brand-cyan">
+      <div className="flex flex-wrap items-center gap-3 font-pixel text-[0.68rem] uppercase tracking-[0.3em] text-brand-highlight">
         <Link
           to="/game"
-          className="rounded-2xl border-2 border-transparent px-4 py-2 transition hover:border-brand-emerald hover:text-brand-emerald hover:drop-shadow-emerald"
+          className="rounded-2xl border-2 border-transparent px-4 py-2 transition hover:border-brand-accent hover:text-brand-accent hover:drop-shadow-accent"
         >
           Game
         </Link>
         <Link
           to="/leaderboard"
-          className="rounded-2xl border-2 border-transparent px-4 py-2 transition hover:border-brand-emerald hover:text-brand-emerald hover:drop-shadow-emerald"
+          className="rounded-2xl border-2 border-transparent px-4 py-2 transition hover:border-brand-accent hover:text-brand-accent hover:drop-shadow-accent"
         >
           Leaderboard
         </Link>

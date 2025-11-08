@@ -25,10 +25,10 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center gap-10">
       <div className="pixel-card w-full max-w-xl text-center">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-gold drop-shadow-neon">
+        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Team Login
         </h2>
-        <p className="mt-4 text-brand-cyan/80">
+        <p className="mt-4 text-brand-highlight/80">
           Jack into the NerdCon Quest console and continue hunting for the next
           clue.
         </p>
@@ -66,11 +66,11 @@ export default function Login() {
             Enter Lobby
           </button>
         </form>
-        <p className="mt-8 text-sm text-brand-cyan/70">
+        <p className="mt-8 text-sm text-brand-highlight/70">
           Need credentials?{" "}
           <Link
             to="/register"
-            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-emerald hover:drop-shadow-emerald"
+            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-accent hover:drop-shadow-accent"
           >
             Register your guild
           </Link>

@@ -10,7 +10,7 @@ function App() {
   const token = localStorage.getItem("token");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-void via-[#1b103a] to-black text-brand-cyan">
+    <div className="min-h-screen text-brand-highlight">
       <BrowserRouter>
         <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-10 sm:px-8 lg:px-12">
           <Navbar />

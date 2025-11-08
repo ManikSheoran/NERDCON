@@ -25,10 +25,10 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center gap-10">
       <div className="pixel-card w-full max-w-xl text-center">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-gold drop-shadow-neon">
+        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Register Team
         </h2>
-        <p className="mt-4 text-brand-cyan/80">
+        <p className="mt-4 text-brand-highlight/80">
           Spin up a new guild and prepare to decode the world of NerdCon.
         </p>
         <form
@@ -75,11 +75,11 @@ export default function Register() {
             Forge Team
           </button>
         </form>
-        <p className="mt-8 text-sm text-brand-cyan/70">
+        <p className="mt-8 text-sm text-brand-highlight/70">
           Already have access?{" "}
           <Link
             to="/login"
-            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-emerald hover:drop-shadow-emerald"
+            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-accent hover:drop-shadow-accent"
           >
             Return to login
           </Link>
