@@ -1,68 +1,49 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@300;400;500;700;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  html {
+    @apply min-h-full bg-brand-void;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    @apply min-h-screen bg-brand-void bg-starfield text-brand-cyan antialiased;
   }
-  button {
-    background-color: #f9f9f9;
+
+  #root {
+    @apply min-h-screen;
+  }
+
+  ::selection {
+    @apply bg-brand-emerald text-brand-void;
+  }
+}
+
+@layer components {
+  .pixel-card {
+    @apply rounded-3xl border-4 border-brand-emerald/80 bg-brand-obsidian/75 p-8 shadow-pixel backdrop-blur;
+  }
+
+  .pixel-label {
+    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-magenta;
+  }
+
+  .pixel-input {
+    @apply w-full rounded-2xl border-2 border-brand-emerald/70 bg-brand-void/70 px-4 py-3 font-sans text-brand-cyan shadow-inner transition focus:border-brand-gold focus:outline-none focus:ring-4 focus:ring-brand-emerald/30;
+  }
+
+  .pixel-button {
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-emerald bg-brand-emerald px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-void transition duration-150 hover:-translate-y-0.5 hover:border-brand-gold hover:bg-brand-gold hover:text-brand-void focus:outline-none focus:ring-4 focus:ring-brand-gold/40 active:translate-y-0;
+  }
+
+  .pixel-pill {
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-magenta/70 bg-brand-magenta/20 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-brand-magenta;
   }
 }

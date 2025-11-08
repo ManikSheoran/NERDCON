@@ -1,0 +1,149 @@
+import { useEffect, useState } from "react";
+import axios from "../api/axios";
+import MapComponent from "../components/MapComponent";
+
+export default function Game() {
+  const [hint, setHint] = useState(null);
+  const [score, setScore] = useState(0);
+  const [penalties, setPenalties] = useState(0);
+  const [pins, setPins] = useState([]);
+  const [position, setPosition] = useState(null);
+
+  // get current hint
+  const fetchHint = async () => {
+    const { data } = await axios.get("/game/hint");
+    setHint(data.hint);
+  };
+
+  const fetchState = async () => {
+    const { data } = await axios.get("/game/state");
+    setScore(data.score);
+    setPenalties(data.penalties);
+  };
+
+  const fetchPins = async (lat, lng) => {
+    const { data } = await axios.get(`/game/pins/nearby?lat=${lat}&lng=${lng}`);
+    setPins(data.pins);
+  };
+
+  const refreshPins = async () => {
+    if (!position) return;
+    await fetchPins(position.lat, position.lng);
+  };
+
+  useEffect(() => {
+    fetchHint();
+    fetchState();
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setPosition({ lat: latitude, lng: longitude });
+        fetchPins(latitude, longitude);
+      },
+      (err) => alert("Please allow location access!")
+    );
+  }, []);
+
+  const handlePinSelect = async (pinId) => {
+    if (!position) return;
+    const { data } = await axios.post("/game/submit", {
+      pinId,
+      lat: position.lat,
+      lng: position.lng,
+    });
+    if (data.success) {
+      alert(`✅ Correct! Earned ${data.earned} points.`);
+      fetchHint();
+      fetchState();
+    } else {
+      alert(`❌ Wrong! Penalties: ${data.penalties}`);
+      setPenalties(data.penalties);
+    }
+  };
+
+  return (
+    <div className="space-y-10">
+      <section className="pixel-card">
+        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-gold drop-shadow-neon">
+          Current Intel
+        </h2>
+        <p className="mt-6 text-lg leading-relaxed text-brand-cyan">
+          {hint?.text ? (
+            hint.text
+          ) : (
+            <span className="animate-pulse text-brand-magenta">
+              Calibrating scanners...
+            </span>
+          )}
+        </p>
+      </section>
+
+      <section className="grid gap-8 lg:grid-cols-[1.2fr_minmax(0,0.75fr)]">
+        <div className="pixel-card">
+          <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+            Mission Map
+          </h3>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <span className="text-brand-cyan/70">
+              Use your scanner to locate nearby pins and recon targets.
+            </span>
+            <button
+              type="button"
+              onClick={refreshPins}
+              disabled={!position}
+              className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Refresh Pins
+            </button>
+          </div>
+          <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-emerald/80 shadow-pixel">
+            {position ? (
+              <MapComponent
+                pins={pins}
+                position={position}
+                onSelect={handlePinSelect}
+              />
+            ) : (
+              <div className="flex h-[24rem] items-center justify-center bg-brand-void/90 text-brand-cyan/70">
+                Enable location services to deploy your scanner.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <div className="pixel-card">
+            <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+              Team Status
+            </h3>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <span className="pixel-pill border-brand-emerald/90 bg-brand-emerald/20 text-brand-emerald">
+                Score: {score}
+              </span>
+              <span className="pixel-pill border-brand-magenta/90 bg-brand-magenta/20 text-brand-magenta">
+                Penalties: {penalties}
+              </span>
+            </div>
+          </div>
+
+          <div className="pixel-card text-sm leading-relaxed text-brand-cyan/80">
+            <h3 className="font-pixel text-base uppercase tracking-[0.3em] text-brand-gold drop-shadow-neon">
+              Mission Briefing
+            </h3>
+            <ul className="mt-6 list-disc space-y-3 pl-6 text-brand-cyan/80">
+              <li>Read the current intel and triangulate the target zone.</li>
+              <li>
+                Move in the real world &amp; tap a pin to submit your guess.
+              </li>
+              <li>
+                Correct hits boost your score, misses add penalties - choose
+                wisely.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
