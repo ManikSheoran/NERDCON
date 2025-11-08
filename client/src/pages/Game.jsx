@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import axios from "../api/axios";
 import MapComponent from "../components/MapComponent";
 
@@ -65,7 +66,7 @@ export default function Game() {
   return (
     <div className="space-y-10">
       <section className="pixel-card">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
+        <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Current Intel
         </h2>
         <p className="mt-6 text-lg leading-relaxed text-brand-highlight">
@@ -77,43 +78,45 @@ export default function Game() {
             </span>
           )}
         </p>
+        <br />
+        <hr />
+        <br />
+        <h3 className="font-pixel text-md uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
+          Mission Map
+        </h3>
+        <br />
+        <button
+          type="button"
+          onClick={refreshPins}
+          disabled={!position}
+          className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled:opacity-60"
+          aria-label="Refresh pins"
+        >
+          Refresh Pins <ArrowPathIcon className="h-6 w-6" />
+        </button>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+          {/* <span className="text-brand-highlight/70">
+              Use your scanner to locate nearby pins and recon targets.
+            </span> */}
+        </div>
+        <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-primary/70 shadow-pixel">
+          {position ? (
+            <MapComponent
+              pins={pins}
+              position={position}
+              onSelect={handlePinSelect}
+            />
+          ) : (
+            <div className="flex h-[24rem] items-center justify-center bg-brand-base/90 text-brand-highlight/70">
+              Enable location services to deploy your scanner.
+            </div>
+          )}
+        </div>
       </section>
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_minmax(0,0.75fr)]">
-        <div className="pixel-card">
-          <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
-            Mission Map
-          </h3>
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-            <span className="text-brand-highlight/70">
-              Use your scanner to locate nearby pins and recon targets.
-            </span>
-            <button
-              type="button"
-              onClick={refreshPins}
-              disabled={!position}
-              className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              Refresh Pins
-            </button>
-          </div>
-          <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-primary/70 shadow-pixel">
-            {position ? (
-              <MapComponent
-                pins={pins}
-                position={position}
-                onSelect={handlePinSelect}
-              />
-            ) : (
-              <div className="flex h-[24rem] items-center justify-center bg-brand-base/90 text-brand-highlight/70">
-                Enable location services to deploy your scanner.
-              </div>
-            )}
-          </div>
-        </div>
-
         <div className="flex flex-col gap-6">
-          <div className="pixel-card">
+          {/* <div className="pixel-card">
             <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Team Status
             </h3>
@@ -125,10 +128,10 @@ export default function Game() {
                 Penalties: {penalties}
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="pixel-card text-sm leading-relaxed text-brand-highlight/80">
-            <h3 className="font-pixel text-base uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
+            <h3 className="font-pixel text-xl text-base uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Mission Briefing
             </h3>
             <ul className="mt-6 list-disc space-y-3 pl-6 text-brand-highlight/80">

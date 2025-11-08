@@ -15,7 +15,7 @@ export default function Navbar() {
         to="/game"
         className="font-pixel text-lg uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight"
       >
-        NerdCon Quest
+        Of beginnings and ends
       </Link>
       <div className="flex flex-wrap items-center gap-3 font-pixel text-[0.68rem] uppercase tracking-[0.3em] text-brand-highlight">
         <Link

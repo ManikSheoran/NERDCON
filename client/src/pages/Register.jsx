@@ -25,7 +25,7 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center gap-10">
       <div className="pixel-card w-full max-w-xl text-center">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
+        <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Register Team
         </h2>
         <p className="mt-4 text-brand-highlight/80">

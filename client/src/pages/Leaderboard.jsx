@@ -12,17 +12,11 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-8">
-      <div className="pixel-card">
-        <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
+      <div className="pixel-card overflow-hidden">
+        <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
           Leaderboard
         </h2>
-        <p className="mt-4 text-brand-highlight/80">
-          Brightest guilds light up the NerdCon skyline. Keep hunting and defend
-          your rank.
-        </p>
-      </div>
-
-      <div className="pixel-card overflow-hidden">
+        <br />
         <div className="-mx-8 -mb-8 overflow-x-auto">
           <table className="min-w-full divide-y divide-brand-primary/40">
             <thead className="bg-brand-secondary/40">
