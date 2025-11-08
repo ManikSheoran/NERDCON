@@ -114,8 +114,8 @@ export default function Game() {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[1.2fr_minmax(0,0.75fr)]">
-        <div className="flex flex-col gap-6">
+      <section className="flex flex-col gap-8 lg:flex-row">
+        <div className="flex flex-col gap-6 lg:flex-1">
           <div className="pixel-card">
             <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Team Status
