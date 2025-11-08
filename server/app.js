@@ -9,7 +9,26 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+const defaultOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const allowedOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOrigins = allowedOrigins.length ? allowedOrigins : defaultOrigins;
+const allowAll = corsOrigins.includes("*");
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowAll || !origin || corsOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
