@@ -11,10 +11,11 @@ export default function Navbar() {
     navigate("/login");
   };
   return (
-    <nav className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border-4 border-brand-primary/70 bg-brand-secondary/30 px-6 py-4 shadow-pixel backdrop-blur">
-      <Link
-        to="/game"
-        className="font-pixel text-lg uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight"
+    <header className="w-full">
+      <nav
+        className={`mx-auto w-full rounded-3xl border-4 border-brand-primary/60 bg-brand-secondary/20 shadow-pixel backdrop-blur transition-all duration-300 ease-out ${
+          open ? "pb-4" : "pb-0"
+        }`}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
           <Link to="/game" className="flex items-center gap-3">
