@@ -47,4 +47,17 @@
   .pixel-pill {
     @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-accent/70 bg-brand-accent/15 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-brand-accent;
   }
+
+  .neon-glow {
+    @apply shadow-neon;
+    filter: drop-shadow(0 0 10px rgba(240, 69, 127, 0.65))
+      drop-shadow(0 0 20px rgba(136, 252, 254, 0.6));
+  }
+}
+
+@layer utilities {
+  .text-neon {
+    text-shadow: 0 0 10px rgba(240, 69, 127, 0.8),
+      0 0 24px rgba(136, 252, 254, 0.65);
+  }
 }

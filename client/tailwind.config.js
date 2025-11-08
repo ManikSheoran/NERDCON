@@ -25,10 +25,15 @@ export default {
       boxShadow: {
         pixel: "0 14px 0 0 rgba(64, 64, 152, 0.45)",
         glow: "0 0 35px rgba(240, 69, 127, 0.35)",
+        neon: "0 0 14px rgba(240, 69, 127, 0.6), 0 0 32px rgba(136, 252, 254, 0.45)",
       },
       dropShadow: {
         highlight: "0 0 12px rgba(136, 252, 254, 0.85)",
         accent: "0 0 18px rgba(240, 69, 127, 0.75)",
+        neon: [
+          "0 0 8px rgba(240, 69, 127, 0.85)",
+          "0 0 18px rgba(136, 252, 254, 0.75)",
+        ],
       },
       backgroundImage: {
         starfield:
