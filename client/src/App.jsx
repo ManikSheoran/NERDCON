@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import Navbar from "./components/Navbar";
+import HackathonCountdown from "./components/HackathonCountdown";
 import "./index.css";
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>
           </main>
+          <footer className="mt-12 flex justify-center">
+            <HackathonCountdown variant="footer" />
+          </footer>
         </div>
       </BrowserRouter>
     </div>

@@ -116,7 +116,7 @@ export default function Game() {
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_minmax(0,0.75fr)]">
         <div className="flex flex-col gap-6">
-          {/* <div className="pixel-card">
+          <div className="pixel-card">
             <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
               Team Status
             </h3>
@@ -128,7 +128,7 @@ export default function Game() {
                 Penalties: {penalties}
               </span>
             </div>
-          </div> */}
+          </div>
 
           <div className="pixel-card text-sm leading-relaxed text-brand-highlight/80">
             <h3 className="font-pixel text-xl text-base uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
