@@ -36,7 +36,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Rubik"', "system-ui", "sans-serif"],
+        sans: ['"Pixeloid Sans"', "system-ui", "sans-serif"],
         pixel: ['"Press Start 2P"', "cursive"],
       },
       boxShadow: {

@@ -1,6 +1,36 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useEffect } from "react";
+
+// Recenter component
+function RecenterButton({ position }) {
+  const map = useMap();
+
+  const recenter = () => {
+    map.setView([position.lat, position.lng], 18, {
+      animate: true,
+      duration: 1,
+    });
+  };
+
+  useEffect(() => {
+    const container = map.getContainer();
+    const button = document.createElement("button");
+    button.innerHTML = "📍";
+    button.className = "leaflet-recenter-button";
+    button.title = "Recenter to your location";
+    button.onclick = recenter;
+
+    container.appendChild(button);
+
+    return () => {
+      container.removeChild(button);
+    };
+  }, [map, position]);
+
+  return null;
+}
 
 const pinIcon = L.divIcon({
   className: "custom-pin-icon",
@@ -52,6 +82,7 @@ export default function MapComponent({ pins, position, onSelect }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <RecenterButton position={position} />
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]} icon={pinIcon}>
           <Popup className="custom-popup" closeButton={true}>
