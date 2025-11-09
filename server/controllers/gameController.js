@@ -62,7 +62,7 @@ const submitAnswer = async (req, res) => {
 
   const correct = String(hint.correctPin) === String(pin._id);
   if (correct) {
-    const earned = Math.max(hint.scoreValue - team.gameState.penalties * 10, 0);
+    const earned = hint.scoreValue - team.gameState.penalties * 10;
     team.gameState.score += earned;
     team.gameState.penalties = 0;
     team.gameState.currentHintIndex += 1;

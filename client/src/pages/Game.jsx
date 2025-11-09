@@ -65,41 +65,47 @@ export default function Game() {
 
   return (
     <div className="space-y-10">
+      {/* Current Hint */}
       <section className="pixel-card">
-        <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
-          Current Intel
-        </h2>
-        <p className="mt-6 text-lg leading-relaxed text-brand-highlight">
-          {hint?.text ? (
-            hint.text
-          ) : (
-            <span className="animate-pulse text-brand-highlight">
-              Calibrating scanners...
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-secondary">
+            Current Intel
+          </h2>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 bg-brand-accent rounded-full animate-pulse"></div>
+            <span className="text-xs text-brand-secondary uppercase tracking-wider font-pixel">
+              Live
             </span>
-          )}
-        </p>
-        <br />
-        <hr />
-        <br />
-        <h3 className="font-pixel text-md uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
-          Mission Map
-        </h3>
-        <br />
-        <button
-          type="button"
-          onClick={refreshPins}
-          disabled={!position}
-          className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled"
-          aria-label="Refresh pins"
-        >
-          Refresh Pins <ArrowPathIcon className="h-6 w-6" />
-        </button>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-          {/* <span className="text-brand-highlight/70">
-              Use your scanner to locate nearby pins and recon targets.
-            </span> */}
+          </div>
         </div>
-        <div className="mt-6 overflow-hidden rounded-3xl border-4 border-brand-primary/70 shadow-pixel">
+        <div className="bg-brand-highlight/10 rounded-2xl p-6 border-2 border-brand-primary">
+          <p className="text-lg leading-relaxed text-nerd-darker font-medium">
+            {hint?.text ? (
+              hint.text
+            ) : (
+              <span className="animate-pulse text-brand-primary">
+                Calibrating scanners...
+              </span>
+            )}
+          </p>
+        </div>
+        <br />
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary">
+            Mission Map
+          </h3>
+          <button
+            type="button"
+            onClick={refreshPins}
+            disabled={!position}
+            className="pixel-button px-4 py-2 text-[0.6rem] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            aria-label="Refresh pins"
+          >
+            <ArrowPathIcon className="h-5 w-5" />
+            Refresh
+          </button>
+        </div>
+        <div className="overflow-hidden rounded-2xl border-4 border-brand-primary">
           {position ? (
             <MapComponent
               pins={pins}
@@ -107,44 +113,53 @@ export default function Game() {
               onSelect={handlePinSelect}
             />
           ) : (
-            <div className="flex h-[24rem] items-center justify-center bg-brand-base/90 text-brand-highlight/70">
-              Enable location services to deploy your scanner.
+            <div className="flex h-[28rem] items-center justify-center bg-white text-nerd-dark">
+              <div className="text-center">
+                <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-brand-primary border-t-transparent"></div>
+                <p className="font-medium">
+                  Enable location services to deploy your scanner.
+                </p>
+              </div>
             </div>
           )}
         </div>
       </section>
-
-      <section className="flex flex-col gap-8 lg:flex-row">
-        <div className="flex flex-col gap-6 lg:flex-1">
-          <div className="pixel-card">
-            <h3 className="font-pixel text-xl uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
-              Team Status
-            </h3>
-            <div className="mt-6 flex flex-wrap gap-4">
-              <span className="pixel-pill border-brand-highlight/80 bg-brand-highlight text-brand-accent">
-                Score: {score}
-              </span>
-              <span className="pixel-pill border-brand-accent/80 bg-brand-accent text-brand-mellow">
-                Penalties: {penalties}
-              </span>
+      
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="pixel-card">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary mb-6">
+            Team Status
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            <div className="pixel-pill bg-brand-primary text-white flex-1 justify-center border-brand-primary">
+              <span>Score:</span>
+              <span className="font-bold text-xl">{score}</span>
+            </div>
+            <div className="pixel-pill bg-brand-secondary text-white flex-1 justify-center border-brand-secondary">
+              <span>Penalties:</span>
+              <span className="font-bold text-xl">{penalties}</span>
             </div>
           </div>
+        </div>
 
-          <div className="pixel-card text-sm leading-relaxed text-brand-highlight/80">
-            <h3 className="font-pixel text-xl text-base uppercase tracking-[0.3em] text-brand-mellow drop-shadow-highlight">
-              Mission Briefing
-            </h3>
-            <ul className="mt-6 list-disc space-y-3 pl-6 text-brand-highlight/80">
-              <li>Read the current intel and triangulate the target zone.</li>
-              <li>
-                Move in the real world &amp; tap a pin to submit your guess.
-              </li>
-              <li>
-                Correct hits boost your score, misses add penalties - choose
-                wisely.
-              </li>
-            </ul>
-          </div>
+        <div className="pixel-card text-sm leading-relaxed">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary mb-6">
+            Mission Brief
+          </h3>
+          <ul className="space-y-3 text-nerd-dark">
+            <li className="flex items-start gap-3">
+              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span>Read intel and triangulate the target zone.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span>Move in real world & tap a pin to submit.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span>Correct hits boost score, misses add penalties.</span>
+            </li>
+          </ul>
         </div>
       </section>
     </div>

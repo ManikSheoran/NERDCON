@@ -13,28 +13,28 @@ export default function Navbar() {
   return (
     <header className="w-full">
       <nav
-        className={`mx-auto w-full rounded-3xl border-4 border-brand-secondary/70 bg-brand-primary shadow-pixel backdrop-blur transition-all duration-300 ease-out ${
+        className={`mx-auto w-full rounded-3xl border-4 border-brand-primary bg-[#FFF1D0] shadow-pixel transition-all duration-300 ease-out ${
           open ? "pb-4" : "pb-0"
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
-          <Link to="/game" className="flex items-center gap-3">
-            <span className="font-pixel text-sm uppercase tracking-[0.3em] text-brand-mellow md:text-lg">
-              Of  ends and beginnings
+          <Link to="/game" className="flex items-center gap-3 group">
+            <span className="font-pixel text-sm uppercase tracking-[0.3em] text-brand-secondary md:text-lg group-hover:text-brand-accent transition-colors">
+              Of ends and beginnings
             </span>
             <span className="sr-only">Quest Home</span>
           </Link>
 
-          <div className="hidden items-center gap-3 md:flex md:ml-auto font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-brand-highlight">
+          <div className="hidden items-center gap-3 md:flex md:ml-auto font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-nerd-dark">
             <Link
               to="/game"
-              className="rounded-2xl border-2 border-transparent px-3 py-1 transition hover:border-brand-accent hover:text-brand-accent"
+              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-primary hover:text-brand-primary hover:bg-brand-primary/5"
             >
               Game
             </Link>
             <Link
               to="/leaderboard"
-              className="rounded-2xl border-2 border-transparent px-3 py-1 transition hover:border-brand-accent hover:text-brand-accent"
+              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-accent hover:text-brand-accent hover:bg-brand-accent/5"
             >
               Leaderboard
             </Link>
@@ -42,14 +42,14 @@ export default function Navbar() {
               <button
                 onClick={logout}
                 type="button"
-                className="pixel-button px-3 py-1 text-[0.6rem]"
+                className="pixel-button px-4 py-2 text-[0.6rem]"
               >
                 Logout
               </button>
             ) : (
               <Link
                 to="/login"
-                className="pixel-button px-3 py-1 text-[0.6rem]"
+                className="pixel-button px-4 py-2 text-[0.6rem]"
               >
                 Login
               </Link>
@@ -62,11 +62,11 @@ export default function Navbar() {
               aria-controls="mobile-nav"
               aria-expanded={open}
               onClick={() => setOpen((s) => !s)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-transparent bg-brand-accent/10 text-brand-highlight transition hover:bg-brand-accent/20 focus:outline-none focus:ring-2 focus:ring-brand-highlight"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-brand-primary bg-brand-accent/10 text-brand-secondary transition-all hover:bg-brand-accent/20 hover:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent"
             >
               <svg
-                className={`h-5 w-5 transform transition-all duration-300 ${
-                  open ? "rotate-45" : ""
+                className={`h-6 w-6 transform transition-all duration-300 ${
+                  open ? "rotate-90" : ""
                 }`}
                 viewBox="0 0 24 24"
                 fill="none"
@@ -91,18 +91,18 @@ export default function Navbar() {
               : "pointer-events-none max-h-0 scale-y-95 opacity-0"
           }`}
         >
-          <nav className="flex flex-col gap-2 font-pixel text-[0.85rem] uppercase tracking-[0.25em] text-brand-highlight">
+          <nav className="flex flex-col gap-2 font-pixel text-[0.85rem] uppercase tracking-[0.25em] text-nerd-dark">
             <Link
               to="/game"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-3 py-2 transition hover:bg-brand-accent/10"
+              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-primary/10 hover:text-brand-primary"
             >
               Game
             </Link>
             <Link
               to="/leaderboard"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-3 py-2 transition hover:bg-brand-accent/10"
+              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-accent/10 hover:text-brand-accent"
             >
               Leaderboard
             </Link>
@@ -112,7 +112,7 @@ export default function Navbar() {
                   setOpen(false);
                   logout();
                 }}
-                className="pixel-button w-full justify-center px-3 py-2 text-[0.65rem]"
+                className="pixel-button w-full justify-center px-4 py-3 text-[0.65rem] mt-2"
               >
                 Logout
               </button>
@@ -120,7 +120,7 @@ export default function Navbar() {
               <Link
                 to="/login"
                 onClick={() => setOpen(false)}
-                className="pixel-button w-full justify-center px-3 py-2 text-[0.65rem]"
+                className="pixel-button w-full justify-center px-4 py-3 text-[0.65rem] mt-2"
               >
                 Login
               </Link>

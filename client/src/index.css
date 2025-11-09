@@ -15,7 +15,8 @@
   }
 
   body {
-    @apply min-h-screen bg-brand-base  text-brand-highlight antialiased;
+    @apply min-h-screen bg-brand-base bg-grid-pattern text-brand-highlight antialiased;
+    background-attachment: fixed;
   }
 
   #root {
@@ -23,29 +24,30 @@
   }
 
   ::selection {
-    @apply bg-brand-accent text-brand-base;
+    @apply bg-brand-accent text-white;
   }
 }
 
 @layer components {
   .pixel-card {
-    @apply rounded-3xl border-4 border-brand-secondary/70 bg-brand-primary p-8 shadow-pixel backdrop-blur;
+    @apply rounded-3xl border-4 border-brand-accent bg-[#FFF1D0] p-8 shadow-pixel;
+    position: relative;
   }
 
   .pixel-label {
-    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-mellow;
+    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-secondary;
   }
 
   .pixel-input {
-    @apply w-full rounded-2xl border-2 border-brand-secondary/70 bg-brand-primary/80 px-4 py-3 font-sans text-brand-highlight shadow-inner transition focus:border-brand-mellow focus:outline-none focus:ring-4 focus:ring-brand-highlight/30;
+    @apply w-full rounded-2xl border-2 border-brand-primary bg-white px-4 py-3 font-sans text-nerd-darker shadow-inner transition focus:border-brand-accent focus:outline-none focus:ring-4 focus:ring-brand-accent/30;
   }
 
   .pixel-button {
-    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-accent bg-brand-accent px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-mellow transition duration-150 hover:-translate-y-0.5 hover:border-brand-highlight hover:bg-brand-highlight hover:text-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-highlight/40 active:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-secondary bg-brand-secondary px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-white transition duration-150 hover:-translate-y-1 hover:bg-brand-accent hover:border-brand-accent hover:shadow-neon-pink focus:outline-none focus:ring-4 focus:ring-brand-accent/40 active:translate-y-0;
   }
 
   .pixel-pill {
-    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-accent/70 bg-brand-accent/15 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-brand-accent;
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-accent bg-brand-accent px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-white;
   }
 
   .neon-glow {
@@ -57,61 +59,87 @@
   .pixel-map-pin {
     position: relative;
     display: block;
-    width: 28px;
-    height: 28px;
-    border-radius: 18px 18px 18px 0;
-    background: linear-gradient(
-      135deg,
-      rgba(240, 69, 127, 0.95),
-      rgba(136, 252, 254, 0.9)
-    );
-    border: 2px solid rgba(255, 255, 255, 0.7);
+    width: 32px;
+    height: 32px;
+    border-radius: 50% 50% 50% 0;
+    background: #ff3d9a;
+    border: 3px solid #00e0ff;
     transform: rotate(-45deg);
-    box-shadow: 0 0 0 2px rgba(13, 19, 33, 0.85),
-      0 10px 18px rgba(13, 19, 33, 0.5);
+    box-shadow: 0 0 20px rgba(255, 61, 154, 0.8),
+      0 0 40px rgba(0, 224, 255, 0.6);
+    animation: float 3s ease-in-out infinite;
   }
 
-  .pixel-map-pin::before {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 10px;
-    width: 6px;
-    height: 12px;
-    background: rgba(136, 252, 254, 0.9);
-    border-radius: 3px;
-    box-shadow: 0 6px 10px rgba(13, 19, 33, 0.4);
-  }
-
+ 
   .pixel-map-pin__core {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background: rgba(13, 19, 33, 0.85);
+    background: #ffffff;
     transform: translate(-50%, -50%) rotate(45deg);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    animation: pulse-neon 2s ease-in-out infinite;
   }
 
   .pixel-map-pin--self {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 221, 89, 0.95),
-      rgba(255, 171, 111, 0.9)
-    );
-    border-color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 0 0 2px rgba(240, 69, 127, 0.35),
-      0 12px 20px rgba(240, 69, 127, 0.3);
+    background: #ffd000;
+    border: 3px solid #ff9800;
+    box-shadow: 0 0 25px rgba(255, 208, 0, 0.9), 0 0 50px rgba(255, 152, 0, 0.7);
+    animation: float 2s ease-in-out infinite,
+      pulse-neon 1.5s ease-in-out infinite;
   }
 
   .pixel-map-pin--self::before {
-    background: rgba(255, 221, 89, 0.9);
+    background: #ff9800;
+    box-shadow: 0 8px 12px rgba(255, 152, 0, 0.6);
   }
 
   .pixel-map-pin--self .pixel-map-pin__core {
-    background: rgba(240, 69, 127, 0.85);
+    background: #0078ff;
+    box-shadow: 0 0 20px rgba(0, 120, 255, 0.9);
+  }
+
+  /* Custom Leaflet Popup Styling */
+  .custom-popup .leaflet-popup-content-wrapper {
+    background: #ffffff;
+    border: 3px solid #0078ff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .custom-popup .leaflet-popup-content {
+    margin: 8px 12px;
+    min-width: 180px;
+  }
+
+  .custom-popup .leaflet-popup-tip {
+    background: #ffffff;
+    border: 3px solid #0078ff;
+    border-top: none;
+    border-right: none;
+  }
+
+  .custom-popup .leaflet-popup-close-button {
+    color: #ff3d9a !important;
+    font-size: 24px !important;
+    font-weight: bold;
+    padding: 4px 8px !important;
+  }
+
+  .custom-popup .leaflet-popup-close-button:hover {
+    color: #0078ff !important;
+    background: rgba(0, 120, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  /* Custom icon containers */
+  .custom-pin-icon,
+  .custom-player-icon {
+    background: transparent !important;
+    border: none !important;
   }
 }
 

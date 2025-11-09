@@ -13,41 +13,72 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8">
       <div className="pixel-card overflow-hidden">
-        <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-mellow drop-shadow-highlight">
-          Leaderboard
-        </h2>
-        <br />
+        <div className="mb-8 text-center">
+          <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-secondary">
+            Leaderboard
+          </h2>
+          <div className="mt-3 h-1 w-32 mx-auto bg-brand-accent"></div>
+          <p className="mt-4 text-nerd-dark text-sm font-medium">
+            Top teams competing for glory in the Quest
+          </p>
+        </div>
         <div className="-mx-8 -mb-8 overflow-x-auto">
-          <table className="min-w-full divide-y divide-brand-primary/40">
-            <thead className="bg-brand-secondary/40">
-              <tr className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-highlight">
-                <th className="px-6 py-4 text-left">Rank</th>
-                <th className="px-6 py-4 text-left">Team</th>
-                <th className="px-6 py-4 text-left">Score</th>
-                <th className="px-6 py-4 text-left">Hint Index</th>
-                <th className="px-6 py-4 text-left">Last Submission</th>
+          <table className="min-w-full divide-y-2 divide-brand-primary">
+            <thead className="bg-brand-primary">
+              <tr className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-white">
+                <th className="px-6 py-5 text-left">Rank</th>
+                <th className="px-6 py-5 text-left">Team</th>
+                <th className="px-6 py-5 text-left">Score</th>
+                <th className="px-6 py-5 text-left">Hint Index</th>
+                <th className="px-6 py-5 text-left">Last Submission</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-brand-primary/25 text-sm text-brand-highlight/90">
+            <tbody className="divide-y divide-brand-primary/20 text-sm text-nerd-dark">
               {board.map((team, index) => {
                 const timestamp = team.lastHintSubmittedAt
                   ? new Date(team.lastHintSubmittedAt).toLocaleString()
                   : "-";
 
+                const isTopThree = index < 3;
+                const rankColors = [
+                  "text-brand-highlight font-bold",
+                  "text-brand-accent font-bold",
+                  "text-brand-secondary font-bold",
+                ];
+
                 return (
                   <tr
                     key={team.name ?? index}
-                    className="transition hover:bg-brand-accent/10 hover:text-brand-accent"
+                    className={`transition-all hover:bg-brand-accent/10 ${
+                      isTopThree ? "bg-brand-highlight/5" : ""
+                    }`}
                   >
-                    <td className="px-6 py-4 font-pixel text-[0.75rem] uppercase tracking-[0.25em] text-brand-mellow">
+                    <td
+                      className={`px-6 py-5 font-pixel text-[0.75rem] uppercase tracking-[0.25em] ${
+                        isTopThree ? rankColors[index] : "text-nerd-dark"
+                      }`}
+                    >
                       #{index + 1}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-brand-highlight">
-                      {team.name}
+                    <td className="px-6 py-5 font-semibold text-nerd-darker">
+                      <div className="flex items-center gap-3">
+                        {isTopThree && (
+                          <span className="text-xl">
+                            {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
+                          </span>
+                        )}
+                        <span>{team.name}</span>
+                      </div>
                     </td>
-                    <td className="px-6 py-4">{team.score}</td>
-                    <td className="px-6 py-4">{team.currentHintIndex}</td>
-                    <td className="px-6 py-4 text-brand-highlight/70">
+                    <td className="px-6 py-5">
+                      <span className="inline-block px-3 py-1 rounded-full bg-brand-primary text-white font-bold">
+                        {team.score}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-brand-mellow font-semibold">
+                      {team.currentHintIndex}
+                    </td>
+                    <td className="px-6 py-5 text-nerd-dark/70 text-xs">
                       {timestamp}
                     </td>
                   </tr>

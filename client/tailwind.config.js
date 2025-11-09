@@ -5,39 +5,72 @@ export default {
     extend: {
       colors: {
         brand: {
-         base: "#00123dff",
-          primary: "#404098",
-          secondary: "#7c3279",
-          accent: "#f0457f",
-          highlight: "#88fcfe",
-          mellow: "#fde7a1",
+          base: "#FFF1D0",        // crisp white background
+          primary: "#0078ff",     // vivid blue (tech-bright)
+          secondary: "#ff3d9a",   // hot pink-magenta
+          accent: "#00e0ff",      // bright cyan
+          highlight: "#ffd000",   // electric yellow
+          mellow: "#ff9800",      // playful orange
+          purple: "#9c27ff",      // bright purple
+          cyan: "#00d9ff",        // strong neon cyan
+          magenta: "#ff00a8",     // hot magenta
         },
-        'nerd-purple': '#7c3279',
-        'nerd-blue': '#404098',
-        'nerd-red': '#f0457f',
-        'nerd-yellow': '#fde7a1',
-        'nerd-cyan': '#88fcfe',
+        nerd: {
+          dark: "#111827",        // readable dark gray text
+          darker: "#000000",      // strong text black
+          blue: "#0066ff",        // saturated blue
+          purple: "#a200ff",      // pure neon purple
+          pink: "#ff1f70",        // bright candy pink
+          cyan: "#00c6ff",        // bright sky cyan
+          yellow: "#ffcc00",      // bright warm yellow
+          green: "#00e676",       // vivid green
+        },
       },
       fontFamily: {
         sans: ['"Rubik"', "system-ui", "sans-serif"],
         pixel: ['"Press Start 2P"', "cursive"],
       },
       boxShadow: {
-        pixel: "0 14px 0 0 rgba(64, 64, 152, 0.45)",
-        glow: "0 0 35px rgba(240, 69, 127, 0.35)",
-        neon: "0 0 14px rgba(240, 69, 127, 0.6), 0 0 32px rgba(136, 252, 254, 0.45)",
+        pixel: "0 4px 0 0 rgba(0, 120, 255, 0.5), 0 8px 20px rgba(0, 0, 0, 0.1)",
+        glow: "0 0 30px rgba(0, 224, 255, 0.6), 0 0 50px rgba(255, 61, 154, 0.5)",
+        neon: "0 0 25px rgba(0, 224, 255, 0.9), 0 0 50px rgba(255, 61, 154, 0.8)",
+        'neon-pink': "0 0 25px rgba(255, 61, 154, 0.9), 0 0 50px rgba(255, 61, 154, 0.6)",
+        'neon-cyan': "0 0 25px rgba(0, 224, 255, 0.9), 0 0 50px rgba(0, 224, 255, 0.6)",
+        'neon-purple': "0 0 25px rgba(156, 39, 255, 0.9), 0 0 50px rgba(156, 39, 255, 0.6)",
       },
       dropShadow: {
-        highlight: "0 0 12px rgba(136, 252, 254, 0.85)",
-        accent: "0 0 18px rgba(240, 69, 127, 0.75)",
+        highlight: "0 0 16px rgba(0, 224, 255, 0.9)",
+        accent: "0 0 16px rgba(255, 61, 154, 0.9)",
         neon: [
-          "0 0 8px rgba(240, 69, 127, 0.85)",
-          "0 0 18px rgba(136, 252, 254, 0.75)",
+          "0 0 16px rgba(0, 224, 255, 0.9)",
+          "0 0 32px rgba(255, 61, 154, 0.8)",
         ],
       },
       backgroundImage: {
         starfield:
-          "linear-gradient(140deg, #40409861, #7c327966), radial-gradient(circle at 18% 22%, rgba(240,69,127,0.28) 0, transparent 42%), radial-gradient(circle at 75% 12%, rgba(136,252,254,0.26) 0, transparent 40%)",
+          "radial-gradient(ellipse at top, rgba(0, 224, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom, rgba(255, 61, 154, 0.12), transparent 50%), linear-gradient(180deg, #ffffff 0%, #f0f3ff 100%)",
+        'grid-pattern': 
+          "repeating-linear-gradient(0deg, rgba(0, 224, 255, 0.08) 0px, transparent 1px, transparent 40px, rgba(0, 224, 255, 0.08) 41px), repeating-linear-gradient(90deg, rgba(255, 61, 154, 0.08) 0px, transparent 1px, transparent 40px, rgba(255, 61, 154, 0.08) 41px)",
+      },
+      animation: {
+        'pulse-neon': 'pulse-neon 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 3s ease-in-out infinite',
+      },
+      keyframes: {
+        'pulse-neon': {
+          '0%, 100%': {
+            opacity: '1',
+            filter: 'drop-shadow(0 0 12px rgba(0, 224, 255, 0.9))',
+          },
+          '50%': {
+            opacity: '0.85',
+            filter: 'drop-shadow(0 0 25px rgba(255, 61, 154, 0.9))',
+          },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
       },
     },
   },

@@ -11,11 +11,11 @@ function App() {
   const token = localStorage.getItem("token");
 
   return (
-    <div className="min-h-screen text-brand-highlight">
+    <div className="min-h-screen bg-white text-nerd-dark">
       <BrowserRouter>
-        <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-10 sm:px-8 lg:px-12">
+        <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-8 sm:px-8 lg:px-12">
           <Navbar />
-          <main className="mt-10 flex-1">
+          <main className="mt-12 flex-1">
             <Routes>
               <Route
                 path="/"
@@ -27,7 +27,7 @@ function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Routes>
           </main>
-          <footer className="mt-12 flex justify-center">
+          <footer className="mt-16 flex justify-center border-t-2 border-brand-primary pt-8">
             <HackathonCountdown variant="footer" />
           </footer>
         </div>
