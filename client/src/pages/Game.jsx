@@ -132,25 +132,43 @@ export default function Game() {
           </div>
         </div>
         <div
-          className={`rounded-2xl p-6 border-2 ${
+          className={`rounded-2xl border-2 overflow-hidden ${
             isFinalHint
               ? "bg-gradient-to-r from-brand-highlight/20 to-brand-accent/20 border-brand-highlight"
               : "bg-brand-highlight/10 border-brand-primary"
           }`}
         >
-          <p className="text-lg leading-relaxed text-nerd-darker font-medium">
-            {hint?.text ? (
-              hint.text
-            ) : gameCompleted ? (
-              <span className="text-brand-highlight font-bold">
+          {hint?.imagePath ? (
+            <div className="relative">
+              <img
+                src={`http://localhost:4000/hints/${hint.imagePath}`}
+                alt="Hint"
+                className="w-full h-auto max-h-96 object-contain bg-white"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  e.target.nextSibling.style.display = "block";
+                }}
+              />
+              <div
+                style={{ display: "none" }}
+                className="p-6 text-center text-red-600 font-semibold"
+              >
+                ⚠️ Image not found. Please contact the organizers.
+              </div>
+            </div>
+          ) : gameCompleted ? (
+            <div className="p-6">
+              <span className="text-brand-highlight font-bold text-lg">
                 All hints completed! 🎉
               </span>
-            ) : (
-              <span className="animate-pulse text-brand-primary">
+            </div>
+          ) : (
+            <div className="p-6">
+              <span className="animate-pulse text-brand-primary text-lg">
                 Calibrating scanners...
               </span>
-            )}
-          </p>
+            </div>
+          )}
         </div>
         <br />
         <div className="flex items-center justify-between mb-6">

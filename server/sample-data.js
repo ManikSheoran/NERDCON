@@ -85,35 +85,21 @@ async function addSampleData() {
     const hints = [
       {
         hint_id: 1,
-        text: "Where knowledge is stored in endless rows, and silence is golden where the wisdom flows.",
+        imagePath: "hint1.png", // Place hint1.png in the hints folder
         scoreValue: 100,
         correctPins: [pin1._id], // Central Library (1 correct answer)
         isFinalHint: false
       },
       {
         hint_id: 2,
-        text: "A place where experiments come alive, where innovation and discovery thrive.",
+        imagePath: "hint2.png", // Place hint2.png in the hints folder
         scoreValue: 100,
         correctPins: [pin2._id, pin3._id], // Science Museum OR Tech Park (2 correct answers)
         isFinalHint: false
       },
       {
         hint_id: 3,
-        text: "Where startups are born and ideas take flight, technology shines both day and night.",
-        scoreValue: 150,
-        correctPins: [pin4._id], // Innovation Center (1 correct answer)
-        isFinalHint: false
-      },
-      {
-        hint_id: 4,
-        text: "A nexus of connectivity and digital dreams, where the future is built with collaborative teams.",
-        scoreValue: 150,
-        correctPins: [pin5._id, pin4._id], // Digital Hub OR Innovation Center (2 correct answers)
-        isFinalHint: false
-      },
-      {
-        hint_id: 5,
-        text: "The ultimate destination where champions gather, the final challenge awaits at the grand hall.",
+        imagePath: "hint3_final.png", // Place hint3_final.png in the hints folder
         scoreValue: 200,
         correctPins: [pin6._id], // Grand Hall - FINAL HINT (1 correct answer only)
         isFinalHint: true

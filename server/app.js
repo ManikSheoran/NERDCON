@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
 const connectDB = require("./config/db.js");
 const authRoutes = require("./routes/authRoutes.js");
 const gameRoutes = require("./routes/gameRoutes.js");
@@ -31,8 +32,28 @@ app.use(
 );
 app.use(express.json());
 
+// Serve static hint images
+app.use("/hints", express.static(path.join(__dirname, "hints")));
+
 app.get("/", (req, res) => {
     res.send("Welcome to the NerdCon API");
+});
+
+// Debug route to test hints folder
+app.get("/debug/hints", (req, res) => {
+  const fs = require('fs');
+  const hintsPath = path.join(__dirname, "hints");
+  
+  try {
+    const files = fs.readdirSync(hintsPath);
+    res.json({ 
+      hintsFolder: hintsPath,
+      files: files,
+      testUrl: `http://localhost:${PORT}/hints/hint1.png`
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.use("/api/auth", authRoutes);

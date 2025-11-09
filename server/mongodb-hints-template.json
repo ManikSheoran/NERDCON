@@ -1,0 +1,65 @@
+
+[
+  {
+    "hint_id": 1,
+    "imagePath": "hint1.png",
+    "scoreValue": 100,
+    "correctPins": [
+      {"$oid": "REPLACE_WITH_PIN_1_OBJECTID"}
+    ],
+    "isFinalHint": false
+  },
+  {
+    "hint_id": 2,
+    "imagePath": "hint2.png",
+    "scoreValue": 100,
+    "correctPins": [
+      {"$oid": "REPLACE_WITH_PIN_2_OBJECTID"},
+      {"$oid": "REPLACE_WITH_PIN_3_OBJECTID"}
+    ],
+    "isFinalHint": false
+  },
+  {
+    "hint_id": 3,
+    "imagePath": "hint3_final.png",
+    "scoreValue": 200,
+    "correctPins": [
+      {"$oid": "REPLACE_WITH_PIN_6_OBJECTID"}
+    ],
+    "isFinalHint": true
+  }
+]
+
+// For MongoDB Shell, use this format:
+/*
+[
+  {
+    "hint_id": 1,
+    "imagePath": "hint1.png",
+    "scoreValue": 100,
+    "correctPins": [
+      ObjectId("REPLACE_WITH_PIN_1_OBJECTID")
+    ],
+    "isFinalHint": false
+  },
+  {
+    "hint_id": 2,
+    "imagePath": "hint2.png",
+    "scoreValue": 100,
+    "correctPins": [
+      ObjectId("REPLACE_WITH_PIN_2_OBJECTID"),
+      ObjectId("REPLACE_WITH_PIN_3_OBJECTID")
+    ],
+    "isFinalHint": false
+  },
+  {
+    "hint_id": 3,
+    "imagePath": "hint3_final.png",
+    "scoreValue": 200,
+    "correctPins": [
+      ObjectId("REPLACE_WITH_PIN_6_OBJECTID")
+    ],
+    "isFinalHint": true
+  }
+]
+*/

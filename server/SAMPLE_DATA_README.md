@@ -72,7 +72,7 @@ db.hints.insertMany([
   // Regular hint with 1 answer
   {
     hint_id: 1,
-    text: "Where knowledge is stored in endless rows, and silence is golden.",
+    imagePath: "hint1.jpg", // Place hint1.jpg in the hints folder
     scoreValue: 100,
     correctPins: [
       ObjectId("6543210abcdef1234567890a"), // pin_id: 1 (Central Library)
@@ -82,7 +82,7 @@ db.hints.insertMany([
   // Regular hint with 2 answers
   {
     hint_id: 2,
-    text: "A place where experiments come alive, where innovation thrives.",
+    imagePath: "hint2.jpg", // Place hint2.jpg in the hints folder
     scoreValue: 100,
     correctPins: [
       ObjectId("6543210abcdef1234567890b"), // pin_id: 2 (Science Museum)
@@ -93,7 +93,7 @@ db.hints.insertMany([
   // FINAL HINT - Must have exactly 1 answer
   {
     hint_id: 3,
-    text: "The ultimate destination where champions gather.",
+    imagePath: "hint3_final.jpg", // Place hint3_final.jpg in the hints folder
     scoreValue: 200,
     correctPins: [
       ObjectId("6543210abcdef1234567890c"), // pin_id: 3 (Grand Hall)
@@ -123,7 +123,7 @@ db.hints.insertMany([
 ```javascript
 {
   hint_id: <number>,                 // Unique, easy to remember ID
-  text: "<hint text>",               // The clue
+  imagePath: "<filename>",           // Image filename (e.g., "hint1.jpg")
   scoreValue: <number>,              // Points for this hint (default: 100)
   correctPins: [ObjectId(...), ...], // Array of 1 or 2 pin _id references
   isFinalHint: <boolean>             // true for the final hint, false for regular hints
@@ -140,9 +140,16 @@ db.hints.insertMany([
 
 3. **Hint IDs**: Use simple numbers (1, 2, 3...) for easy reference
 
-4. **Multiple Answers**: Regular hints can have 1 or 2 correct pins in the `correctPins` array
+4. **Hint Images**:
 
-5. **Final Hint**:
+   - Place all hint images in the `server/hints/` folder
+   - Supported formats: .jpg, .png, .gif, .webp
+   - Use simple names like: hint1.jpg, hint2.png, hint3_final.jpg
+   - Images will be accessible at: `http://localhost:4000/hints/hint1.jpg`
+
+5. **Multiple Answers**: Regular hints can have 1 or 2 correct pins in the `correctPins` array
+
+6. **Final Hint**:
 
    - Must be the LAST hint in the sequence
    - Must have `isFinalHint: true`
@@ -150,7 +157,7 @@ db.hints.insertMany([
    - Usually has a higher score value (e.g., 200 points)
    - Completing it shows a "game completed" message
 
-6. **Always add Pins BEFORE Hints** since hints reference pin MongoDB ObjectIds
+7. **Always add Pins BEFORE Hints** since hints reference pin MongoDB ObjectIds
 
 ## Game Flow:
 
