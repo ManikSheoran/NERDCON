@@ -15,7 +15,16 @@ const haversineMeters = (lat1, lon1, lat2, lon2) => {
 const getHint = async (req, res) => {
   const team = req.user;
   const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
-  res.json({ currentHintIndex: team.gameState.currentHintIndex, hint });
+  
+  if (!hint) {
+    return res.status(404).json({ message: "No more hints available" });
+  }
+  
+  res.json({ 
+    currentHintIndex: team.gameState.currentHintIndex, 
+    hint,
+    isFinalHint: hint.isFinalHint || false
+  });
 };
 
 // Return pins within ~200 meters of provided lat/lng (query params or body)
@@ -54,38 +63,87 @@ const getNearbyPins = async (req, res) => {
 const submitAnswer = async (req, res) => {
   const { pinId, lat, lng } = req.body;
   const team = req.user;
+  
+  // Check if team has reached penalty limit
+  if (team.gameState.penalties >= 20) {
+    return res.status(403).json({ 
+      message: "Maximum penalties reached. You cannot submit anymore.", 
+      penalties: team.gameState.penalties 
+    });
+  }
+  
   const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
+  if (!hint) {
+    return res.status(404).json({ message: "No more hints available" });
+  }
+  
   const pin = await Pin.findById(pinId);
+  if (!pin) {
+    return res.status(404).json({ message: "Pin not found" });
+  }
 
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
   if (dist > 5000) return res.status(400).json({ message: "Not near correct zone" });
 
-  const correct = String(hint.correctPin) === String(pin._id);
+  // Check if submitted pin is one of the correct answers
+  // Compare MongoDB ObjectIds, not pin_id numbers
+  const correct = hint.correctPins && hint.correctPins.length > 0 
+    ? hint.correctPins.some(correctPinId => String(correctPinId) === String(pin._id))
+    : false;
+  
   if (correct) {
-    const earned = hint.scoreValue - team.gameState.penalties * 10;
+    const earned = hint.scoreValue;
     team.gameState.score += earned;
-    team.gameState.penalties = 0;
     team.gameState.currentHintIndex += 1;
     // record the time of this successful submission
     team.gameState.lastHintSubmittedAt = new Date();
     await team.save();
-    return res.json({ success: true, earned, totalScore: team.gameState.score });
+    
+    // Check if this was the final hint
+    if (hint.isFinalHint) {
+      return res.json({ 
+        success: true, 
+        earned, 
+        totalScore: team.gameState.score,
+        penalties: team.gameState.penalties,
+        gameCompleted: true,
+        message: "Congratulations! You've completed all hints!"
+      });
+    }
+    
+    return res.json({ 
+      success: true, 
+      earned, 
+      totalScore: team.gameState.score,
+      penalties: team.gameState.penalties 
+    });
   } else {
+    // Wrong answer: add penalty
     team.gameState.penalties += 1;
     // record the time of this (failed) submission as well
     team.gameState.lastHintSubmittedAt = new Date();
     await team.save();
-    return res.json({ success: false, penalties: team.gameState.penalties });
+    return res.json({ 
+      success: false, 
+      penalties: team.gameState.penalties,
+      message: team.gameState.penalties >= 20 ? "Maximum penalties reached!" : "Incorrect answer" 
+    });
   }
 };
 
-// Leaderboard: return teams with name, current hint index, score and last submission time
+// Leaderboard: return teams with name, current hint index, score, penalties and last submission time
 const getLeaderboard = async (req, res) => {
   try {
-    // top teams by score
+    // Sort by score (descending), then by penalties (ascending)
     const teams = await require('../models/Team.js')
-      .find({}, { name: 1, 'gameState.currentHintIndex': 1, 'gameState.score': 1, 'gameState.lastHintSubmittedAt': 1 })
-      .sort({ 'gameState.score': -1 })
+      .find({}, { 
+        name: 1, 
+        'gameState.currentHintIndex': 1, 
+        'gameState.score': 1, 
+        'gameState.penalties': 1,
+        'gameState.lastHintSubmittedAt': 1 
+      })
+      .sort({ 'gameState.score': -1, 'gameState.penalties': 1 })
       .limit(50)
       .lean();
 
@@ -93,6 +151,7 @@ const getLeaderboard = async (req, res) => {
       name: t.name,
       currentHintIndex: t.gameState?.currentHintIndex ?? 0,
       score: t.gameState?.score ?? 0,
+      penalties: t.gameState?.penalties ?? 0,
       lastHintSubmittedAt: t.gameState?.lastHintSubmittedAt ?? null,
     }));
 

@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         brand: {
-          base: "#FFF1D0",        // crisp white background
+          base: "#ca2147",        // crisp white background
           primary: "#0078ff",     // vivid blue (tech-bright)
           secondary: "#ff3d9a",   // hot pink-magenta
           accent: "#00e0ff",      // bright cyan

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const pinSchema = new mongoose.Schema({
+  pin_id: { type: Number, required: true, unique: true }, // Easy reference ID
   name: String,
   location: {
     type: { type: String, default: "Point" },

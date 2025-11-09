@@ -29,7 +29,7 @@ export default function Leaderboard() {
                 <th className="px-6 py-5 text-left">Rank</th>
                 <th className="px-6 py-5 text-left">Team</th>
                 <th className="px-6 py-5 text-left">Score</th>
-                <th className="px-6 py-5 text-left">Hint Index</th>
+                <th className="px-6 py-5 text-left">Penalties</th>
                 <th className="px-6 py-5 text-left">Last Submission</th>
               </tr>
             </thead>
@@ -45,6 +45,10 @@ export default function Leaderboard() {
                   "text-brand-accent font-bold",
                   "text-brand-secondary font-bold",
                 ];
+
+                const penalties = team.penalties ?? 0;
+                const isPenaltyWarning = penalties >= 15;
+                const isPenaltyMax = penalties >= 20;
 
                 return (
                   <tr
@@ -75,8 +79,20 @@ export default function Leaderboard() {
                         {team.score}
                       </span>
                     </td>
-                    <td className="px-6 py-5 text-brand-mellow font-semibold">
-                      {team.currentHintIndex}
+                    <td className="px-6 py-5">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full font-semibold ${
+                          isPenaltyMax
+                            ? "bg-red-500 text-white"
+                            : isPenaltyWarning
+                            ? "bg-orange-500 text-white"
+                            : penalties > 0
+                            ? "bg-yellow-500 text-white"
+                            : "bg-green-500 text-white"
+                        }`}
+                      >
+                        {penalties}
+                      </span>
                     </td>
                     <td className="px-6 py-5 text-nerd-dark/70 text-xs">
                       {timestamp}

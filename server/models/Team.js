@@ -6,7 +6,7 @@ const teamSchema = new mongoose.Schema({
   passwordHash: String,
   gameState: {
     currentHintIndex: { type: Number, default: 0 },
-    penalties: { type: Number, default: 0 },
+    penalties: { type: Number, default: 0 }, // Total penalties across the game
     score: { type: Number, default: 0 },
     // timestamp of the last hint submission (correct or incorrect)
     lastHintSubmittedAt: { type: Date },
