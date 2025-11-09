@@ -13,14 +13,14 @@ export default function Navbar() {
   return (
     <header className="w-full">
       <nav
-        className={`mx-auto w-full rounded-3xl border-4 border-brand-primary/60 bg-brand-secondary/20 shadow-pixel backdrop-blur transition-all duration-300 ease-out ${
+        className={`mx-auto w-full rounded-3xl border-4 border-brand-secondary/70 bg-brand-primary shadow-pixel backdrop-blur transition-all duration-300 ease-out ${
           open ? "pb-4" : "pb-0"
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
           <Link to="/game" className="flex items-center gap-3">
             <span className="font-pixel text-sm uppercase tracking-[0.3em] text-brand-mellow md:text-lg">
-              Of  beginnings and ends
+              Of  ends and beginnings
             </span>
             <span className="sr-only">Quest Home</span>
           </Link>
@@ -62,7 +62,7 @@ export default function Navbar() {
               aria-controls="mobile-nav"
               aria-expanded={open}
               onClick={() => setOpen((s) => !s)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-transparent bg-brand-accent/10 text-brand-accent transition hover:bg-brand-accent/20 focus:outline-none focus:ring-2 focus:ring-brand-highlight"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-transparent bg-brand-accent/10 text-brand-highlight transition hover:bg-brand-accent/20 focus:outline-none focus:ring-2 focus:ring-brand-highlight"
             >
               <svg
                 className={`h-5 w-5 transform transition-all duration-300 ${

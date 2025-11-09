@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         brand: {
-          base: "#00123dff",
+         base: "#00123dff",
           primary: "#404098",
           secondary: "#7c3279",
           accent: "#f0457f",
@@ -37,7 +37,7 @@ export default {
       },
       backgroundImage: {
         starfield:
-          "linear-gradient(140deg, rgba(64,64,152,0.38), rgba(124,50,121,0.4)), radial-gradient(circle at 18% 22%, rgba(240,69,127,0.28) 0, transparent 42%), radial-gradient(circle at 75% 12%, rgba(136,252,254,0.26) 0, transparent 40%)",
+          "linear-gradient(140deg, #40409861, #7c327966), radial-gradient(circle at 18% 22%, rgba(240,69,127,0.28) 0, transparent 42%), radial-gradient(circle at 75% 12%, rgba(136,252,254,0.26) 0, transparent 40%)",
       },
     },
   },

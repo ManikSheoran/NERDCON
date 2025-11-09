@@ -29,19 +29,19 @@
 
 @layer components {
   .pixel-card {
-    @apply rounded-3xl border-4 border-brand-primary/70 bg-brand-secondary/25 p-8 shadow-pixel backdrop-blur;
+    @apply rounded-3xl border-4 border-brand-secondary/70 bg-brand-primary p-8 shadow-pixel backdrop-blur;
   }
 
   .pixel-label {
-    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-accent;
+    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-mellow;
   }
 
   .pixel-input {
-    @apply w-full rounded-2xl border-2 border-brand-primary/70 bg-brand-base/80 px-4 py-3 font-sans text-brand-highlight shadow-inner transition focus:border-brand-mellow focus:outline-none focus:ring-4 focus:ring-brand-highlight/30;
+    @apply w-full rounded-2xl border-2 border-brand-secondary/70 bg-brand-primary/80 px-4 py-3 font-sans text-brand-highlight shadow-inner transition focus:border-brand-mellow focus:outline-none focus:ring-4 focus:ring-brand-highlight/30;
   }
 
   .pixel-button {
-    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-accent bg-brand-accent px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-base transition duration-150 hover:-translate-y-0.5 hover:border-brand-highlight hover:bg-brand-highlight hover:text-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-highlight/40 active:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-accent bg-brand-accent px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-brand-mellow transition duration-150 hover:-translate-y-0.5 hover:border-brand-highlight hover:bg-brand-highlight hover:text-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-highlight/40 active:translate-y-0;
   }
 
   .pixel-pill {

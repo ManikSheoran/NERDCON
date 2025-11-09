@@ -29,7 +29,7 @@ export default function Login() {
           Team Login
         </h2>
         <p className="mt-4 text-brand-highlight/80">
-          Jack into the NerdCon Quest console and continue hunting for the next
+          Jack into the Quest console and continue hunting for the next
           clue.
         </p>
         <form
@@ -37,13 +37,13 @@ export default function Login() {
           className="mt-10 flex flex-col gap-6 text-left"
         >
           <label className="pixel-label" htmlFor="email">
-            Access Email
+            Access ID
           </label>
           <input
             id="email"
-            type="email"
+            type="number"
             autoComplete="email"
-            placeholder="team@nerdcon.quest"
+            placeholder="Team ID aka leader's phone number"
             value={form.email}
             onChange={handleChange("email")}
             required
@@ -66,11 +66,11 @@ export default function Login() {
             Enter Lobby
           </button>
         </form>
-        <p className="mt-8 text-sm text-brand-highlight/70">
+        <p className="mt-8 text-sm text-brand-mellow">
           Need credentials?{" "}
           <Link
             to="/register"
-            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-accent hover:drop-shadow-accent"
+            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-highlight hover:drop-shadow-accent"
           >
             Register your guild
           </Link>

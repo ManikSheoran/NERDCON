@@ -7,11 +7,11 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
       const allowedEmails = require('../config/allowedEmails.json');
       if (!allowedEmails || !Array.isArray(allowedEmails) || !allowedEmails.map(e => e.toLowerCase()).includes(String(email).toLowerCase())) {
-        return res.status(403).json({ message: 'Email not allowed to register' });
+        return res.status(403).json({ message: 'Number not allowed to register' });
       }
 
       const existing = await Team.findOne({ $or: [{ name }, { email }] });
-      if (existing) return res.status(400).json({ message: "Team name or email already exists" });
+      if (existing) return res.status(400).json({ message: "Team name or phone number already exists" });
 
     const hash = await bcrypt.hash(password, 10);
     const team = await Team.create({ name, email, passwordHash: hash });

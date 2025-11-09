@@ -73,7 +73,7 @@ export default function Game() {
           {hint?.text ? (
             hint.text
           ) : (
-            <span className="animate-pulse text-brand-accent">
+            <span className="animate-pulse text-brand-highlight">
               Calibrating scanners...
             </span>
           )}
@@ -89,7 +89,7 @@ export default function Game() {
           type="button"
           onClick={refreshPins}
           disabled={!position}
-          className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled:opacity-60"
+          className="pixel-button px-5 py-2 text-[0.6rem] disabled:cursor-not-allowed disabled"
           aria-label="Refresh pins"
         >
           Refresh Pins <ArrowPathIcon className="h-6 w-6" />
@@ -121,10 +121,10 @@ export default function Game() {
               Team Status
             </h3>
             <div className="mt-6 flex flex-wrap gap-4">
-              <span className="pixel-pill border-brand-highlight/80 bg-brand-highlight/20 text-brand-highlight">
+              <span className="pixel-pill border-brand-highlight/80 bg-brand-highlight text-brand-accent">
                 Score: {score}
               </span>
-              <span className="pixel-pill border-brand-accent/80 bg-brand-accent/20 text-brand-accent">
+              <span className="pixel-pill border-brand-accent/80 bg-brand-accent text-brand-mellow">
                 Penalties: {penalties}
               </span>
             </div>

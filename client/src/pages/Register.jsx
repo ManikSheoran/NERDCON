@@ -29,7 +29,7 @@ export default function Register() {
           Register Team
         </h2>
         <p className="mt-4 text-brand-highlight/80">
-          Spin up a new guild and prepare to decode the world of NerdCon.
+          Spin up a new guild and prepare to decode the world of hunting.
         </p>
         <form
           onSubmit={handleSubmit}
@@ -48,12 +48,12 @@ export default function Register() {
             className="pixel-input"
           />
           <label className="pixel-label" htmlFor="email">
-            Contact Email
+            Leader's Contact ID
           </label>
           <input
             id="email"
-            type="email"
-            placeholder="guild@nerdcon.quest"
+            type="number"
+            placeholder="1234567890"
             value={form.email}
             onChange={handleChange("email")}
             required
@@ -75,11 +75,11 @@ export default function Register() {
             Forge Team
           </button>
         </form>
-        <p className="mt-8 text-sm text-brand-highlight/70">
-          Already have access?{" "}
+        <p className="mt-8 text-sm text-brand-mellow">
+          Already have access?{"    "}
           <Link
             to="/login"
-            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-accent hover:drop-shadow-accent"
+            className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-highlight hover:drop-shadow-accent"
           >
             Return to login
           </Link>
