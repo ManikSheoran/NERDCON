@@ -26,7 +26,7 @@ export default function Register() {
     <div className="flex flex-col items-center gap-10">
       <div className="pixel-card w-full max-w-xl text-center">
         <div className="mb-6 inline-block">
-          <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-secondary drop-shadow-accent">
+          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-secondary drop-shadow-accent">
             Register Team
           </h2>
           <div className="mt-3 h-1 w-full bg-brand-accent"></div>

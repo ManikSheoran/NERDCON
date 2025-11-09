@@ -14,7 +14,7 @@ export default function Leaderboard() {
     <div className="space-y-8">
       <div className="pixel-card overflow-hidden">
         <div className="mb-8 text-center">
-          <h2 className="font-pixel text-2xl uppercase tracking-[0.35em] text-brand-secondary">
+          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-secondary">
             Leaderboard
           </h2>
           <div className="mt-3 h-1 w-32 mx-auto bg-brand-accent"></div>
