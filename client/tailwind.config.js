@@ -5,25 +5,34 @@ export default {
     extend: {
       colors: {
         brand: {
-          base: "#ca2147",        // crisp white background
-          primary: "#0078ff",     // vivid blue (tech-bright)
-          secondary: "#ff3d9a",   // hot pink-magenta
-          accent: "#00e0ff",      // bright cyan
-          highlight: "#ffd000",   // electric yellow
-          mellow: "#ff9800",      // playful orange
-          purple: "#9c27ff",      // bright purple
-          cyan: "#00d9ff",        // strong neon cyan
-          magenta: "#ff00a8",     // hot magenta
-        },
-        nerd: {
-          dark: "#111827",        // readable dark gray text
-          darker: "#000000",      // strong text black
-          blue: "#0066ff",        // saturated blue
-          purple: "#a200ff",      // pure neon purple
-          pink: "#ff1f70",        // bright candy pink
-          cyan: "#00c6ff",        // bright sky cyan
-          yellow: "#ffcc00",      // bright warm yellow
-          green: "#00e676",       // vivid green
+          primary: "#ca2147",     // Main accent color (pink/red)
+          secondary: "#343736",   // Dark gray background
+          // Shades of ca2147 (pink/red)
+          pink: {
+            50: "#fef2f4",
+            100: "#fde6ea",
+            200: "#faccd4",
+            300: "#f7a3b4",
+            400: "#f26f8c",
+            500: "#ca2147",       // Base
+            600: "#b61d3f",
+            700: "#991935",
+            800: "#7c142b",
+            900: "#5e1020",
+          },
+          // Shades of 343736 (dark gray)
+          gray: {
+            50: "#f7f7f7",
+            100: "#e8e8e9",
+            200: "#c7c8ca",
+            300: "#a6a8ab",
+            400: "#6d7073",
+            500: "#343736",       // Base
+            600: "#2d2f31",
+            700: "#252729",
+            800: "#1e1f21",
+            900: "#161718",
+          },
         },
       },
       fontFamily: {
@@ -31,46 +40,8 @@ export default {
         pixel: ['"Press Start 2P"', "cursive"],
       },
       boxShadow: {
-        pixel: "0 4px 0 0 rgba(0, 120, 255, 0.5), 0 8px 20px rgba(0, 0, 0, 0.1)",
-        glow: "0 0 30px rgba(0, 224, 255, 0.6), 0 0 50px rgba(255, 61, 154, 0.5)",
-        neon: "0 0 25px rgba(0, 224, 255, 0.9), 0 0 50px rgba(255, 61, 154, 0.8)",
-        'neon-pink': "0 0 25px rgba(255, 61, 154, 0.9), 0 0 50px rgba(255, 61, 154, 0.6)",
-        'neon-cyan': "0 0 25px rgba(0, 224, 255, 0.9), 0 0 50px rgba(0, 224, 255, 0.6)",
-        'neon-purple': "0 0 25px rgba(156, 39, 255, 0.9), 0 0 50px rgba(156, 39, 255, 0.6)",
-      },
-      dropShadow: {
-        highlight: "0 0 16px rgba(0, 224, 255, 0.9)",
-        accent: "0 0 16px rgba(255, 61, 154, 0.9)",
-        neon: [
-          "0 0 16px rgba(0, 224, 255, 0.9)",
-          "0 0 32px rgba(255, 61, 154, 0.8)",
-        ],
-      },
-      backgroundImage: {
-        starfield:
-          "radial-gradient(ellipse at top, rgba(0, 224, 255, 0.15), transparent 50%), radial-gradient(ellipse at bottom, rgba(255, 61, 154, 0.12), transparent 50%), linear-gradient(180deg, #ffffff 0%, #f0f3ff 100%)",
-        'grid-pattern': 
-          "repeating-linear-gradient(0deg, rgba(0, 224, 255, 0.08) 0px, transparent 1px, transparent 40px, rgba(0, 224, 255, 0.08) 41px), repeating-linear-gradient(90deg, rgba(255, 61, 154, 0.08) 0px, transparent 1px, transparent 40px, rgba(255, 61, 154, 0.08) 41px)",
-      },
-      animation: {
-        'pulse-neon': 'pulse-neon 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 3s ease-in-out infinite',
-      },
-      keyframes: {
-        'pulse-neon': {
-          '0%, 100%': {
-            opacity: '1',
-            filter: 'drop-shadow(0 0 12px rgba(0, 224, 255, 0.9))',
-          },
-          '50%': {
-            opacity: '0.85',
-            filter: 'drop-shadow(0 0 25px rgba(255, 61, 154, 0.9))',
-          },
-        },
-        'float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' },
-        },
+        'glow-pink': "0 0 20px rgba(202, 33, 71, 0.5), 0 0 40px rgba(202, 33, 71, 0.3)",
+        'glow-dark': "0 4px 20px rgba(0, 0, 0, 0.5)",
       },
     },
   },

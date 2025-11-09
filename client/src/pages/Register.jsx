@@ -26,12 +26,12 @@ export default function Register() {
     <div className="flex flex-col items-center gap-10">
       <div className="pixel-card w-full max-w-xl text-center">
         <div className="mb-6 inline-block">
-          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-secondary drop-shadow-accent">
+          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-primary">
             Register Team
           </h2>
-          <div className="mt-3 h-1 w-full bg-brand-accent"></div>
+          <div className="mt-3 h-1 w-full bg-brand-primary rounded-full border border-brand-pink-400"></div>
         </div>
-        <p className="mt-4 text-nerd-dark leading-relaxed">
+        <p className="mt-4 text-gray-300 leading-relaxed">
           Spin up a new guild and prepare to decode the world of hunting.
         </p>
         <form
@@ -87,12 +87,12 @@ export default function Register() {
             Forge Team
           </button>
         </form>
-        <div className="mt-10 pt-6 border-t-2 border-brand-primary">
-          <p className="text-sm text-nerd-dark">
+        <div className="mt-10 pt-6 border-t-2 border-brand-gray-700">
+          <p className="text-sm text-gray-300">
             Already have access?{" "}
             <Link
               to="/login"
-              className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary hover:text-brand-accent transition-colors"
+              className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary hover:text-brand-pink-400 transition-colors"
             >
               Return to login
             </Link>

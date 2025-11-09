@@ -99,7 +99,7 @@ export default function Game() {
     <div className="space-y-10">
       {/* Game Completed Message */}
       {gameCompleted && (
-        <div className="pixel-card bg-gradient-to-r from-brand-highlight to-brand-accent">
+        <div className="pixel-card bg-gradient-to-r from-brand-primary to-brand-pink-700 border-brand-primary">
           <div className="text-center py-8">
             <h2 className="font-pixel text-3xl uppercase tracking-[0.35em] text-white mb-4">
               🏆 Mission Complete! 🏆
@@ -117,16 +117,16 @@ export default function Game() {
       {/* Current Hint */}
       <section className="pixel-card">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-secondary">
+          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-primary">
             {isFinalHint ? "🎯 Final Challenge" : "Current Intel"}
           </h2>
           <div className="flex items-center gap-2">
             <div
               className={`h-3 w-3 rounded-full animate-pulse ${
-                isFinalHint ? "bg-brand-highlight" : "bg-brand-accent"
+                isFinalHint ? "bg-brand-primary" : "bg-brand-primary"
               }`}
             ></div>
-            <span className="text-xs text-brand-secondary uppercase tracking-wider font-pixel">
+            <span className="text-xs text-gray-300 uppercase tracking-wider font-pixel">
               {isFinalHint ? "Final" : "Live"}
             </span>
           </div>
@@ -134,8 +134,8 @@ export default function Game() {
         <div
           className={`rounded-2xl border-2 overflow-hidden ${
             isFinalHint
-              ? "bg-gradient-to-r from-brand-highlight/20 to-brand-accent/20 border-brand-highlight"
-              : "bg-brand-highlight/10 border-brand-primary"
+              ? "bg-brand-gray-800 border-brand-primary"
+              : "bg-brand-gray-800 border-brand-gray-700"
           }`}
         >
           {hint?.imagePath ? (
@@ -143,7 +143,7 @@ export default function Game() {
               <img
                 src={`http://localhost:4000/hints/${hint.imagePath}`}
                 alt="Hint"
-                className="w-full h-auto max-h-96 object-contain bg-white"
+                className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
                 onError={(e) => {
                   e.target.style.display = "none";
                   e.target.nextSibling.style.display = "block";
@@ -151,20 +151,20 @@ export default function Game() {
               />
               <div
                 style={{ display: "none" }}
-                className="p-6 text-center text-red-600 font-semibold"
+                className="p-6 text-center text-brand-primary font-semibold"
               >
                 ⚠️ Image not found. Please contact the organizers.
               </div>
             </div>
           ) : gameCompleted ? (
             <div className="p-6">
-              <span className="text-brand-highlight font-bold text-lg">
+              <span className="text-brand-primary font-bold text-lg">
                 All hints completed! 🎉
               </span>
             </div>
           ) : (
             <div className="p-6">
-              <span className="animate-pulse text-brand-primary text-lg">
+              <span className="animate-pulse text-gray-400 text-lg">
                 Calibrating scanners...
               </span>
             </div>
@@ -172,7 +172,7 @@ export default function Game() {
         </div>
         <br />
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary">
             Mission Map
           </h3>
           <button
@@ -186,7 +186,7 @@ export default function Game() {
             Refresh
           </button>
         </div>
-        <div className="overflow-hidden rounded-2xl border-4 border-brand-primary">
+        <div className="overflow-hidden rounded-2xl border-2 border-brand-gray-700">
           {position ? (
             <MapComponent
               pins={pins}
@@ -194,7 +194,7 @@ export default function Game() {
               onSelect={handlePinSelect}
             />
           ) : (
-            <div className="flex h-[28rem] items-center justify-center bg-white text-nerd-dark">
+            <div className="flex h-[28rem] items-center justify-center bg-brand-gray-800 text-gray-300">
               <div className="text-center">
                 <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-brand-primary border-t-transparent"></div>
                 <p className="font-medium">
@@ -208,7 +208,7 @@ export default function Game() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="pixel-card">
-          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary mb-6">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary mb-6">
             Team Status
           </h3>
           <div className="flex flex-wrap gap-4">
@@ -219,10 +219,10 @@ export default function Game() {
             <div
               className={`pixel-pill text-white flex-1 justify-center ${
                 penalties >= 20
-                  ? "bg-red-500 border-red-500"
+                  ? "bg-red-600 border-red-600"
                   : penalties >= 15
-                  ? "bg-orange-500 border-orange-500"
-                  : "bg-brand-secondary border-brand-secondary"
+                  ? "bg-orange-600 border-orange-600"
+                  : "bg-brand-gray-700 border-brand-gray-700"
               }`}
             >
               <span>Penalties:</span>
@@ -230,15 +230,15 @@ export default function Game() {
             </div>
           </div>
           {penalties >= 20 && (
-            <div className="mt-4 p-3 bg-red-100 border-2 border-red-500 rounded-lg">
-              <p className="text-red-700 font-semibold text-sm text-center">
+            <div className="mt-4 p-3 bg-red-900/50 border-2 border-red-600 rounded-lg">
+              <p className="text-red-300 font-semibold text-sm text-center">
                 🚫 Maximum penalties reached! Cannot submit answers.
               </p>
             </div>
           )}
           {penalties >= 15 && penalties < 20 && (
-            <div className="mt-4 p-3 bg-orange-100 border-2 border-orange-500 rounded-lg">
-              <p className="text-orange-700 font-semibold text-sm text-center">
+            <div className="mt-4 p-3 bg-orange-900/50 border-2 border-orange-600 rounded-lg">
+              <p className="text-orange-300 font-semibold text-sm text-center">
                 ⚠️ Warning: {20 - penalties} penalties remaining!
               </p>
             </div>
@@ -246,20 +246,20 @@ export default function Game() {
         </div>
 
         <div className="pixel-card text-sm leading-relaxed">
-          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-secondary mb-6">
+          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary mb-6">
             Mission Brief
           </h3>
-          <ul className="space-y-3 text-nerd-dark">
+          <ul className="space-y-3 text-gray-300">
             <li className="flex items-start gap-3">
-              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
               <span>Read intel and triangulate the target zone.</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
               <span>Move in real world & tap a pin to submit.</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-brand-accent mt-1 font-bold">▸</span>
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
               <span>Correct hits boost score, misses add penalties.</span>
             </li>
           </ul>

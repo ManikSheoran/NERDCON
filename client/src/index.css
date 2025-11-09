@@ -11,11 +11,11 @@
 
 @layer base {
   html {
-    @apply min-h-full bg-brand-base;
+    @apply min-h-full bg-brand-gray-900;
   }
 
   body {
-    @apply min-h-screen bg-brand-base bg-grid-pattern text-brand-highlight antialiased;
+    @apply min-h-screen bg-brand-gray-900 text-gray-100 antialiased;
     background-attachment: fixed;
   }
 
@@ -24,36 +24,34 @@
   }
 
   ::selection {
-    @apply bg-brand-accent text-white;
+    @apply bg-brand-primary text-white;
   }
 }
 
 @layer components {
   .pixel-card {
-    @apply rounded-3xl border-4 border-brand-accent bg-[#FFF1D0] p-8 shadow-pixel;
+    @apply rounded-3xl border-2 border-brand-gray-700 bg-brand-secondary p-8 shadow-glow-dark;
     position: relative;
   }
 
   .pixel-label {
-    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-secondary;
+    @apply font-pixel text-[0.7rem] uppercase tracking-[0.35em] text-brand-primary;
   }
 
   .pixel-input {
-    @apply w-full rounded-2xl border-2 border-brand-primary bg-white px-4 py-3 font-sans text-nerd-darker shadow-inner transition focus:border-brand-accent focus:outline-none focus:ring-4 focus:ring-brand-accent/30;
+    @apply w-full rounded-2xl border-2 border-brand-gray-600 bg-brand-gray-800 px-4 py-3 font-sans text-gray-100 shadow-inner transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30;
   }
 
   .pixel-button {
-    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-secondary bg-brand-secondary px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-white transition duration-150 hover:-translate-y-1 hover:bg-brand-accent hover:border-brand-accent hover:shadow-neon-pink focus:outline-none focus:ring-4 focus:ring-brand-accent/40 active:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-primary bg-brand-primary px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-white transition duration-150 hover:-translate-y-1 hover:shadow-glow-pink focus:outline-none focus:ring-2 focus:ring-brand-primary/40 active:translate-y-0;
   }
 
   .pixel-pill {
-    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-accent bg-brand-accent px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-white;
+    @apply inline-flex items-center gap-2 rounded-full border-2 border-brand-primary bg-brand-primary px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] text-white;
   }
 
   .neon-glow {
-    @apply shadow-neon;
-    filter: drop-shadow(0 0 10px rgba(240, 69, 127, 0.65))
-      drop-shadow(0 0 20px rgba(136, 252, 254, 0.6));
+    @apply shadow-glow-pink;
   }
 
   .pixel-map-pin {
@@ -62,15 +60,13 @@
     width: 32px;
     height: 32px;
     border-radius: 50% 50% 50% 0;
-    background: #ff3d9a;
-    border: 3px solid #00e0ff;
+    @apply bg-brand-primary border-brand-secondary;
+    border-width: 3px;
     transform: rotate(-45deg);
-    box-shadow: 0 0 20px rgba(255, 61, 154, 0.8),
-      0 0 40px rgba(0, 224, 255, 0.6);
+    box-shadow: 0 0 20px rgba(202, 33, 71, 0.8);
     animation: float 3s ease-in-out infinite;
   }
 
- 
   .pixel-map-pin__core {
     position: absolute;
     top: 50%;
@@ -78,36 +74,34 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #ffffff;
+    @apply bg-gray-100;
     transform: translate(-50%, -50%) rotate(45deg);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
-    animation: pulse-neon 2s ease-in-out infinite;
   }
 
   .pixel-map-pin--self {
-    background: #ffd000;
-    border: 3px solid #ff9800;
-    box-shadow: 0 0 25px rgba(255, 208, 0, 0.9), 0 0 50px rgba(255, 152, 0, 0.7);
-    animation: float 2s ease-in-out infinite,
-      pulse-neon 1.5s ease-in-out infinite;
+    @apply bg-brand-primary border-gray-100;
+    border-width: 3px;
+    box-shadow: 0 0 25px rgba(202, 33, 71, 0.9), 0 0 50px rgba(202, 33, 71, 0.5);
+    animation: float 2s ease-in-out infinite;
   }
 
   .pixel-map-pin--self::before {
-    background: #ff9800;
-    box-shadow: 0 8px 12px rgba(255, 152, 0, 0.6);
+    @apply bg-brand-primary;
+    box-shadow: 0 8px 12px rgba(202, 33, 71, 0.6);
   }
 
   .pixel-map-pin--self .pixel-map-pin__core {
-    background: #0078ff;
-    box-shadow: 0 0 20px rgba(0, 120, 255, 0.9);
+    @apply bg-brand-pink-400;
+    box-shadow: 0 0 20px rgba(202, 33, 71, 0.9);
   }
 
   /* Custom Leaflet Popup Styling */
   .custom-popup .leaflet-popup-content-wrapper {
-    background: #ffffff;
-    border: 3px solid #0078ff;
+    @apply bg-brand-secondary border-brand-gray-700;
+    border-width: 3px;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 
   .custom-popup .leaflet-popup-content {
@@ -116,22 +110,21 @@
   }
 
   .custom-popup .leaflet-popup-tip {
-    background: #ffffff;
-    border: 3px solid #0078ff;
+    @apply bg-brand-secondary border-brand-gray-700;
+    border-width: 3px;
     border-top: none;
     border-right: none;
   }
 
   .custom-popup .leaflet-popup-close-button {
-    color: #ff3d9a !important;
+    @apply text-brand-primary;
     font-size: 24px !important;
     font-weight: bold;
     padding: 4px 8px !important;
   }
 
   .custom-popup .leaflet-popup-close-button:hover {
-    color: #0078ff !important;
-    background: rgba(0, 120, 255, 0.1);
+    @apply text-brand-pink-300 bg-brand-primary/10;
     border-radius: 8px;
   }
 
@@ -140,6 +133,25 @@
   .custom-player-icon {
     background: transparent !important;
     border: none !important;
+  }
+
+  /* Dark map styling */
+  .leaflet-container {
+    background: #1a1d1f !important;
+  }
+
+  .dark-mode-map .leaflet-layer,
+  .dark-mode-map .leaflet-control-zoom-in,
+  .dark-mode-map .leaflet-control-zoom-out,
+  .dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) !important;
+  }
+
+  .leaflet-layer,
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out,
+  .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
   }
 }
 

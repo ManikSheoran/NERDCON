@@ -66,7 +66,7 @@ export default function QuestCountdown({ variant = "card" }) {
     return (
       <div className="flex flex-col items-center gap-3 text-center">
         <div className="inline-block">
-          <span className="font-pixel text-[0.75rem] text-brand-secondary uppercase tracking-[0.3em]">
+          <span className="font-pixel text-[0.75rem] text-brand-gray-50 uppercase tracking-[0.3em]">
             {status.phase === "post" ? "Quest concluded" : status.label}
           </span>
           <div className="mt-2 h-0.5 w-full bg-brand-accent"></div>
@@ -89,12 +89,12 @@ export default function QuestCountdown({ variant = "card" }) {
 
   return (
     <section className="mx-auto mt-6 w-full max-w-3xl rounded-3xl border-4 border-brand-accent bg-white px-8 py-6 text-center shadow-pixel">
-      <p className="font-pixel text-sm uppercase tracking-[0.35em] text-brand-secondary">
+      <p className="font-pixel text-sm uppercase tracking-[0.35em] text-brand-gray-50">
         {status.label}
       </p>
       {status.phase === "post" ? (
         <p className="mt-4 text-sm text-nerd-dark">
-          Thanks for playing! See you at the next LITSOC challenge.
+          Thanks for playing! See you at NERDCON 4.
         </p>
       ) : (
         <div className="mt-6 flex items-center justify-center gap-6 text-sm">
@@ -114,7 +114,7 @@ export default function QuestCountdown({ variant = "card" }) {
 function TimeBlock({ label, value }) {
   return (
     <div className="flex flex-col items-center rounded-2xl border-2 border-brand-primary bg-brand-highlight px-5 py-4 shadow-pixel transition-transform hover:scale-105">
-      <span className="font-pixel text-2xl tracking-[0.2em] text-brand-secondary">
+      <span className="font-pixel text-2xl tracking-[0.2em] text-brand-gray-50">
         {String(value).padStart(2, "0")}
       </span>
       <span className="mt-2 text-[0.65rem] uppercase tracking-[0.35em] text-brand-primary">

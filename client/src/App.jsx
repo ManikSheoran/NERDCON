@@ -11,7 +11,7 @@ function App() {
   const token = localStorage.getItem("token");
 
   return (
-    <div className="min-h-screen bg-white text-nerd-dark">
+    <div className="min-h-screen bg-brand-gray-900 text-gray-100">
       <BrowserRouter>
         <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-8 sm:px-8 lg:px-12">
           <Navbar />

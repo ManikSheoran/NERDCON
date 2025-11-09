@@ -13,28 +13,28 @@ export default function Navbar() {
   return (
     <header className="w-full">
       <nav
-        className={`mx-auto w-full rounded-3xl border-4 border-brand-primary bg-[#FFF1D0] shadow-pixel transition-all duration-300 ease-out ${
+        className={`mx-auto w-full rounded-3xl border-2 border-brand-gray-700 bg-brand-secondary shadow-glow-dark transition-all duration-300 ease-out ${
           open ? "pb-4" : "pb-0"
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
           <Link to="/game" className="flex items-center gap-3 group">
-            <span className="font-pixel text-sm uppercase tracking-[0.3em] text-brand-secondary md:text-lg group-hover:text-brand-accent transition-colors">
+            <span className="font-pixel text-sm uppercase tracking-[0.3em] text-brand-primary md:text-lg group-hover:text-brand-pink-400 transition-colors">
               Of ends and beginnings
             </span>
             <span className="sr-only">Quest Home</span>
           </Link>
 
-          <div className="hidden items-center gap-3 md:flex md:ml-auto font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-nerd-dark">
+          <div className="hidden items-center gap-3 md:flex md:ml-auto font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-gray-300">
             <Link
               to="/game"
-              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-primary hover:text-brand-primary hover:bg-brand-primary/5"
+              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-primary hover:text-brand-primary"
             >
               Game
             </Link>
             <Link
               to="/leaderboard"
-              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-accent hover:text-brand-accent hover:bg-brand-accent/5"
+              className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-primary hover:text-brand-primary"
             >
               Leaderboard
             </Link>
@@ -62,7 +62,7 @@ export default function Navbar() {
               aria-controls="mobile-nav"
               aria-expanded={open}
               onClick={() => setOpen((s) => !s)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-brand-primary bg-brand-accent/10 text-brand-secondary transition-all hover:bg-brand-accent/20 hover:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-brand-primary bg-brand-accent/10 text-brand-primary transition-all hover:bg-brand-accent/20 hover:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent"
             >
               <svg
                 className={`h-6 w-6 transform transition-all duration-300 ${

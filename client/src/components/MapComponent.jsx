@@ -44,25 +44,25 @@ export default function MapComponent({ pins, position, onSelect }) {
     <MapContainer
       center={[position.lat, position.lng]}
       zoom={18}
-      className="h-[28rem] w-full bg-white"
+      className="h-[28rem] w-full bg-brand-gray-800 dark-mode-map"
       scrollWheelZoom
       zoomControl={true}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]} icon={pinIcon}>
           <Popup className="custom-popup" closeButton={true}>
-            <div className="space-y-3 p-2">
+            <div className="space-y-3 p-2 bg-brand-secondary">
               <div className="flex items-center gap-2">
-                <div className="h-2 w-2 bg-brand-secondary rounded-full animate-pulse"></div>
-                <p className="font-pixel text-[0.7rem] uppercase tracking-wider text-brand-secondary">
+                <div className="h-2 w-2 bg-brand-primary rounded-full animate-pulse"></div>
+                <p className="font-pixel text-[0.7rem] uppercase tracking-wider text-brand-primary">
                   Target Location
                 </p>
               </div>
-              <p className="font-semibold text-nerd-darker text-base">
+              <p className="font-semibold text-gray-100 text-base">
                 {pin.name}
               </p>
               <button
@@ -78,14 +78,14 @@ export default function MapComponent({ pins, position, onSelect }) {
       ))}
       <Marker position={[position.lat, position.lng]} icon={playerIcon}>
         <Popup className="custom-popup" closeButton={true}>
-          <div className="space-y-2 p-2">
+          <div className="space-y-2 p-2 bg-brand-secondary">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 bg-brand-highlight rounded-full animate-pulse"></div>
+              <div className="h-2 w-2 bg-brand-primary rounded-full animate-pulse"></div>
               <p className="font-pixel text-[0.7rem] uppercase tracking-wider text-brand-primary">
                 Your Position
               </p>
             </div>
-            <p className="font-semibold text-nerd-darker">You are here</p>
+            <p className="font-semibold text-gray-100">You are here</p>
           </div>
         </Popup>
       </Marker>
