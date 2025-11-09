@@ -17,6 +17,9 @@ function App() {
           <Navbar />
           <main className="mt-12 flex-1">
             <Routes>
+              {/* UNCOMMENT THIS WHEN QUEST ENDS - Redirects all routes to leaderboard */}
+              {/* <Route path="*" element={<Navigate to="/leaderboard" replace />} /> */}
+
               <Route
                 path="/"
                 element={<Navigate to={token ? "/game" : "/login"} />}
