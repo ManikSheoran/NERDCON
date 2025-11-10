@@ -39,7 +39,7 @@ const getNearbyPins = async (req, res) => {
       location: {
         $nearSphere: {
           $geometry: { type: 'Point', coordinates: [lng, lat] },
-          $maxDistance: 5000,
+          $maxDistance: 80,
         },
       },
     })
@@ -83,17 +83,13 @@ const submitAnswer = async (req, res) => {
   }
 
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 5000) return res.status(400).json({ message: "Not near correct zone" });
+  if (dist > 80) return res.status(400).json({ message: "Not near correct zone" });
 
-  // Check if submitted pin is one of the correct answers
-  // Compare MongoDB ObjectIds, not pin_id numbers
   const correct = hint.correctPins && hint.correctPins.length > 0 
     ? hint.correctPins.some(correctPinId => String(correctPinId) === String(pin._id))
     : false;
   
   if (correct) {
-    // Use atomic operation to prevent race conditions
-    // Only update if this hint hasn't been completed yet
     const Team = require('../models/Team.js');
     const updatedTeam = await Team.findOneAndUpdate(
       {

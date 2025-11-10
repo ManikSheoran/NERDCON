@@ -73,7 +73,7 @@ export default function QuestCountdown({ variant = "card" }) {
         </div>
         {status.phase === "post" ? (
           <span className="text-[0.65rem] tracking-[0.25em] text-nerd-dark/70">
-            Thanks for playing! See you soon.
+            Thanks for playing! See you at NERDCON 4.
           </span>
         ) : (
           <span className="font-mono text-base tracking-[0.2em] text-brand-primary font-bold">
@@ -113,7 +113,7 @@ export default function QuestCountdown({ variant = "card" }) {
 
 function TimeBlock({ label, value }) {
   return (
-    <div className="flex flex-col items-center rounded-2xl border-2 border-brand-primary bg-brand-highlight px-5 py-4 shadow-pixel transition-transform hover:scale-105">
+    <div className="flex flex-col items-center rounded-2xl border-2 border-brand-primary bg-brand-secondary px-5 py-4 shadow-pixel transition-transform hover:scale-105">
       <span className="font-pixel text-2xl tracking-[0.2em] text-brand-gray-50">
         {String(value).padStart(2, "0")}
       </span>

@@ -163,7 +163,7 @@ export default function Game() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary">
-              Navigation
+              Mission Map
             </h3>
             <button
               type="button"
