@@ -55,7 +55,7 @@ export default function Login() {
           </div>
           <div>
             <label className="pixel-label mb-3 block" htmlFor="password">
-              Secret Key
+              Secret Passcode
             </label>
             <input
               id="password"
