@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import axios from "../api/axios";
 import MapComponent from "../components/MapComponent";
+import AuthenticatedImage from "../components/AuthenticatedImage";
 
 export default function Game() {
   const [hint, setHint] = useState(null);
@@ -36,23 +37,21 @@ export default function Game() {
     setPins(data.pins);
   };
 
-  const refreshPins = async () => {
-    if (!position) return;
-    await fetchPins(position.lat, position.lng);
-  };
-
-  useEffect(() => {
-    fetchHint();
-    fetchState();
-
+  const refreshLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         setPosition({ lat: latitude, lng: longitude });
         fetchPins(latitude, longitude);
       },
-      (err) => alert("Please allow location access!")
+      (err) => alert("Unable to get location. Please check permissions!")
     );
+  };
+
+  useEffect(() => {
+    fetchHint();
+    fetchState();
+    refreshLocation();
   }, []);
 
   const handlePinSelect = async (pinId) => {
@@ -114,79 +113,68 @@ export default function Game() {
         </div>
       )}
 
-      {/* Current Hint */}
+      {/* Combined Hint and Map Section */}
       <section className="pixel-card">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-primary">
-            {isFinalHint ? "🎯 Final Challenge" : "Current Intel"}
-          </h2>
-          <div className="flex items-center gap-2">
-            <div
-              className={`h-3 w-3 rounded-full animate-pulse ${
-                isFinalHint ? "bg-brand-primary" : "bg-brand-primary"
-              }`}
-            ></div>
-            <span className="text-xs text-gray-300 uppercase tracking-wider font-pixel">
-              {isFinalHint ? "Final" : "Live"}
-            </span>
-          </div>
-        </div>
-        <div
-          className={`rounded-2xl border-2 overflow-hidden ${
-            isFinalHint
-              ? "bg-brand-gray-800 border-brand-primary"
-              : "bg-brand-gray-800 border-brand-gray-700"
-          }`}
-        >
-          {hint?.imagePath ? (
-            <div className="relative">
-              <img
-                src={`http://localhost:4000/hints/${hint.imagePath}`}
-                alt="Hint"
-                className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
-                onError={(e) => {
-                  e.target.style.display = "none";
-                  e.target.nextSibling.style.display = "block";
-                }}
-              />
-              <div
-                style={{ display: "none" }}
-                className="p-6 text-center text-brand-primary font-semibold"
+        {/* Current Hint */}
+        {hint && (
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-brand-primary uppercase tracking-wider">
+                {isFinalHint ? "🎯 Final Challenge" : "Current Intel"}
+              </h3>
+              <span
+                className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
+                  isFinalHint
+                    ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
+                    : "bg-green-500/20 text-green-400 border border-green-500/50"
+                }`}
               >
-                ⚠️ Image not found. Please contact the organizers.
+                {isFinalHint ? "Final" : "Live"}
+              </span>
+            </div>
+            {hint.imagePath ? (
+              <div className="relative rounded-lg overflow-hidden border-2 border-brand-gray-700">
+                <AuthenticatedImage
+                  src={`/hints/${hint.imagePath}`}
+                  alt="Hint"
+                  className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
+                />
               </div>
-            </div>
-          ) : gameCompleted ? (
-            <div className="p-6">
-              <span className="text-brand-primary font-bold text-lg">
-                All hints completed! 🎉
+            ) : (
+              <p className="text-gray-300">
+                {hint.text || "No hint available"}
+              </p>
+            )}
+            <div className="mt-4 flex items-center justify-between text-sm">
+              <span className="text-gray-400">
+                Worth:{" "}
+                <span className="text-brand-primary font-bold">
+                  {hint.scoreValue} points
+                </span>
               </span>
             </div>
-          ) : (
-            <div className="p-6">
-              <span className="animate-pulse text-gray-400 text-lg">
-                Calibrating scanners...
-              </span>
-            </div>
-          )}
-        </div>
-        <br />
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary">
-            Mission Map
-          </h3>
-          <button
-            type="button"
-            onClick={refreshPins}
-            disabled={!position}
-            className="pixel-button px-4 py-2 text-[0.6rem] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-            aria-label="Refresh pins"
-          >
-            <ArrowPathIcon className="h-5 w-5" />
-            Refresh
-          </button>
-        </div>
-        <div className="overflow-hidden rounded-2xl border-2 border-brand-gray-700">
+          </div>
+        )}
+
+        {/* Divider */}
+        <div className="border-t-2 border-brand-gray-700 my-6"></div>
+
+        {/* Map Section */}
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary">
+              Navigation
+            </h3>
+            <button
+              type="button"
+              onClick={refreshLocation}
+              className="pixel-button-sm bg-brand-gray-700 hover:bg-brand-gray-600 text-white flex items-center gap-2"
+              title="Refresh location and nearby pins"
+            >
+              <ArrowPathIcon className="h-4 w-4" />
+              <span>Refresh</span>
+            </button>
+          </div>
           {position ? (
             <MapComponent
               pins={pins}
@@ -194,12 +182,10 @@ export default function Game() {
               onSelect={handlePinSelect}
             />
           ) : (
-            <div className="flex h-[28rem] items-center justify-center bg-brand-gray-800 text-gray-300">
+            <div className="h-[28rem] flex items-center justify-center bg-brand-gray-900 rounded-lg border-2 border-brand-gray-700">
               <div className="text-center">
                 <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-brand-primary border-t-transparent"></div>
-                <p className="font-medium">
-                  Enable location services to deploy your scanner.
-                </p>
+                <p className="text-gray-400">Acquiring GPS coordinates...</p>
               </div>
             </div>
           )}

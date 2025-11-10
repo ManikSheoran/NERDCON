@@ -92,20 +92,45 @@ const submitAnswer = async (req, res) => {
     : false;
   
   if (correct) {
-    const earned = hint.scoreValue;
-    team.gameState.score += earned;
-    team.gameState.currentHintIndex += 1;
-    // record the time of this successful submission
-    team.gameState.lastHintSubmittedAt = new Date();
-    await team.save();
+    // Use atomic operation to prevent race conditions
+    // Only update if this hint hasn't been completed yet
+    const Team = require('../models/Team.js');
+    const updatedTeam = await Team.findOneAndUpdate(
+      {
+        _id: team._id,
+        'gameState.completedHints': { $ne: hint._id } 
+            },
+      {
+        $inc: { 
+          'gameState.score': hint.scoreValue,
+          'gameState.currentHintIndex': 1
+        },
+        $push: { 'gameState.completedHints': hint._id },
+        $set: { 'gameState.lastHintSubmittedAt': new Date() }
+      },
+      { new: true } // Return updated document
+    );
+    
+    // If updatedTeam is null, hint was already completed (race condition prevented)
+    if (!updatedTeam) {
+      // Re-fetch team to get current state
+      const currentTeam = await Team.findById(team._id);
+      return res.json({ 
+        success: true, 
+        earned: 0,
+        totalScore: currentTeam.gameState.score,
+        penalties: currentTeam.gameState.penalties,
+        message: "You've already completed this hint!"
+      });
+    }
     
     // Check if this was the final hint
     if (hint.isFinalHint) {
       return res.json({ 
         success: true, 
-        earned, 
-        totalScore: team.gameState.score,
-        penalties: team.gameState.penalties,
+        earned: hint.scoreValue, 
+        totalScore: updatedTeam.gameState.score,
+        penalties: updatedTeam.gameState.penalties,
         gameCompleted: true,
         message: "Congratulations! You've completed all hints!"
       });
@@ -113,9 +138,9 @@ const submitAnswer = async (req, res) => {
     
     return res.json({ 
       success: true, 
-      earned, 
-      totalScore: team.gameState.score,
-      penalties: team.gameState.penalties 
+      earned: hint.scoreValue, 
+      totalScore: updatedTeam.gameState.score,
+      penalties: updatedTeam.gameState.penalties 
     });
   } else {
     // Wrong answer: add penalty
@@ -134,6 +159,12 @@ const submitAnswer = async (req, res) => {
 // Leaderboard: return teams with name, current hint index, score, penalties and last submission time
 const getLeaderboard = async (req, res) => {
   try {
+    // Check cache first (10 second TTL)
+    const cache = req.app.locals.getLeaderboardCache();
+    if (cache.data && (Date.now() - cache.timestamp) < 10000) {
+      return res.json(cache.data);
+    }
+
     // Sort by score (descending), then by penalties (ascending)
     const teams = await require('../models/Team.js')
       .find({}, { 
@@ -155,7 +186,12 @@ const getLeaderboard = async (req, res) => {
       lastHintSubmittedAt: t.gameState?.lastHintSubmittedAt ?? null,
     }));
 
-    res.json({ leaderboard: payload });
+    const result = { leaderboard: payload };
+    
+    // Cache the result
+    req.app.locals.setLeaderboardCache(result);
+
+    res.json(result);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
