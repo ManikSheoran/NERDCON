@@ -25,7 +25,7 @@ export default function Navbar() {
             <span className="sr-only">Quest Home</span>
           </Link>
 
-          <div className="hidden items-center gap-3 md:flex md:ml-auto font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-gray-300">
+          <div className="hidden items-center gap-3 md:flex font-pixel text-[0.7rem] uppercase tracking-[0.25em] text-gray-300">
             <Link
               to="/game"
               className="rounded-2xl border-2 border-transparent px-4 py-2 transition-all hover:border-brand-primary hover:text-brand-primary"
@@ -91,18 +91,18 @@ export default function Navbar() {
               : "pointer-events-none max-h-0 scale-y-95 opacity-0"
           }`}
         >
-          <nav className="flex flex-col gap-2 font-pixel text-[0.85rem] uppercase tracking-[0.25em] text-nerd-dark">
+          <nav className="flex flex-col gap-2 font-pixel text-[0.85rem] uppercase tracking-[0.25em] text-nerd-dark items-center">
             <Link
               to="/game"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-primary/10 hover:text-brand-primary"
+              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-primary/10 hover:text-brand-primary text-center w-full"
             >
               Game
             </Link>
             <Link
               to="/leaderboard"
               onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-accent/10 hover:text-brand-accent"
+              className="rounded-xl px-4 py-3 transition-all hover:bg-brand-accent/10 hover:text-brand-accent text-center w-full"
             >
               Leaderboard
             </Link>

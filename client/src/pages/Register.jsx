@@ -45,7 +45,7 @@ export default function Register() {
             <input
               id="name"
               type="text"
-              placeholder="The Block Breakers"
+              placeholder="Team Nerdcon"
               value={form.name}
               onChange={handleChange("name")}
               required

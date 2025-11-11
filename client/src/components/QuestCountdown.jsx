@@ -76,7 +76,7 @@ export default function QuestCountdown({ variant = "card" }) {
             Thanks for playing! See you at NERDCON 4.
           </span>
         ) : (
-          <span className="font-mono text-base tracking-[0.2em] text-brand-primary font-bold">
+          <span className="font-pixel text-base tracking-[0.2em] text-brand-primary font-bold">
             {countdownInline}
           </span>
         )}
