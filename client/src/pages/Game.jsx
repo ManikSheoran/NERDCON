@@ -173,11 +173,11 @@ export default function Game() {
             <button
               type="button"
               onClick={refreshLocation}
-              className="pixel-button-sm bg-brand-gray-700 hover:bg-brand-gray-600 text-white flex items-center gap-2"
+              className="pixel-button-sm bg-brand-gray-700 hover:bg-brand-gray-600 border-brand-gray-600 text-white flex items-center gap-2 group"
               title="Refresh location and nearby pins"
             >
-              <ArrowPathIcon className="h-4 w-4" />
-              <span>Refresh</span>
+              <ArrowPathIcon className="h-4 w-4 group-hover:rotate-180 transition-transform duration-500" />
+              <span className="group-hover:animate-pulse">Refresh</span>
             </button>
           </div>
           {position ? (

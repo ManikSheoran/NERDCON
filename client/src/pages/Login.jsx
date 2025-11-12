@@ -70,9 +70,9 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="pixel-button w-full justify-center mt-4"
+            className="pixel-button w-full justify-center mt-4 group"
           >
-            Enter Lobby
+            <span className="group-hover:animate-pulse">Enter Lobby</span>
           </button>
         </form>
         <div className="mt-10 pt-6 border-t-2 border-brand-gray-700">
@@ -80,7 +80,7 @@ export default function Login() {
             Need credentials?{" "}
             <Link
               to="/register"
-              className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary hover:text-brand-pink-400 transition-colors"
+              className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary hover:text-brand-pink-400 transition-all duration-300 hover:tracking-[0.35em]"
             >
               Register your guild
             </Link>

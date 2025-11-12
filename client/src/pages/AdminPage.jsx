@@ -96,7 +96,7 @@ export default function AdminPage() {
             <button
               onClick={downloadCSV}
               disabled={downloading}
-              className="pixel-button w-full md:w-auto px-8 py-4 text-base"
+              className="pixel-button w-full md:w-auto px-8 py-4 text-base group"
             >
               {downloading ? (
                 <span className="flex items-center gap-3 justify-center">
@@ -104,7 +104,7 @@ export default function AdminPage() {
                   Generating CSV...
                 </span>
               ) : (
-                <span>Download Teams CSV</span>
+                <span className="group-hover:animate-pulse">Download Teams CSV</span>
               )}
             </button>
           </div>
@@ -117,9 +117,9 @@ export default function AdminPage() {
               </h2>
               <button
                 onClick={fetchTeamsData}
-                className="pixel-button-sm bg-brand-gray-700 hover:bg-brand-gray-600 text-white px-4 py-2"
+                className="pixel-button-sm bg-brand-gray-700 hover:bg-brand-gray-600 border-brand-gray-600 text-white px-4 py-2 group"
               >
-                Refresh
+                <span className="group-hover:animate-pulse">Refresh</span>
               </button>
             </div>
 

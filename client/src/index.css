@@ -56,7 +56,45 @@
   }
 
   .pixel-button {
-    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-primary bg-brand-primary px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-white transition duration-150 hover:-translate-y-1 hover:shadow-glow-pink focus:outline-none focus:ring-2 focus:ring-brand-primary/40 active:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-2xl border-2 border-brand-primary bg-brand-primary px-6 py-3 font-pixel text-[0.75rem] uppercase tracking-[0.35em] text-white transition-all duration-200 hover:-translate-y-1 hover:shadow-glow-pink hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 active:translate-y-0 active:scale-100;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixel-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .pixel-button:hover::before {
+    left: 100%;
+  }
+
+  .pixel-button-sm {
+    @apply inline-flex items-center justify-center rounded-xl border-2 px-4 py-2 font-pixel text-[0.65rem] uppercase tracking-[0.3em] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 active:translate-y-0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixel-button-sm::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transition: left 0.4s;
+  }
+
+  .pixel-button-sm:hover::before {
+    left: 100%;
   }
 
   .pixel-pill {
