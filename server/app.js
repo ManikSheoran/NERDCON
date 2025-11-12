@@ -5,6 +5,7 @@ const path = require("path");
 const connectDB = require("./config/db.js");
 const authRoutes = require("./routes/authRoutes.js");
 const gameRoutes = require("./routes/gameRoutes.js");
+const adminRoutes = require("./routes/adminRoutes.js");
 const { protect } = require("./middleware/auth.js");
 
 dotenv.config();
@@ -14,10 +15,10 @@ const app = express();
 
 app.use(cors({
   origin: [
-    // "http://localhost:5173",
-    // "http://127.0.0.1:5173",
-    "https://nerdcon.vercel.app",
-    "https://nerdcon-git-main-maniksheoran.vercel.app"
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    // "https://nerdcon.vercel.app",
+    // "https://nerdcon-git-main-maniksheoran.vercel.app"
   ],
   credentials: true
 }));
@@ -61,6 +62,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/game", gameRoutes);
+app.use("/api/admin", adminRoutes); // Hidden admin route
 
 // Error handler
 app.use((err, req, res, next) => {

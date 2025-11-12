@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import TimerPage from "./pages/TimerPage";
+import AdminPage from "./pages/AdminPage";
 import Navbar from "./components/Navbar";
 import HackathonCountdown from "./components/QuestCountdown";
 import "./index.css";
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/game" element={<Game />} />
                   <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/panel" element={<AdminPage />} />
                 </>
               )}
             </Routes>
