@@ -82,12 +82,17 @@ export default function Game() {
             : data.penalties >= 15
             ? "\n\n⚠️ Warning: Close to maximum penalties!"
             : "";
-        alert(`❌ Wrong! Penalties: ${data.penalties}${penaltyWarning}`);
+        alert(
+          `❌ ${data.message}\nPenalties: ${data.penalties}${penaltyWarning}`
+        );
         setPenalties(data.penalties);
       }
     } catch (error) {
       if (error.response?.status === 403) {
-        alert("🚫 Maximum penalties reached! You cannot submit anymore.");
+        const message =
+          error.response?.data?.message ||
+          "Maximum penalties reached! You cannot submit anymore.";
+        alert(`🚫 ${message}`);
       } else {
         alert("Error submitting answer. Please try again.");
       }
