@@ -89,7 +89,8 @@ export default function AdminPage() {
               Team Progress Export
             </h2>
             <p className="text-gray-300 mb-6">
-              Download a CSV file containing all teams' progress, scores, and completed hints.
+              Download a CSV file containing all teams' progress, scores, and
+              completed hints.
             </p>
 
             <button
@@ -134,16 +135,29 @@ export default function AdminPage() {
                 <table className="w-full text-left">
                   <thead className="sticky top-0 bg-brand-gray-800 z-20">
                     <tr className="border-b-2 border-brand-gray-700">
-                      <th className="px-3 py-3 text-brand-primary font-bold sticky left-0 bg-brand-gray-800 z-30">Rank</th>
-                      <th className="px-3 py-3 text-brand-primary font-bold sticky left-14 bg-brand-gray-800 z-30">Team</th>
-                      <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">Score</th>
-                      <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">Penalties</th>
+                      <th className="px-3 py-3 text-brand-primary font-bold sticky left-0 bg-brand-gray-800 z-30">
+                        Rank
+                      </th>
+                      <th className="px-3 py-3 text-brand-primary font-bold sticky left-14 bg-brand-gray-800 z-30">
+                        Team
+                      </th>
+                      <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
+                        Score
+                      </th>
+                      <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
+                        Penalties
+                      </th>
                       {Array.from({ length: totalHints }, (_, i) => (
-                        <th key={i} className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
+                        <th
+                          key={i}
+                          className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800"
+                        >
                           H{i + 1}
                         </th>
                       ))}
-                      <th className="px-3 py-3 text-brand-primary font-bold bg-brand-gray-800">Last Submission</th>
+                      <th className="px-3 py-3 text-brand-primary font-bold bg-brand-gray-800">
+                        Last Submission
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,7 +167,13 @@ export default function AdminPage() {
                         className="border-b border-brand-gray-700 hover:bg-brand-gray-700/50 transition-colors"
                       >
                         <td className="px-3 py-3 text-gray-300 font-bold sticky left-0 bg-brand-gray-800">
-                          {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `#${index + 1}`}
+                          {index === 0
+                            ? "🥇"
+                            : index === 1
+                            ? "🥈"
+                            : index === 2
+                            ? "🥉"
+                            : `#${index + 1}`}
                         </td>
                         <td className="px-3 py-3 text-gray-100 font-semibold sticky left-14 bg-brand-gray-800">
                           {team.name}
@@ -164,34 +184,41 @@ export default function AdminPage() {
                           </span>
                         </td>
                         <td className="px-3 py-3 text-center">
-                          <span className={`px-2 py-1 rounded font-bold text-sm ${
-                            team.penalties >= 20
-                              ? "bg-red-500/20 text-red-400"
-                              : team.penalties >= 15
-                              ? "bg-orange-500/20 text-orange-400"
-                              : "bg-gray-500/20 text-gray-400"
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded font-bold text-sm ${
+                              team.penalties >= 20
+                                ? "bg-red-500/20 text-red-400"
+                                : team.penalties >= 15
+                                ? "bg-orange-500/20 text-orange-400"
+                                : "bg-gray-500/20 text-gray-400"
+                            }`}
+                          >
                             {team.penalties}
                           </span>
                         </td>
                         {team.hintCompletion?.map((status, hintIndex) => (
                           <td key={hintIndex} className="px-3 py-3 text-center">
-                            <span className={`font-bold text-lg ${
-                              status === 1 
-                                ? "text-green-400" 
-                                : "text-gray-600"
-                            }`}>
+                            <span
+                              className={`font-bold text-lg ${
+                                status === 1
+                                  ? "text-green-400"
+                                  : "text-gray-600"
+                              }`}
+                            >
                               {status}
                             </span>
                           </td>
                         ))}
                         <td className="px-3 py-3 text-gray-400 text-xs whitespace-nowrap">
-                          {team.lastSubmission 
-                            ? new Date(team.lastSubmission).toLocaleTimeString('en-IN', { 
-                                hour: '2-digit', 
-                                minute: '2-digit', 
-                                second: '2-digit' 
-                              })
+                          {team.lastSubmission
+                            ? new Date(team.lastSubmission).toLocaleTimeString(
+                                "en-IN",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                }
+                              )
                             : "N/A"}
                         </td>
                       </tr>
