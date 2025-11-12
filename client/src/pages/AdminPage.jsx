@@ -78,7 +78,7 @@ export default function AdminPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="pixel-card">
-        <h1 className="font-pixel text-3xl uppercase tracking-[0.35em] text-brand-primary mb-8 text-center">
+        <h1 className="font-pixel text-xl uppercase tracking-[0.35em] text-brand-primary mb-8 text-center">
           Admin Dashboard
         </h1>
 
@@ -104,7 +104,9 @@ export default function AdminPage() {
                   Generating CSV...
                 </span>
               ) : (
-                <span className="group-hover:animate-pulse">Download Teams CSV</span>
+                <span className="group-hover:animate-pulse">
+                  Download Teams CSV
+                </span>
               )}
             </button>
           </div>
