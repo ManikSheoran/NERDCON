@@ -1,0 +1,159 @@
+{
+  "pins": [
+    {
+      "pin_id": "parade_ground",
+      "name": "Parade Ground",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1234, 28.5678]
+      },
+      "unlocksHintId": 2
+    },
+    {
+      "pin_id": "clock_tower",
+      "name": "Clock Tower",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1235, 28.5679]
+      },
+      "unlocksHintId": 3
+    },
+    {
+      "pin_id": "library",
+      "name": "Library",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1236, 28.5680]
+      },
+      "unlocksHintId": 4
+    },
+    {
+      "pin_id": "student_center",
+      "name": "Student Center",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1237, 28.5681]
+      },
+      "unlocksHintId": 5
+    },
+    {
+      "pin_id": "sports_complex",
+      "name": "Sports Complex",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1238, 28.5682]
+      },
+      "unlocksHintId": 6
+    },
+    {
+      "pin_id": "cafeteria",
+      "name": "Cafeteria",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1239, 28.5683]
+      },
+      "unlocksHintId": 7
+    },
+    {
+      "pin_id": "auditorium",
+      "name": "Auditorium",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1240, 28.5684]
+      },
+      "unlocksHintId": 8
+    },
+    {
+      "pin_id": "main_gate",
+      "name": "Main Gate",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1241, 28.5685]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "trophy_room",
+      "name": "Trophy Room",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1242, 28.5686]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "random_building_a",
+      "name": "Random Building A",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1243, 28.5687]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "random_building_b",
+      "name": "Random Building B",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.1244, 28.5688]
+      },
+      "unlocksHintId": null
+    }
+  ],
+  "hints": [
+    {
+      "hint_id": 1,
+      "imagePath": "hint1.jpg",
+      "correctPins": ["parade_ground"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 2,
+      "imagePath": "hint2.jpg",
+      "correctPins": ["clock_tower", "library"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 3,
+      "imagePath": "hint3.jpg",
+      "correctPins": ["library", "student_center"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 4,
+      "imagePath": "hint4.jpg",
+      "correctPins": ["student_center"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 5,
+      "imagePath": "hint5.jpg",
+      "correctPins": ["sports_complex"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 6,
+      "imagePath": "hint6.jpg",
+      "correctPins": ["cafeteria"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 7,
+      "imagePath": "hint7.jpg",
+      "correctPins": ["auditorium"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 8,
+      "imagePath": "hint8.jpg",
+      "correctPins": ["main_gate"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 9,
+      "imagePath": "final_hint.jpg",
+      "correctPins": ["trophy_room"],
+      "isFinalHint": true
+    }
+  ]
+}

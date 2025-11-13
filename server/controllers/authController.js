@@ -29,9 +29,19 @@ const register = async (req, res) => {
 
     // Create new team
     const hash = await bcrypt.hash(password, 10);
-    const team = await Team.create({ name, email, passwordHash: hash });
+    
+    const team = await Team.create({ 
+      name, 
+      email, 
+      passwordHash: hash,
+      gameState: {
+        currentHintId: 1, // Start with hint 1
+        completedHints: [],
+        penalties: 0
+      }
+    });
 
-    res.status(201).json({ message: "Registered successfully", teamId: team._id });
+    res.status(201).json({ message: "Registered successfully! Your quest begins with Hint 1.", teamId: team._id });
   } catch (e) {
     console.error('Registration error:', e);
     res.status(500).json({ message: "Registration failed. Please try again." });

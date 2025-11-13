@@ -28,7 +28,7 @@ export default function Leaderboard() {
               <tr className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary">
                 <th className="px-6 py-5 text-left">Rank</th>
                 <th className="px-6 py-5 text-left">Team</th>
-                <th className="px-6 py-5 text-left">Score</th>
+                <th className="px-6 py-5 text-left">Hints Completed</th>
                 <th className="px-6 py-5 text-left">Penalties</th>
                 <th className="px-6 py-5 text-left">Last Submission</th>
               </tr>
@@ -76,7 +76,7 @@ export default function Leaderboard() {
                     </td>
                     <td className="px-6 py-5">
                       <span className="inline-block px-3 py-1 rounded-full bg-brand-primary text-white font-bold border-2 border-brand-pink-400">
-                        {team.score}
+                        {team.hintsCompleted || 0}
                       </span>
                     </td>
                     <td className="px-6 py-5">

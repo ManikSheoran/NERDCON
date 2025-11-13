@@ -144,7 +144,7 @@ export default function AdminPage() {
                         Team
                       </th>
                       <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
-                        Score
+                        Hints Done
                       </th>
                       <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
                         Penalties
@@ -182,7 +182,7 @@ export default function AdminPage() {
                         </td>
                         <td className="px-3 py-3 text-center">
                           <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded font-bold text-sm">
-                            {team.score}
+                            {team.hintsCompleted || 0}
                           </span>
                         </td>
                         <td className="px-3 py-3 text-center">

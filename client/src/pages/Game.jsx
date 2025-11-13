@@ -5,12 +5,13 @@ import MapComponent from "../components/MapComponent";
 import AuthenticatedImage from "../components/AuthenticatedImage";
 
 export default function Game() {
-  const [hint, setHint] = useState(null);
-  const [score, setScore] = useState(0);
+  const [hint, setHint] = useState(null); // Single current hint
+  const [currentHintId, setCurrentHintId] = useState(1);
+  const [completedHints, setCompletedHints] = useState([]);
   const [penalties, setPenalties] = useState(0);
   const [pins, setPins] = useState([]);
   const [position, setPosition] = useState(null);
-  const [isFinalHint, setIsFinalHint] = useState(false);
+  const [totalHints, setTotalHints] = useState(0);
   const [gameCompleted, setGameCompleted] = useState(false);
 
   const downloadHintImage = async () => {
@@ -50,23 +51,25 @@ export default function Game() {
     }
   };
 
-  // get current hint
+  // Get current hint
   const fetchHint = async () => {
     try {
       const { data } = await axios.get("/game/hint");
       setHint(data.hint);
-      setIsFinalHint(data.isFinalHint || false);
+      setCurrentHintId(data.currentHintId);
+      setCompletedHints(data.completedHints || []);
+      setTotalHints(data.totalHints || 0);
     } catch (error) {
-      if (error.response?.status === 404) {
-        setGameCompleted(true);
-      }
+      console.error("Failed to fetch hint:", error);
     }
   };
 
   const fetchState = async () => {
     const { data } = await axios.get("/game/state");
-    setScore(data.score);
+    setCurrentHintId(data.currentHintId);
+    setCompletedHints(data.completedHints || []);
     setPenalties(data.penalties);
+    setTotalHints(data.totalHints || 0);
   };
 
   const fetchPins = async (lat, lng) => {
@@ -104,23 +107,24 @@ export default function Game() {
       if (data.success) {
         if (data.gameCompleted) {
           alert(
-            `🎉 CONGRATULATIONS! You've completed all hints!\n\n✅ Final Score: ${data.totalScore}\n⚠️ Penalties: ${data.penalties}\n\nYou are a true champion! 🏆`
+            `🎉 CONGRATULATIONS!\n\nYou've completed the treasure hunt!\n\n✅ Hints Completed: ${data.totalHints}\n⚠️ Penalties: ${data.penalties}\n\nYou are a true champion! 🏆`
           );
           setGameCompleted(true);
+        } else if (data.finalUnlocked) {
+          alert(
+            `🎯 AMAZING! Final hint unlocked!\n\n✅ You've completed all regular hints!\n⚠️ Penalties: ${data.penalties}\n\nNow solve the final challenge! 🏆`
+          );
         } else {
-          alert(`✅ Correct! Earned ${data.earned} points.`);
+          alert(
+            `✅ ${data.message}\n\n⚠️ Penalties: ${data.penalties}\n📍 Moving to hint ${data.currentHintId}...`
+          );
         }
         fetchHint();
         fetchState();
       } else {
-        const penaltyWarning =
-          data.penalties >= 20
-            ? "\n\n🚫 Maximum penalties reached! You cannot submit anymore."
-            : data.penalties >= 15
-            ? "\n\n⚠️ Warning: Close to maximum penalties!"
-            : "";
+        // Wrong answer
         alert(
-          `❌ ${data.message}\nPenalties: ${data.penalties}${penaltyWarning}`
+          `❌ ${data.message}\n\n⚠️ Penalties: ${data.penalties}\n\nKeep trying!`
         );
         setPenalties(data.penalties);
       }
@@ -130,6 +134,13 @@ export default function Game() {
           error.response?.data?.message ||
           "Maximum penalties reached! You cannot submit anymore.";
         alert(`🚫 ${message}`);
+      } else if (error.response?.status === 400) {
+        alert(
+          `⚠️ ${
+            error.response?.data?.message ||
+            "You are too far from this location!"
+          }`
+        );
       } else {
         alert("Error submitting answer. Please try again.");
       }
@@ -146,7 +157,7 @@ export default function Game() {
               🏆 Mission Complete!
             </h2>
             <p className="text-white text-lg font-semibold mb-2">
-              Congratulations! You've completed all hints!
+              Congratulations! You've completed the treasure hunt!
             </p>
             <p className="text-white/90 text-sm">
               Check the leaderboard to see your final ranking!
@@ -158,30 +169,29 @@ export default function Game() {
       {/* Combined Hint and Map Section */}
       <section className="pixel-card">
         {/* Current Hint */}
-        {hint && (
+        {hint ? (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-brand-primary uppercase tracking-wider">
-                {isFinalHint ? "🎯 Final Challenge" : "Current Intel"}
+                {hint.isFinalHint ? "🎯 Final Challenge" : `Current Hint`}
               </h3>
               <span
                 className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-                  isFinalHint
+                  hint.isFinalHint
                     ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
                     : "bg-green-500/20 text-green-400 border border-green-500/50"
                 }`}
               >
-                {isFinalHint ? "Final" : "Live"}
+                {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
               </span>
             </div>
             {hint.imagePath ? (
               <div className="relative group rounded-lg overflow-hidden border-2 border-brand-gray-700">
                 <AuthenticatedImage
                   src={`/hints/${hint.imagePath}`}
-                  alt="Hint"
+                  alt="Current Hint"
                   className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
                 />
-                {/* Download Button Overlay */}
                 <button
                   onClick={downloadHintImage}
                   className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-brand-primary/90 hover:bg-brand-primary text-white rounded-lg p-3 shadow-lg hover:shadow-glow-pink hover:scale-110 active:scale-100"
@@ -192,24 +202,15 @@ export default function Game() {
               </div>
             ) : (
               <div className="text-center py-8 px-4 bg-brand-gray-900 rounded-lg border-2 border-brand-gray-700">
-                {hint.text ? (
-                  <div>
-                    <div className="text-6xl mb-4">🔒</div>
-                    <p className="text-gray-300 text-lg">{hint.text}</p>
-                  </div>
-                ) : (
-                  <p className="text-gray-300">No hint available</p>
-                )}
+                <div className="text-6xl mb-4">�</div>
+                <p className="text-gray-300">No hint image available</p>
               </div>
             )}
-            <div className="mt-4 flex items-center justify-between text-sm">
-              <span className="text-gray-400">
-                Worth:{" "}
-                <span className="text-brand-primary font-bold">
-                  {hint.scoreValue} points
-                </span>
-              </span>
-            </div>
+          </div>
+        ) : (
+          <div className="mb-6 text-center py-8 px-4 bg-brand-gray-900 rounded-lg border-2 border-brand-gray-700">
+            <div className="text-5xl mb-4">⏳</div>
+            <p className="text-gray-300 text-lg mb-2">Loading hint...</p>
           </div>
         )}
 
@@ -256,8 +257,10 @@ export default function Game() {
           </h3>
           <div className="flex flex-wrap gap-4">
             <div className="pixel-pill bg-brand-primary text-white flex-1 justify-center border-brand-primary">
-              <span>Score:</span>
-              <span className="font-bold text-xl">{score}</span>
+              <span>Hints Completed:</span>
+              <span className="font-bold text-xl">
+                {completedHints.length}/{totalHints}
+              </span>
             </div>
             <div
               className={`pixel-pill text-white flex-1 justify-center ${

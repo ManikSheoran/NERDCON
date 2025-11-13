@@ -13,80 +13,20 @@ const haversineMeters = (lat1, lon1, lat2, lon2) => {
 };
 
 const getHint = async (req, res) => {
-  //   const now = new Date();
-  // const eventStart = new Date("2025-11-15T11:30:00Z");
-  // if (now < eventStart) {
-  //   return res.status(403).json({ message: "Quest has not started yet!" });
-  // }
   const team = req.user;
   
-  // Allow viewing specific hint by hint_id query parameter
-  const requestedHintId = req.query.hint_id ? parseInt(req.query.hint_id) : null;
+  // Get current hint the team is working on
+  const currentHint = await Hint.findOne({ hint_id: team.gameState.currentHintId }).lean();
   
-  let hint;
-  if (requestedHintId) {
-    // Team wants to view a specific hint - check if they've unlocked it
-    hint = await Hint.findOne({ hint_id: requestedHintId });
-    if (!hint) {
-      return res.status(404).json({ message: "Hint not found" });
-    }
-    
-    // Check if this hint has been unlocked (hint_id <= currentHintIndex + 1)
-    if (requestedHintId > team.gameState.currentHintIndex + 1) {
-      return res.status(403).json({ message: "You haven't unlocked this hint yet!" });
-    }
-  } else {
-    // Default: show current hint
-    hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
-  }
-  
-  if (!hint) {
-    return res.status(404).json({ message: "No more hints available" });
-  }
-  
-  // Check if this is the final hint (hint 9)
-  const isFinalHint = hint.isFinalHint || false;
-  
-  // If it's the final hint, check if team has visited all unique locations
-  if (isFinalHint) {
-    // Get all unique pins from hints 1-8
-    const allHints = await Hint.find({ isFinalHint: false }).lean();
-    const allUniquePins = new Set();
-    allHints.forEach(h => {
-      h.correctPins.forEach(pinId => allUniquePins.add(String(pinId)));
-    });
-    
-    // Get unique pins the team has submitted
-    const submittedPins = team.gameState.submittedPins || [];
-    const uniqueSubmittedPins = new Set(submittedPins.map(sp => String(sp.pinId)));
-    
-    const totalUniquePins = allUniquePins.size;
-    const visitedUniquePins = uniqueSubmittedPins.size;
-    
-    // If not all unique pins have been visited, hide the image
-    if (visitedUniquePins < totalUniquePins) {
-      const hintWithoutImage = {
-        ...hint.toObject(),
-        imagePath: null,
-        text: `🔒 Visit all unique locations to unlock the final challenge! (${visitedUniquePins}/${totalUniquePins} locations discovered)`
-      };
-      
-      return res.json({ 
-        currentHintIndex: team.gameState.currentHintIndex, 
-        hint: hintWithoutImage,
-        isFinalHint: true,
-        locked: true,
-        visitedLocations: visitedUniquePins,
-        requiredLocations: totalUniquePins
-      });
-    }
+  if (!currentHint) {
+    return res.status(404).json({ message: "No hint available" });
   }
   
   res.json({ 
-    currentHintIndex: team.gameState.currentHintIndex, 
-    hint,
-    isFinalHint,
-    locked: false
+    hint: currentHint,
+    currentHintId: team.gameState.currentHintId,
+    completedHints: team.gameState.completedHints || [],
+    totalHints: await Hint.countDocuments({ isFinalHint: false })
   });
 };
 
@@ -110,7 +50,7 @@ const getNearbyPins = async (req, res) => {
       .lean();
 
     const pins = nearby.map(p => ({
-      id: p._id,
+      id: p.pin_id, // Use custom pin_id instead of MongoDB _id
       name: p.name,
       lat: p.location.coordinates[1],
       lng: p.location.coordinates[0],
@@ -124,13 +64,9 @@ const getNearbyPins = async (req, res) => {
 };
 
 const submitAnswer = async (req, res) => {
-  //   const now = new Date();
-  // const eventStart = new Date("2025-11-15T11:30:00Z");
-  // if (now < eventStart) {
-  //   return res.status(403).json({ message: "Quest has not started yet!" });
-  // }
-  const { pinId, lat, lng, hintId } = req.body;
+  const { pinId, lat, lng } = req.body; // pinId is now custom string like "parade_ground"
   const team = req.user;
+  const Team = require('../models/Team.js');
   
   // Check if team has reached penalty limit
   if (team.gameState.penalties >= 20) {
@@ -140,136 +76,104 @@ const submitAnswer = async (req, res) => {
     });
   }
   
-  // If hintId is provided, use that hint; otherwise use current hint
-  let hint;
-  if (hintId) {
-    hint = await Hint.findById(hintId);
-    if (!hint) {
-      return res.status(404).json({ message: "Hint not found" });
-    }
-    
-    // Check if team has unlocked this hint
-    if (hint.hint_id > team.gameState.currentHintIndex + 1) {
-      return res.status(403).json({ message: "You haven't unlocked this hint yet!" });
-    }
-  } else {
-    hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
-    if (!hint) {
-      return res.status(404).json({ message: "No more hints available" });
-    }
-  }
-  
-  // If this is the final hint, check if all unique locations have been visited
-  if (hint.isFinalHint) {
-    // Get all unique pins from hints 1-8
-    const allHints = await Hint.find({ isFinalHint: false }).lean();
-    const allUniquePins = new Set();
-    allHints.forEach(h => {
-      h.correctPins.forEach(pinId => allUniquePins.add(String(pinId)));
-    });
-    
-    // Get unique pins the team has submitted
-    const submittedPins = team.gameState.submittedPins || [];
-    const uniqueSubmittedPins = new Set(submittedPins.map(sp => String(sp.pinId)));
-    
-    const totalUniquePins = allUniquePins.size;
-    const visitedUniquePins = uniqueSubmittedPins.size;
-    
-    if (visitedUniquePins < totalUniquePins) {
-      return res.status(403).json({ 
-        message: `You must visit all unique locations before attempting the final challenge! (${visitedUniquePins}/${totalUniquePins} locations discovered)`,
-        visitedLocations: visitedUniquePins,
-        requiredLocations: totalUniquePins
-      });
-    }
-  }
-  
-  const pin = await Pin.findById(pinId);
+  // Find pin by custom pin_id
+  const pin = await Pin.findOne({ pin_id: pinId });
   if (!pin) {
     return res.status(404).json({ message: "Pin not found" });
   }
 
+  // Check distance
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 5000) return res.status(400).json({ message: "Not near correct zone" });
+  if (dist > 200) {
+    return res.status(400).json({ message: "You are too far from this location!" });
+  }
 
-  const correct = hint.correctPins && hint.correctPins.length > 0 
-    ? hint.correctPins.some(correctPinId => String(correctPinId) === String(pin._id))
-    : false;
+  // Get current hint
+  const currentHint = await Hint.findOne({ hint_id: team.gameState.currentHintId });
+  if (!currentHint) {
+    return res.status(404).json({ message: "No active hint found" });
+  }
+
+  // Check if the submitted pin is correct for current hint
+  const isCorrect = currentHint.correctPins.includes(pin.pin_id);
   
-  if (correct) {
-    const Team = require('../models/Team.js');
-    
-    // Check if this hint has already been completed
-    const alreadyCompleted = team.gameState.completedHints?.some(
-      h => String(h) === String(hint._id)
-    );
-    
-    // Always move forward if this is their current hint, even if already completed
-    const isCurrentHint = hint.hint_id === team.gameState.currentHintIndex + 1;
-    
-    if (alreadyCompleted && !isCurrentHint) {
-      // Completed a previous hint - give 0 points, don't move forward
-      return res.json({ 
-        success: true, 
-        earned: 0,
-        totalScore: team.gameState.score,
-        penalties: team.gameState.penalties,
-        message: "You've already completed this hint!"
-      });
-    }
-    
-    // Add score only if not already completed
-    if (!alreadyCompleted) {
-      team.gameState.score += hint.scoreValue;
-      team.gameState.completedHints = team.gameState.completedHints || [];
-      team.gameState.completedHints.push(hint._id);
-    }
-    
-    // Always move forward if this is the current hint
-    if (isCurrentHint) {
-      team.gameState.currentHintIndex += 1;
-    }
-    
-    team.gameState.lastHintSubmittedAt = new Date();
-    
-    await team.save();
-    
-    const earnedPoints = alreadyCompleted ? 0 : hint.scoreValue;
-    const moveMessage = isCurrentHint ? " Moving to next hint." : "";
-    
-    // Check if this was the final hint
-    if (hint.isFinalHint && isCurrentHint) {
-      return res.json({ 
-        success: true, 
-        earned: earnedPoints, 
-        totalScore: team.gameState.score,
-        penalties: team.gameState.penalties,
-        gameCompleted: true,
-        message: "Congratulations! You've completed all hints!"
-      });
-    }
-    
-    return res.json({ 
-      success: true, 
-      earned: earnedPoints, 
-      totalScore: team.gameState.score,
-      penalties: team.gameState.penalties,
-      message: alreadyCompleted 
-        ? `Correct location! (0 points - already completed)${moveMessage}`
-        : `Correct! +${hint.scoreValue} points.${moveMessage}`
-    });
-  } else {
+  if (!isCorrect) {
+    // Wrong answer - add penalty
     team.gameState.penalties += 1;
-    
-    team.gameState.lastHintSubmittedAt = new Date();
     await team.save();
-    return res.json({ 
-      success: false, 
+    
+    const penaltyWarning = team.gameState.penalties >= 15
+      ? "\n\n⚠️ Warning: Close to maximum penalties!"
+      : "";
+    
+    return res.json({
+      success: false,
+      message: `❌ Incorrect answer! ${pin.name} is not the right location.`,
       penalties: team.gameState.penalties,
-      message: team.gameState.penalties >= 20 ? "Maximum penalties reached!" : "Incorrect answer" 
+      currentHintId: team.gameState.currentHintId,
+      completedHints: team.gameState.completedHints || []
     });
   }
+  
+  // Correct answer!
+  team.gameState.completedHints = team.gameState.completedHints || [];
+  team.gameState.completedHints.push(currentHint.hint_id);
+  team.gameState.lastHintSubmittedAt = new Date();
+  
+  // Check if this was the final hint
+  if (currentHint.isFinalHint) {
+    await team.save();
+    return res.json({
+      success: true,
+      gameCompleted: true,
+      message: `🎉 CONGRATULATIONS! You've completed the treasure hunt!`,
+      penalties: team.gameState.penalties,
+      completedHints: team.gameState.completedHints,
+      totalHints: team.gameState.completedHints.length
+    });
+  }
+  
+  // Move to next hint (use pin's unlocksHintId if available, otherwise sequential)
+  const nextHintId = pin.unlocksHintId || (currentHint.hint_id + 1);
+  const nextHint = await Hint.findOne({ hint_id: nextHintId });
+  
+  if (!nextHint) {
+    // No more hints - check if all regular hints are complete, unlock final
+    const totalRegularHints = await Hint.countDocuments({ isFinalHint: false });
+    if (team.gameState.completedHints.length >= totalRegularHints) {
+      const finalHint = await Hint.findOne({ isFinalHint: true });
+      if (finalHint) {
+        team.gameState.currentHintId = finalHint.hint_id;
+        await team.save();
+        
+        return res.json({
+          success: true,
+          message: `🎯 Amazing! Final hint unlocked!`,
+          penalties: team.gameState.penalties,
+          currentHintId: finalHint.hint_id,
+          completedHints: team.gameState.completedHints,
+          nextHint: finalHint,
+          finalUnlocked: true
+        });
+      }
+    }
+  }
+  
+  team.gameState.currentHintId = nextHintId;
+  await team.save();
+  
+  return res.json({
+    success: true,
+    message: `✅ Correct! Moving to next hint...`,
+    penalties: team.gameState.penalties,
+    currentHintId: nextHintId,
+    completedHints: team.gameState.completedHints,
+    nextHint: nextHint
+  });
 };
+
+// Handle wrong answers (penalty system removed from new design, but keep for compatibility)
+// In the new design, there are no "wrong" answers - just visited/not visited locations
 
 // Leaderboard: return teams with name, current hint index, score, penalties and last submission time
 const getLeaderboard = async (req, res) => {
@@ -280,23 +184,40 @@ const getLeaderboard = async (req, res) => {
       return res.json(cache.data);
     }
 
-    // Sort by score (descending), then by penalties (ascending)
+    // Sort by: hints completed (desc), then penalties (asc), then time (asc)
     const teams = await require('../models/Team.js')
       .find({}, { 
         name: 1, 
-        'gameState.currentHintIndex': 1, 
-        'gameState.score': 1, 
+        'gameState.currentHintId': 1,
+        'gameState.completedHints': 1,
         'gameState.penalties': 1,
         'gameState.lastHintSubmittedAt': 1 
       })
-      .sort({ 'gameState.score': -1, 'gameState.penalties': 1 })
-      .limit(50)
       .lean();
 
-    const payload = teams.map(t => ({
+    // Sort manually
+    const sorted = teams.sort((a, b) => {
+      const aHints = a.gameState?.completedHints?.length || 0;
+      const bHints = b.gameState?.completedHints?.length || 0;
+      
+      if (bHints !== aHints) return bHints - aHints; // More hints = higher rank
+      
+      const aPenalties = a.gameState?.penalties || 0;
+      const bPenalties = b.gameState?.penalties || 0;
+      
+      if (aPenalties !== bPenalties) return aPenalties - bPenalties; // Fewer penalties = higher rank
+      
+      // Earlier completion time = higher rank
+      const aTime = a.gameState?.lastHintSubmittedAt ? new Date(a.gameState.lastHintSubmittedAt).getTime() : Infinity;
+      const bTime = b.gameState?.lastHintSubmittedAt ? new Date(b.gameState.lastHintSubmittedAt).getTime() : Infinity;
+      
+      return aTime - bTime;
+    }).slice(0, 50);
+
+    const payload = sorted.map(t => ({
       name: t.name,
-      currentHintIndex: t.gameState?.currentHintIndex ?? 0,
-      score: t.gameState?.score ?? 0,
+      currentHintId: t.gameState?.currentHintId ?? 1,
+      hintsCompleted: t.gameState?.completedHints?.length ?? 0,
       penalties: t.gameState?.penalties ?? 0,
       lastHintSubmittedAt: t.gameState?.lastHintSubmittedAt ?? null,
     }));
@@ -313,29 +234,16 @@ const getLeaderboard = async (req, res) => {
 
 const getState = async (req, res) => {
   const { gameState } = req.user;
-  res.json(gameState);
+  const totalHints = await Hint.countDocuments({ isFinalHint: false });
+  
+  res.json({
+    currentHintId: gameState.currentHintId || 1,
+    completedHints: gameState.completedHints || [],
+    hintsCompleted: (gameState.completedHints || []).length,
+    penalties: gameState.penalties || 0,
+    totalHints: totalHints,
+    lastHintSubmittedAt: gameState.lastHintSubmittedAt
+  });
 };
 
-// Get all completed hints with their images
-const getCompletedHints = async (req, res) => {
-  try {
-    const team = req.user;
-    const completedHintIds = team.gameState.completedHints || [];
-    
-    if (completedHintIds.length === 0) {
-      return res.json({ hints: [] });
-    }
-    
-    // Fetch all completed hints
-    const hints = await Hint.find({ _id: { $in: completedHintIds } })
-      .select('hint_id imagePath text scoreValue isFinalHint')
-      .sort({ hint_id: 1 })
-      .lean();
-    
-    res.json({ hints });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-module.exports = { getHint, submitAnswer, getState, getLeaderboard, getNearbyPins, getCompletedHints };
+module.exports = { getHint, submitAnswer, getState, getLeaderboard, getNearbyPins };
