@@ -7,6 +7,7 @@ const teamSchema = new mongoose.Schema({
   gameState: {
     currentHintId: { type: Number, default: 1 }, 
     completedHints: [{ type: Number }], 
+    visitedLocations: [{ type: String }], // Track unique pin_ids visited
     penalties: { type: Number, default: 0 },
     lastHintSubmittedAt: { type: Date },
   },

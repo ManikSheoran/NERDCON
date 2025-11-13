@@ -37,6 +37,7 @@ const register = async (req, res) => {
       gameState: {
         currentHintId: 1, // Start with hint 1
         completedHints: [],
+        visitedLocations: [],
         penalties: 0
       }
     });

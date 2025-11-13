@@ -26,6 +26,7 @@ const getHint = async (req, res) => {
     hint: currentHint,
     currentHintId: team.gameState.currentHintId,
     completedHints: team.gameState.completedHints || [],
+    visitedLocations: team.gameState.visitedLocations || [],
     totalHints: await Hint.countDocuments({ isFinalHint: false })
   });
 };
@@ -108,16 +109,32 @@ const submitAnswer = async (req, res) => {
     
     return res.json({
       success: false,
-      message: `❌ Incorrect answer! ${pin.name} is not the right location.`,
+      message: `Incorrect answer! ${pin.name} is not the right location.`,
       penalties: team.gameState.penalties,
       currentHintId: team.gameState.currentHintId,
-      completedHints: team.gameState.completedHints || []
+      completedHints: team.gameState.completedHints || [],
+      visitedLocations: team.gameState.visitedLocations || []
     });
   }
   
   // Correct answer!
+  // Initialize arrays if needed
   team.gameState.completedHints = team.gameState.completedHints || [];
-  team.gameState.completedHints.push(currentHint.hint_id);
+  team.gameState.visitedLocations = team.gameState.visitedLocations || [];
+  
+  // Check if this location was already visited
+  const alreadyVisited = team.gameState.visitedLocations.includes(pin.pin_id);
+  
+  if (!alreadyVisited) {
+    // New unique location - add to visited set
+    team.gameState.visitedLocations.push(pin.pin_id);
+  }
+  
+  // Only increment completed hints if this is a new location
+  if (!alreadyVisited) {
+    team.gameState.completedHints.push(currentHint.hint_id);
+  }
+  
   team.gameState.lastHintSubmittedAt = new Date();
   
   // Check if this was the final hint
@@ -129,34 +146,51 @@ const submitAnswer = async (req, res) => {
       message: `🎉 CONGRATULATIONS! You've completed the treasure hunt!`,
       penalties: team.gameState.penalties,
       completedHints: team.gameState.completedHints,
+      visitedLocations: team.gameState.visitedLocations,
       totalHints: team.gameState.completedHints.length
     });
+  }
+  
+  // Check if 8 unique locations have been visited - unlock final hint
+  if (team.gameState.visitedLocations.length >= 8) {
+    const finalHint = await Hint.findOne({ isFinalHint: true });
+    if (finalHint) {
+      team.gameState.currentHintId = finalHint.hint_id;
+      await team.save();
+      
+      return res.json({
+        success: true,
+        message: alreadyVisited 
+          ? `✅ Correct! You already visited this location. Final hint unlocked!`
+          : `🎯 Amazing! 8 unique locations found! Final hint unlocked!`,
+        penalties: team.gameState.penalties,
+        currentHintId: finalHint.hint_id,
+        completedHints: team.gameState.completedHints,
+        visitedLocations: team.gameState.visitedLocations,
+        nextHint: finalHint,
+        finalUnlocked: true,
+        alreadyVisited: alreadyVisited
+      });
+    }
   }
   
   // Move to next hint (use pin's unlocksHintId if available, otherwise sequential)
   const nextHintId = pin.unlocksHintId || (currentHint.hint_id + 1);
   const nextHint = await Hint.findOne({ hint_id: nextHintId });
   
+  // If no next hint exists but we haven't reached 8 locations yet, stay on current hint
   if (!nextHint) {
-    // No more hints - check if all regular hints are complete, unlock final
-    const totalRegularHints = await Hint.countDocuments({ isFinalHint: false });
-    if (team.gameState.completedHints.length >= totalRegularHints) {
-      const finalHint = await Hint.findOne({ isFinalHint: true });
-      if (finalHint) {
-        team.gameState.currentHintId = finalHint.hint_id;
-        await team.save();
-        
-        return res.json({
-          success: true,
-          message: `🎯 Amazing! Final hint unlocked!`,
-          penalties: team.gameState.penalties,
-          currentHintId: finalHint.hint_id,
-          completedHints: team.gameState.completedHints,
-          nextHint: finalHint,
-          finalUnlocked: true
-        });
-      }
-    }
+    return res.json({
+      success: true,
+      message: alreadyVisited
+        ? `✅ Correct! You already visited this location. ${8 - team.gameState.visitedLocations.length} more unique locations needed.`
+        : `✅ Correct! ${8 - team.gameState.visitedLocations.length} more unique locations to unlock final hint.`,
+      penalties: team.gameState.penalties,
+      currentHintId: team.gameState.currentHintId,
+      completedHints: team.gameState.completedHints,
+      visitedLocations: team.gameState.visitedLocations,
+      alreadyVisited: alreadyVisited
+    });
   }
   
   team.gameState.currentHintId = nextHintId;
@@ -164,11 +198,15 @@ const submitAnswer = async (req, res) => {
   
   return res.json({
     success: true,
-    message: `✅ Correct! Moving to next hint...`,
+    message: alreadyVisited
+      ? `✅ Correct! You already visited this location. Moving to next hint...`
+      : `✅ Correct! Moving to next hint...`,
     penalties: team.gameState.penalties,
     currentHintId: nextHintId,
     completedHints: team.gameState.completedHints,
-    nextHint: nextHint
+    visitedLocations: team.gameState.visitedLocations,
+    nextHint: nextHint,
+    alreadyVisited: alreadyVisited
   });
 };
 
@@ -240,6 +278,8 @@ const getState = async (req, res) => {
     currentHintId: gameState.currentHintId || 1,
     completedHints: gameState.completedHints || [],
     hintsCompleted: (gameState.completedHints || []).length,
+    visitedLocations: gameState.visitedLocations || [],
+    uniqueLocationsVisited: (gameState.visitedLocations || []).length,
     penalties: gameState.penalties || 0,
     totalHints: totalHints,
     lastHintSubmittedAt: gameState.lastHintSubmittedAt
