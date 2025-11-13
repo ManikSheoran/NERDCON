@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import axios from "../api/axios";
 import MapComponent from "../components/MapComponent";
 import AuthenticatedImage from "../components/AuthenticatedImage";
@@ -12,6 +12,43 @@ export default function Game() {
   const [position, setPosition] = useState(null);
   const [isFinalHint, setIsFinalHint] = useState(false);
   const [gameCompleted, setGameCompleted] = useState(false);
+
+  const downloadHintImage = async () => {
+    if (!hint?.imagePath) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const backendURL =
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+      const baseURL = backendURL.replace(/\/api$/, "");
+
+      const response = await fetch(`${baseURL}/hints/${hint.imagePath}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch image");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+
+      const filename = hint.imagePath.split("/").pop() || "hint-image.jpg";
+      a.download = filename;
+
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Failed to download image:", error);
+      alert("Failed to download image. Please try again.");
+    }
+  };
 
   // get current hint
   const fetchHint = async () => {
@@ -138,12 +175,20 @@ export default function Game() {
               </span>
             </div>
             {hint.imagePath ? (
-              <div className="relative rounded-lg overflow-hidden border-2 border-brand-gray-700">
+              <div className="relative group rounded-lg overflow-hidden border-2 border-brand-gray-700">
                 <AuthenticatedImage
                   src={`/hints/${hint.imagePath}`}
                   alt="Hint"
                   className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
                 />
+                {/* Download Button Overlay */}
+                <button
+                  onClick={downloadHintImage}
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-brand-primary/90 hover:bg-brand-primary text-white rounded-lg p-3 shadow-lg hover:shadow-glow-pink hover:scale-110 active:scale-100"
+                  title="Download hint image"
+                >
+                  <ArrowDownTrayIcon className="h-5 w-5" />
+                </button>
               </div>
             ) : (
               <p className="text-gray-300">

@@ -13,11 +13,11 @@ const haversineMeters = (lat1, lon1, lat2, lon2) => {
 };
 
 const getHint = async (req, res) => {
-    const now = new Date();
-  const eventStart = new Date("2025-11-15T11:30:00Z");
-  if (now < eventStart) {
-    return res.status(403).json({ message: "Quest has not started yet!" });
-  }
+  //   const now = new Date();
+  // const eventStart = new Date("2025-11-15T11:30:00Z");
+  // if (now < eventStart) {
+  //   return res.status(403).json({ message: "Quest has not started yet!" });
+  // }
   const team = req.user;
   const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
   
@@ -66,11 +66,11 @@ const getNearbyPins = async (req, res) => {
 };
 
 const submitAnswer = async (req, res) => {
-    const now = new Date();
-  const eventStart = new Date("2025-11-15T11:30:00Z");
-  if (now < eventStart) {
-    return res.status(403).json({ message: "Quest has not started yet!" });
-  }
+  //   const now = new Date();
+  // const eventStart = new Date("2025-11-15T11:30:00Z");
+  // if (now < eventStart) {
+  //   return res.status(403).json({ message: "Quest has not started yet!" });
+  // }
   const { pinId, lat, lng } = req.body;
   const team = req.user;
   
@@ -119,7 +119,6 @@ const submitAnswer = async (req, res) => {
     
     // If updatedTeam is null, hint was already completed (race condition prevented)
     if (!updatedTeam) {
-      // Re-fetch team to get current state
       const currentTeam = await Team.findById(team._id);
       return res.json({ 
         success: true, 
