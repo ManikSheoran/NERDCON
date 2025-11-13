@@ -19,7 +19,26 @@ const getHint = async (req, res) => {
   //   return res.status(403).json({ message: "Quest has not started yet!" });
   // }
   const team = req.user;
-  const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
+  
+  // Allow viewing specific hint by hint_id query parameter
+  const requestedHintId = req.query.hint_id ? parseInt(req.query.hint_id) : null;
+  
+  let hint;
+  if (requestedHintId) {
+    // Team wants to view a specific hint - check if they've unlocked it
+    hint = await Hint.findOne({ hint_id: requestedHintId });
+    if (!hint) {
+      return res.status(404).json({ message: "Hint not found" });
+    }
+    
+    // Check if this hint has been unlocked (hint_id <= currentHintIndex + 1)
+    if (requestedHintId > team.gameState.currentHintIndex + 1) {
+      return res.status(403).json({ message: "You haven't unlocked this hint yet!" });
+    }
+  } else {
+    // Default: show current hint
+    hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
+  }
   
   if (!hint) {
     return res.status(404).json({ message: "No more hints available" });
@@ -110,7 +129,7 @@ const submitAnswer = async (req, res) => {
   // if (now < eventStart) {
   //   return res.status(403).json({ message: "Quest has not started yet!" });
   // }
-  const { pinId, lat, lng } = req.body;
+  const { pinId, lat, lng, hintId } = req.body;
   const team = req.user;
   
   // Check if team has reached penalty limit
@@ -121,9 +140,23 @@ const submitAnswer = async (req, res) => {
     });
   }
   
-  const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
-  if (!hint) {
-    return res.status(404).json({ message: "No more hints available" });
+  // If hintId is provided, use that hint; otherwise use current hint
+  let hint;
+  if (hintId) {
+    hint = await Hint.findById(hintId);
+    if (!hint) {
+      return res.status(404).json({ message: "Hint not found" });
+    }
+    
+    // Check if team has unlocked this hint
+    if (hint.hint_id > team.gameState.currentHintIndex + 1) {
+      return res.status(403).json({ message: "You haven't unlocked this hint yet!" });
+    }
+  } else {
+    hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
+    if (!hint) {
+      return res.status(404).json({ message: "No more hints available" });
+    }
   }
   
   // If this is the final hint, check if all unique locations have been visited
@@ -171,7 +204,11 @@ const submitAnswer = async (req, res) => {
       h => String(h) === String(hint._id)
     );
     
-    if (alreadyCompleted) {
+    // Always move forward if this is their current hint, even if already completed
+    const isCurrentHint = hint.hint_id === team.gameState.currentHintIndex + 1;
+    
+    if (alreadyCompleted && !isCurrentHint) {
+      // Completed a previous hint - give 0 points, don't move forward
       return res.json({ 
         success: true, 
         earned: 0,
@@ -181,22 +218,30 @@ const submitAnswer = async (req, res) => {
       });
     }
     
-    // Add score and move to next hint
-    team.gameState.score += hint.scoreValue;
-    team.gameState.currentHintIndex += 1;
-    team.gameState.lastHintSubmittedAt = new Date();
+    // Add score only if not already completed
+    if (!alreadyCompleted) {
+      team.gameState.score += hint.scoreValue;
+      team.gameState.completedHints = team.gameState.completedHints || [];
+      team.gameState.completedHints.push(hint._id);
+    }
     
-    // Mark hint as completed
-    team.gameState.completedHints = team.gameState.completedHints || [];
-    team.gameState.completedHints.push(hint._id);
+    // Always move forward if this is the current hint
+    if (isCurrentHint) {
+      team.gameState.currentHintIndex += 1;
+    }
+    
+    team.gameState.lastHintSubmittedAt = new Date();
     
     await team.save();
     
+    const earnedPoints = alreadyCompleted ? 0 : hint.scoreValue;
+    const moveMessage = isCurrentHint ? " Moving to next hint." : "";
+    
     // Check if this was the final hint
-    if (hint.isFinalHint) {
+    if (hint.isFinalHint && isCurrentHint) {
       return res.json({ 
         success: true, 
-        earned: hint.scoreValue, 
+        earned: earnedPoints, 
         totalScore: team.gameState.score,
         penalties: team.gameState.penalties,
         gameCompleted: true,
@@ -206,10 +251,12 @@ const submitAnswer = async (req, res) => {
     
     return res.json({ 
       success: true, 
-      earned: hint.scoreValue, 
+      earned: earnedPoints, 
       totalScore: team.gameState.score,
       penalties: team.gameState.penalties,
-      message: "Correct! Moving to the next hint."
+      message: alreadyCompleted 
+        ? `Correct location! (0 points - already completed)${moveMessage}`
+        : `Correct! +${hint.scoreValue} points.${moveMessage}`
     });
   } else {
     team.gameState.penalties += 1;
