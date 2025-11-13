@@ -31,7 +31,6 @@ const getHint = async (req, res) => {
   });
 };
 
-// Return pins within ~200 meters of provided lat/lng (query params or body)
 const getNearbyPins = async (req, res) => {
   try {
     const lat = parseFloat(req.query.lat ?? req.body?.lat);
@@ -43,7 +42,7 @@ const getNearbyPins = async (req, res) => {
       location: {
         $nearSphere: {
           $geometry: { type: 'Point', coordinates: [lng, lat] },
-          $maxDistance: 200,
+          $maxDistance: 51,
         },
       },
     })
@@ -85,7 +84,7 @@ const submitAnswer = async (req, res) => {
 
   // Check distance
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 200) {
+  if (dist > 51) {
     return res.status(400).json({ message: "You are too far from this location!" });
   }
 
