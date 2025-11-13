@@ -129,59 +129,41 @@ const submitAnswer = async (req, res) => {
   if (correct) {
     const Team = require('../models/Team.js');
     
-    // Check if this specific pin has already been submitted for this hint
-    const alreadySubmitted = team.gameState.submittedPins?.some(
-      sp => String(sp.hintId) === String(hint._id) && String(sp.pinId) === String(pin._id)
+    // Check if this hint has already been completed
+    const alreadyCompleted = team.gameState.completedHints?.some(
+      h => String(h) === String(hint._id)
     );
     
-    if (alreadySubmitted) {
+    if (alreadyCompleted) {
       return res.json({ 
         success: true, 
         earned: 0,
         totalScore: team.gameState.score,
         penalties: team.gameState.penalties,
-        message: "You've already found this location for this hint!"
+        message: "You've already completed this hint!"
       });
     }
     
-    // Add this pin to submitted pins
-    team.gameState.submittedPins = team.gameState.submittedPins || [];
-    team.gameState.submittedPins.push({
-      hintId: hint._id,
-      pinId: pin._id,
-      submittedAt: new Date()
-    });
-    
-    // Count how many correct pins have been found for this hint
-    const foundPinsForThisHint = team.gameState.submittedPins.filter(
-      sp => String(sp.hintId) === String(hint._id)
-    ).length;
-    
-    const totalCorrectPins = hint.correctPins.length;
-    const allPinsFound = foundPinsForThisHint >= totalCorrectPins;
-    
-    // Add score for this pin
+    // Add score and move to next hint
     team.gameState.score += hint.scoreValue;
+    team.gameState.currentHintIndex += 1;
     team.gameState.lastHintSubmittedAt = new Date();
     
-    // If all pins are found, move to next hint and mark as completed
-    if (allPinsFound) {
-      team.gameState.currentHintIndex += 1;
-      team.gameState.completedHints = team.gameState.completedHints || [];
-      team.gameState.completedHints.push(hint._id);
-    }
+    // Mark hint as completed
+    team.gameState.completedHints = team.gameState.completedHints || [];
+    team.gameState.completedHints.push(hint._id);
     
     await team.save();
     
     // Check if this was the final hint
-    if (hint.isFinalHint && allPinsFound) {
+    if (hint.isFinalHint) {
       return res.json({ 
         success: true, 
         earned: hint.scoreValue, 
         totalScore: team.gameState.score,
         penalties: team.gameState.penalties,
         gameCompleted: true,
-        message: `Congratulations! You've completed all hints! (${foundPinsForThisHint}/${totalCorrectPins} locations found)`
+        message: "Congratulations! You've completed all hints!"
       });
     }
     
@@ -190,12 +172,7 @@ const submitAnswer = async (req, res) => {
       earned: hint.scoreValue, 
       totalScore: team.gameState.score,
       penalties: team.gameState.penalties,
-      allPinsFound,
-      foundPins: foundPinsForThisHint,
-      totalPins: totalCorrectPins,
-      message: allPinsFound 
-        ? `Perfect! All locations found! Moving to next hint. (${foundPinsForThisHint}/${totalCorrectPins})`
-        : `Correct! Keep searching for more locations. (${foundPinsForThisHint}/${totalCorrectPins})`
+      message: "Correct! Moving to the next hint."
     });
   } else {
     team.gameState.penalties += 1;
