@@ -68,7 +68,13 @@ const submitAnswer = async (req, res) => {
   const team = req.user;
   const Team = require('../models/Team.js');
   
-  // Check if team has reached penalty limit
+  if (team.gameState.visitedLocations.length >= 8) {
+    return res.status(403).json({ 
+      message: "All locations already visited. Game completed.", 
+      visitedLocations: team.gameState.visitedLocations 
+    }); 
+  }
+  
   if (team.gameState.penalties >= 20) {
     return res.status(403).json({ 
       message: "Maximum penalties reached. You cannot submit anymore.", 
