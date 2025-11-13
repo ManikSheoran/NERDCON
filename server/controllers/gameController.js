@@ -28,16 +28,28 @@ const getHint = async (req, res) => {
   // Check if this is the final hint (hint 9)
   const isFinalHint = hint.isFinalHint || false;
   
-  // If it's the final hint, check if all 8 previous hints are completed
+  // If it's the final hint, check if team has visited all unique locations
   if (isFinalHint) {
-    const completedCount = team.gameState.completedHints?.length || 0;
+    // Get all unique pins from hints 1-8
+    const allHints = await Hint.find({ isFinalHint: false }).lean();
+    const allUniquePins = new Set();
+    allHints.forEach(h => {
+      h.correctPins.forEach(pinId => allUniquePins.add(String(pinId)));
+    });
     
-    // If not all 8 previous hints are completed, hide the image
-    if (completedCount < 8) {
+    // Get unique pins the team has submitted
+    const submittedPins = team.gameState.submittedPins || [];
+    const uniqueSubmittedPins = new Set(submittedPins.map(sp => String(sp.pinId)));
+    
+    const totalUniquePins = allUniquePins.size;
+    const visitedUniquePins = uniqueSubmittedPins.size;
+    
+    // If not all unique pins have been visited, hide the image
+    if (visitedUniquePins < totalUniquePins) {
       const hintWithoutImage = {
         ...hint.toObject(),
         imagePath: null,
-        text: "Complete all 8 previous hints to unlock the final challenge image!"
+        text: `🔒 Visit all unique locations to unlock the final challenge! (${visitedUniquePins}/${totalUniquePins} locations discovered)`
       };
       
       return res.json({ 
@@ -45,8 +57,8 @@ const getHint = async (req, res) => {
         hint: hintWithoutImage,
         isFinalHint: true,
         locked: true,
-        completedHints: completedCount,
-        requiredHints: 8
+        visitedLocations: visitedUniquePins,
+        requiredLocations: totalUniquePins
       });
     }
   }
@@ -112,6 +124,31 @@ const submitAnswer = async (req, res) => {
   const hint = await Hint.findOne().skip(team.gameState.currentHintIndex);
   if (!hint) {
     return res.status(404).json({ message: "No more hints available" });
+  }
+  
+  // If this is the final hint, check if all unique locations have been visited
+  if (hint.isFinalHint) {
+    // Get all unique pins from hints 1-8
+    const allHints = await Hint.find({ isFinalHint: false }).lean();
+    const allUniquePins = new Set();
+    allHints.forEach(h => {
+      h.correctPins.forEach(pinId => allUniquePins.add(String(pinId)));
+    });
+    
+    // Get unique pins the team has submitted
+    const submittedPins = team.gameState.submittedPins || [];
+    const uniqueSubmittedPins = new Set(submittedPins.map(sp => String(sp.pinId)));
+    
+    const totalUniquePins = allUniquePins.size;
+    const visitedUniquePins = uniqueSubmittedPins.size;
+    
+    if (visitedUniquePins < totalUniquePins) {
+      return res.status(403).json({ 
+        message: `You must visit all unique locations before attempting the final challenge! (${visitedUniquePins}/${totalUniquePins} locations discovered)`,
+        visitedLocations: visitedUniquePins,
+        requiredLocations: totalUniquePins
+      });
+    }
   }
   
   const pin = await Pin.findById(pinId);

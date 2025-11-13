@@ -142,8 +142,8 @@ export default function Game() {
       {gameCompleted && (
         <div className="pixel-card bg-gradient-to-r from-brand-primary to-brand-pink-700 border-brand-primary">
           <div className="text-center py-8">
-            <h2 className="font-pixel text-3xl uppercase tracking-[0.35em] text-white mb-4">
-              🏆 Mission Complete! 🏆
+            <h2 className="font-pixel text-xl uppercase tracking-[0.35em] text-white mb-4">
+              🏆 Mission Complete!
             </h2>
             <p className="text-white text-lg font-semibold mb-2">
               Congratulations! You've completed all hints!
