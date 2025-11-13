@@ -25,10 +25,37 @@ const getHint = async (req, res) => {
     return res.status(404).json({ message: "No more hints available" });
   }
   
+  // Check if this is the final hint (hint 9)
+  const isFinalHint = hint.isFinalHint || false;
+  
+  // If it's the final hint, check if all 8 previous hints are completed
+  if (isFinalHint) {
+    const completedCount = team.gameState.completedHints?.length || 0;
+    
+    // If not all 8 previous hints are completed, hide the image
+    if (completedCount < 8) {
+      const hintWithoutImage = {
+        ...hint.toObject(),
+        imagePath: null,
+        text: "🔒 Complete all 8 previous hints to unlock the final challenge image!"
+      };
+      
+      return res.json({ 
+        currentHintIndex: team.gameState.currentHintIndex, 
+        hint: hintWithoutImage,
+        isFinalHint: true,
+        locked: true,
+        completedHints: completedCount,
+        requiredHints: 8
+      });
+    }
+  }
+  
   res.json({ 
     currentHintIndex: team.gameState.currentHintIndex, 
     hint,
-    isFinalHint: hint.isFinalHint || false
+    isFinalHint,
+    locked: false
   });
 };
 
@@ -48,7 +75,7 @@ const getNearbyPins = async (req, res) => {
         },
       },
     })
-      .limit(50)
+      .limit(55)
       .lean();
 
     const pins = nearby.map(p => ({
@@ -148,9 +175,8 @@ const submitAnswer = async (req, res) => {
       penalties: updatedTeam.gameState.penalties 
     });
   } else {
-    // Wrong answer: add penalty
     team.gameState.penalties += 1;
-    // record the time of this (failed) submission as well
+    
     team.gameState.lastHintSubmittedAt = new Date();
     await team.save();
     return res.json({ 

@@ -191,9 +191,16 @@ export default function Game() {
                 </button>
               </div>
             ) : (
-              <p className="text-gray-300">
-                {hint.text || "No hint available"}
-              </p>
+              <div className="text-center py-8 px-4 bg-brand-gray-900 rounded-lg border-2 border-brand-gray-700">
+                {hint.text ? (
+                  <div>
+                    <div className="text-6xl mb-4">🔒</div>
+                    <p className="text-gray-300 text-lg">{hint.text}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-300">No hint available</p>
+                )}
+              </div>
             )}
             <div className="mt-4 flex items-center justify-between text-sm">
               <span className="text-gray-400">
