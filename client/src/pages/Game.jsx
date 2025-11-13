@@ -107,16 +107,16 @@ export default function Game() {
       if (data.success) {
         if (data.gameCompleted) {
           alert(
-            `🎉 CONGRATULATIONS!\n\nYou've completed the treasure hunt!\n\n✅ Hints Completed: ${data.totalHints}\n⚠️ Penalties: ${data.penalties}\n\nYou are a true champion! 🏆`
+            `🎉 CONGRATULATIONS!\n\nYou've completed the treasure hunt!\n\nHints Completed: ${data.totalHints}\nPenalties: ${data.penalties}\n\nYou are a true champion! 🏆`
           );
           setGameCompleted(true);
         } else if (data.finalUnlocked) {
           alert(
-            `🎯 AMAZING! Final hint unlocked!\n\n✅ You've completed all regular hints!\n⚠️ Penalties: ${data.penalties}\n\nNow solve the final challenge! 🏆`
+            `🎯 AMAZING! Final hint unlocked!\n\nYou've completed all regular hints!\nPenalties: ${data.penalties}\n\nNow solve the final challenge! 🏆`
           );
         } else {
           alert(
-            `✅ ${data.message}\n\n⚠️ Penalties: ${data.penalties}\n📍 Moving to hint ${data.currentHintId}...`
+            `${data.message}\n\nPenalties: ${data.penalties}\n📍 Moving to hint ${data.currentHintId}...`
           );
         }
         fetchHint();
@@ -124,7 +124,7 @@ export default function Game() {
       } else {
         // Wrong answer
         alert(
-          `❌ ${data.message}\n\n⚠️ Penalties: ${data.penalties}\n\nKeep trying!`
+          `${data.message}\n\nPenalties: ${data.penalties}\n\nKeep trying!`
         );
         setPenalties(data.penalties);
       }
@@ -136,7 +136,7 @@ export default function Game() {
         alert(`🚫 ${message}`);
       } else if (error.response?.status === 400) {
         alert(
-          `⚠️ ${
+          `${
             error.response?.data?.message ||
             "You are too far from this location!"
           }`
@@ -259,7 +259,7 @@ export default function Game() {
             <div className="pixel-pill bg-brand-primary text-white flex-1 justify-center border-brand-primary">
               <span>Hints Completed:</span>
               <span className="font-bold text-xl">
-                {completedHints.length}/{totalHints}
+                {completedHints.length}
               </span>
             </div>
             <div
@@ -285,7 +285,7 @@ export default function Game() {
           {penalties >= 15 && penalties < 20 && (
             <div className="mt-4 p-3 bg-orange-900/50 border-2 border-orange-600 rounded-lg">
               <p className="text-orange-300 font-semibold text-sm text-center">
-                ⚠️ Warning: {20 - penalties} penalties remaining!
+                Warning: {20 - penalties} penalties remaining!
               </p>
             </div>
           )}

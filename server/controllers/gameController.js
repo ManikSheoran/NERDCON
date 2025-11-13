@@ -84,7 +84,7 @@ const submitAnswer = async (req, res) => {
 
   // Check distance
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 200) {
+  if (dist > 5000) {
     return res.status(400).json({ message: "You are too far from this location!" });
   }
 
