@@ -35,7 +35,7 @@ const register = async (req, res) => {
       email, 
       passwordHash: hash,
       gameState: {
-        currentHintId: 1, // Start with hint 1
+        currentHintId: 1,
         completedHints: [],
         visitedLocations: [],
         penalties: 0

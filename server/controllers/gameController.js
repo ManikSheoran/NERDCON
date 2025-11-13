@@ -151,8 +151,7 @@ const submitAnswer = async (req, res) => {
     });
   }
   
-  // Check if 8 unique locations have been visited - unlock final hint
-  if (team.gameState.visitedLocations.length >= 8) {
+  if (team.gameState.visitedLocations.length >= 7) {
     const finalHint = await Hint.findOne({ isFinalHint: true });
     if (finalHint) {
       team.gameState.currentHintId = finalHint.hint_id;
@@ -162,7 +161,7 @@ const submitAnswer = async (req, res) => {
         success: true,
         message: alreadyVisited 
           ? `✅ Correct! You already visited this location. Final hint unlocked!`
-          : `🎯 Amazing! 8 unique locations found! Final hint unlocked!`,
+          : `🎯 Amazing! 7 unique locations found! Final hint unlocked!`,
         penalties: team.gameState.penalties,
         currentHintId: finalHint.hint_id,
         completedHints: team.gameState.completedHints,
@@ -178,13 +177,13 @@ const submitAnswer = async (req, res) => {
   const nextHintId = pin.unlocksHintId || (currentHint.hint_id + 1);
   const nextHint = await Hint.findOne({ hint_id: nextHintId });
   
-  // If no next hint exists but we haven't reached 8 locations yet, stay on current hint
+  // If no next hint exists but we haven't reached 7 locations yet, stay on current hint
   if (!nextHint) {
     return res.json({
       success: true,
       message: alreadyVisited
-        ? `✅ Correct! You already visited this location. ${8 - team.gameState.visitedLocations.length} more unique locations needed.`
-        : `✅ Correct! ${8 - team.gameState.visitedLocations.length} more unique locations to unlock final hint.`,
+        ? `✅ Correct! You already visited this location. ${7 - team.gameState.visitedLocations.length} more unique locations needed.`
+        : `✅ Correct! ${7 - team.gameState.visitedLocations.length} more unique locations to unlock final hint.`,
       penalties: team.gameState.penalties,
       currentHintId: team.gameState.currentHintId,
       completedHints: team.gameState.completedHints,
