@@ -44,7 +44,7 @@ const getNearbyPins = async (req, res) => {
       location: {
         $nearSphere: {
           $geometry: { type: 'Point', coordinates: [lng, lat] },
-          $maxDistance: 50,
+          $maxDistance: 5000,
         },
       },
     })
@@ -93,7 +93,7 @@ const submitAnswer = async (req, res) => {
   }
 
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 50) return res.status(400).json({ message: "Not near correct zone" });
+  if (dist > 5000) return res.status(400).json({ message: "Not near correct zone" });
 
   const correct = hint.correctPins && hint.correctPins.length > 0 
     ? hint.correctPins.some(correctPinId => String(correctPinId) === String(pin._id))
