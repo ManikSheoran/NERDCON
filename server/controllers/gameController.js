@@ -87,7 +87,7 @@ const submitAnswer = async (req, res) => {
   const team = req.user;
   const Team = require('../models/Team.js');
   
-  if (team.gameState.visitedLocations.length >= 6) {
+  if (team.gameState.visitedLocations.length > 6) {
     return res.status(403).json({ 
       message: "All locations already visited. Game completed.", 
       visitedLocations: team.gameState.visitedLocations 
