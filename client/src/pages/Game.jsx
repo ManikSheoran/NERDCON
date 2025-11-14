@@ -282,7 +282,7 @@ export default function Game() {
                   className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
                     hint.isFinalHint
                       ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
-                      : "bg-green-500/20 text-green-400 border border-green-500/50"
+                      : "bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/50"
                   }`}
                 >
                   {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
