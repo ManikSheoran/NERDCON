@@ -27,7 +27,7 @@ const getHint = async (req, res) => {
   // Read images from the hint folder
   let images = [];
   try {
-    const hintFolderPath = path.join(__dirname, '../../public/hints', currentHint.folderName);
+    const hintFolderPath = path.join(__dirname, '../hints', currentHint.folderName);
     const files = await fs.readdir(hintFolderPath);
     // Filter for image files and sort them
     images = files
@@ -36,6 +36,7 @@ const getHint = async (req, res) => {
       .map(file => `${currentHint.folderName}/${file}`);
   } catch (error) {
     console.error('Error reading hint folder:', error);
+    console.error('Attempted path:', path.join(__dirname, '../hints', currentHint.folderName));
     images = [];
   }
   
