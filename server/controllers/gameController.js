@@ -60,7 +60,7 @@ const getNearbyPins = async (req, res) => {
       location: {
         $nearSphere: {
           $geometry: { type: 'Point', coordinates: [lng, lat] },
-          $maxDistance: 75,
+          $maxDistance: 5511,
         },
       },
     })
@@ -101,7 +101,7 @@ const submitAnswer = async (req, res) => {
 
   // Check distance
   const dist = haversineMeters(lat, lng, pin.location.coordinates[1], pin.location.coordinates[0]);
-  if (dist > 75) {
+  if (dist > 5511) {
     return res.status(400).json({ message: "You are too far from this location!" });
   }
 
