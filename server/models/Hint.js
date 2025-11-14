@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const hintSchema = new mongoose.Schema({
   hint_id: { type: Number, required: true, unique: true },
-  imagePath: { type: String, required: true },
-  correctPins: [{ type: String }], // Array of custom pin_id strings
+  folderName: { type: String, required: true },
+  intel: { type: String, default: "" }, // Additional hint text (costs 2 penalties to unlock)
+  correctPins: [{ type: String }],
   isFinalHint: { type: Boolean, default: false },
 });
 

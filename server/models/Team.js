@@ -8,6 +8,7 @@ const teamSchema = new mongoose.Schema({
     currentHintId: { type: Number, default: 1 }, 
     completedHints: [{ type: Number }], 
     visitedLocations: [{ type: String }], // Track unique pin_ids visited
+    unlockedIntels: [{ type: Number }], // Track which hints have intel unlocked
     penalties: { type: Number, default: 0 },
     lastHintSubmittedAt: { type: Date },
   },

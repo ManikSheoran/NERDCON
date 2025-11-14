@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { ArrowPathIcon, ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowPathIcon,
+  ArrowDownTrayIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/outline";
 import axios from "../api/axios";
 import MapComponent from "../components/MapComponent";
 import AuthenticatedImage from "../components/AuthenticatedImage";
@@ -8,14 +13,18 @@ export default function Game() {
   const [hint, setHint] = useState(null); // Single current hint
   const [currentHintId, setCurrentHintId] = useState(1);
   const [completedHints, setCompletedHints] = useState([]);
+  const [unlockedIntels, setUnlockedIntels] = useState([]);
   const [penalties, setPenalties] = useState(0);
   const [pins, setPins] = useState([]);
   const [position, setPosition] = useState(null);
   const [totalHints, setTotalHints] = useState(0);
   const [gameCompleted, setGameCompleted] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showIntel, setShowIntel] = useState(false);
+  const [unlockingIntel, setUnlockingIntel] = useState(false);
 
   const downloadHintImage = async () => {
-    if (!hint?.imagePath) return;
+    if (!hint?.images || hint.images.length === 0) return;
 
     try {
       const token = localStorage.getItem("token");
@@ -23,7 +32,8 @@ export default function Game() {
         import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
       const baseURL = backendURL.replace(/\/api$/, "");
 
-      const response = await fetch(`${baseURL}/hints/${hint.imagePath}`, {
+      const currentImage = hint.images[currentImageIndex];
+      const response = await fetch(`${baseURL}/hints/${currentImage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +48,7 @@ export default function Game() {
       const a = document.createElement("a");
       a.href = url;
 
-      const filename = hint.imagePath.split("/").pop() || "hint-image.jpg";
+      const filename = currentImage.split("/").pop() || "hint-image.jpg";
       a.download = filename;
 
       document.body.appendChild(a);
@@ -51,14 +61,29 @@ export default function Game() {
     }
   };
 
+  const nextImage = () => {
+    if (hint?.images && currentImageIndex < hint.images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
   // Get current hint
   const fetchHint = async () => {
     try {
       const { data } = await axios.get("/game/hint");
       setHint(data.hint);
       setCurrentHintId(data.currentHintId);
+      setCurrentImageIndex(0); // Reset to first image when new hint loads
       setCompletedHints(data.completedHints || []);
+      setUnlockedIntels(data.unlockedIntels || []);
       setTotalHints(data.totalHints || 0);
+      setShowIntel(false); // Hide intel panel when new hint loads
     } catch (error) {
       console.error("Failed to fetch hint:", error);
     }
@@ -68,8 +93,52 @@ export default function Game() {
     const { data } = await axios.get("/game/state");
     setCurrentHintId(data.currentHintId);
     setCompletedHints(data.completedHints || []);
+    setUnlockedIntels(data.unlockedIntels || []);
     setPenalties(data.penalties);
     setTotalHints(data.totalHints || 0);
+  };
+
+  const unlockIntel = async () => {
+    if (unlockingIntel) return;
+
+    const isUnlocked = unlockedIntels.includes(currentHintId);
+
+    if (isUnlocked) {
+      setShowIntel(!showIntel);
+      return;
+    }
+
+    const confirmUnlock = window.confirm(
+      `Unlock Clue for this hint?\n\nCost: +2 Penalties\n\nOnce unlocked, you can view it anytime without additional cost.`
+    );
+
+    if (!confirmUnlock) return;
+
+    try {
+      setUnlockingIntel(true);
+      const { data } = await axios.post("/game/unlock-intel", {
+        hintId: currentHintId,
+      });
+
+      if (data.success) {
+        setUnlockedIntels(data.unlockedIntels);
+        setPenalties(data.penalties);
+        setShowIntel(true);
+        alert(
+          `✅ Clue Unlocked!\n\n+2 Penalties\n\nYou can now view this clue anytime.`
+        );
+      }
+    } catch (error) {
+      if (error.response?.data?.alreadyUnlocked) {
+        setShowIntel(true);
+      } else if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("Failed to unlock intel. Please try again.");
+      }
+    } finally {
+      setUnlockingIntel(false);
+    }
   };
 
   const fetchPins = async (lat, lng) => {
@@ -130,9 +199,7 @@ export default function Game() {
       }
     } catch (error) {
       if (error.response?.status === 403) {
-        const message =
-          error.response?.data?.message ||
-          "Maximum penalties reached! You cannot submit anymore.";
+        const message = error.response?.data?.message || "Action not allowed.";
         alert(`🚫 ${message}`);
       } else if (error.response?.status === 400) {
         alert(
@@ -171,34 +238,161 @@ export default function Game() {
         {/* Current Hint */}
         {hint ? (
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-2">
               <h3 className="text-lg font-bold text-brand-primary uppercase tracking-wider">
                 {hint.isFinalHint ? "🎯 Final Challenge" : `Current Hint`}
               </h3>
-              <span
-                className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-                  hint.isFinalHint
-                    ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
-                    : "bg-green-500/20 text-green-400 border border-green-500/50"
-                }`}
-              >
-                {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
-              </span>
-            </div>
-            {hint.imagePath ? (
-              <div className="relative group rounded-lg overflow-hidden border-2 border-brand-gray-700">
-                <AuthenticatedImage
-                  src={`/hints/${hint.imagePath}`}
-                  alt="Current Hint"
-                  className="w-full h-auto max-h-96 object-contain bg-brand-gray-900"
-                />
-                <button
-                  onClick={downloadHintImage}
-                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-brand-primary/90 hover:bg-brand-primary text-white rounded-lg p-3 shadow-lg hover:shadow-glow-pink hover:scale-110 active:scale-100"
-                  title="Download hint image"
+              <div className="flex items-center gap-2">
+                {/* Clue Button */}
+                {hint.intel && hint.intel.trim() !== "" && (
+                  <button
+                    onClick={unlockIntel}
+                    disabled={unlockingIntel}
+                    className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
+                      unlockedIntels.includes(currentHintId)
+                        ? showIntel
+                          ? "bg-blue-600 text-white border border-blue-500"
+                          : "bg-blue-500/20 text-blue-400 border border-blue-500/50 hover:bg-blue-500/30"
+                        : "bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/30 active:scale-95"
+                    }`}
+                    title={
+                      unlockedIntels.includes(currentHintId)
+                        ? showIntel
+                          ? "Hide Clue"
+                          : "Show Clue"
+                        : "Unlock Clue (Cost: 2 penalties)"
+                    }
+                  >
+                    {unlockingIntel ? (
+                      <span className="flex items-center gap-1">
+                        <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                      </span>
+                    ) : unlockedIntels.includes(currentHintId) ? (
+                      showIntel ? (
+                        "🔓 Hide Clue"
+                      ) : (
+                        "🔓 Show Clue"
+                      )
+                    ) : (
+                      "🔒 Clue (-2❌)"
+                    )}
+                  </button>
+                )}
+                <span
+                  className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
+                    hint.isFinalHint
+                      ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
+                      : "bg-green-500/20 text-green-400 border border-green-500/50"
+                  }`}
                 >
-                  <ArrowDownTrayIcon className="h-5 w-5" />
-                </button>
+                  {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
+                </span>
+              </div>
+            </div>
+
+            {/* Clue Display */}
+            {showIntel &&
+              unlockedIntels.includes(currentHintId) &&
+              hint.intel && (
+                <div className="mb-4 p-4 bg-blue-900/30 border-2 border-blue-500/50 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-400 text-lg">💡</span>
+                    <div className="flex-1">
+                      <h4 className="text-blue-400 font-bold text-sm uppercase mb-2">
+                        Clue:
+                      </h4>
+                      <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">
+                        {hint.intel}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {hint.images && hint.images.length > 0 ? (
+              <div className="relative">
+                {/* Image Container with Mobile-Optimized Carousel */}
+                <div className="relative rounded-lg overflow-hidden border-2 border-brand-gray-700 bg-brand-gray-900">
+                  <AuthenticatedImage
+                    src={`/hints/${hint.images[currentImageIndex]}`}
+                    alt={`Hint ${currentImageIndex + 1} of ${
+                      hint.images.length
+                    }`}
+                    className="w-full h-auto max-h-[70vh] object-contain"
+                  />
+
+                  {/* Download Button - Always visible on mobile */}
+                  <button
+                    onClick={downloadHintImage}
+                    className="absolute top-2 right-2 md:top-4 md:right-4 bg-brand-primary/90 hover:bg-brand-primary text-white rounded-lg p-2 md:p-3 shadow-lg hover:shadow-glow-pink active:scale-95 transition-all z-10"
+                    title="Download current image"
+                  >
+                    <ArrowDownTrayIcon className="h-4 w-4 md:h-5 md:w-5" />
+                  </button>
+
+                  {/* Navigation Arrows - Only show if multiple images */}
+                  {hint.images.length > 1 && (
+                    <>
+                      {/* Previous Button */}
+                      <button
+                        onClick={prevImage}
+                        disabled={currentImageIndex === 0}
+                        className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 md:p-3 rounded-full transition-all z-10 ${
+                          currentImageIndex === 0
+                            ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
+                            : "bg-black/70 hover:bg-black/90 text-white active:scale-95"
+                        }`}
+                        title="Previous image"
+                      >
+                        <ChevronLeftIcon className="h-6 w-6 md:h-8 md:w-8" />
+                      </button>
+
+                      {/* Next Button */}
+                      <button
+                        onClick={nextImage}
+                        disabled={currentImageIndex === hint.images.length - 1}
+                        className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 md:p-3 rounded-full transition-all z-10 ${
+                          currentImageIndex === hint.images.length - 1
+                            ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
+                            : "bg-black/70 hover:bg-black/90 text-white active:scale-95"
+                        }`}
+                        title="Next image"
+                      >
+                        <ChevronRightIcon className="h-6 w-6 md:h-8 md:w-8" />
+                      </button>
+
+                      {/* Image Counter */}
+                      <div className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-semibold">
+                        {currentImageIndex + 1} / {hint.images.length}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Thumbnail Strip - Mobile Optimized */}
+                {hint.images.length > 1 && (
+                  <div className="mt-3 md:mt-4">
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-brand-primary scrollbar-track-brand-gray-800">
+                      {hint.images.map((image, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentImageIndex(index)}
+                          className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                            index === currentImageIndex
+                              ? "border-brand-primary shadow-lg shadow-brand-primary/50 scale-105"
+                              : "border-brand-gray-700 hover:border-brand-gray-500 opacity-70 hover:opacity-100"
+                          }`}
+                        >
+                          <AuthenticatedImage
+                            src={`/hints/${image}`}
+                            alt={`Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-8 px-4 bg-brand-gray-900 rounded-lg border-2 border-brand-gray-700">
@@ -258,37 +452,13 @@ export default function Game() {
           <div className="flex flex-wrap gap-4">
             <div className="pixel-pill bg-brand-primary text-white flex-1 justify-center border-brand-primary">
               <span>Hints Completed:</span>
-              <span className="font-bold text-xl">
-                {completedHints.length}
-              </span>
+              <span className="font-bold text-xl">{completedHints.length}</span>
             </div>
-            <div
-              className={`pixel-pill text-white flex-1 justify-center ${
-                penalties >= 20
-                  ? "bg-red-600 border-red-600"
-                  : penalties >= 15
-                  ? "bg-orange-600 border-orange-600"
-                  : "bg-brand-gray-700 border-brand-gray-700"
-              }`}
-            >
+            <div className="pixel-pill bg-brand-gray-700 border-brand-gray-700 text-white flex-1 justify-center">
               <span>Penalties:</span>
               <span className="font-bold text-xl">{penalties}</span>
             </div>
           </div>
-          {penalties >= 20 && (
-            <div className="mt-4 p-3 bg-red-900/50 border-2 border-red-600 rounded-lg">
-              <p className="text-red-300 font-semibold text-sm text-center">
-                🚫 Maximum penalties reached! Cannot submit answers.
-              </p>
-            </div>
-          )}
-          {penalties >= 15 && penalties < 20 && (
-            <div className="mt-4 p-3 bg-orange-900/50 border-2 border-orange-600 rounded-lg">
-              <p className="text-orange-300 font-semibold text-sm text-center">
-                Warning: {20 - penalties} penalties remaining!
-              </p>
-            </div>
-          )}
         </div>
 
         <div className="pixel-card text-sm leading-relaxed">
@@ -298,7 +468,7 @@ export default function Game() {
           <ul className="space-y-3 text-gray-300">
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Read intel and triangulate the target zone.</span>
+              <span>Decode hints and unlock clues to find locations.</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
@@ -306,7 +476,7 @@ export default function Game() {
             </li>
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Correct hits boost score, misses add penalties.</span>
+              <span>Correct answers advance, wrong ones add penalties.</span>
             </li>
           </ul>
         </div>

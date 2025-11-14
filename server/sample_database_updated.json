@@ -1,0 +1,176 @@
+{
+  "pins": [
+    {
+      "pin_id": "library",
+      "name": "Central Library",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5946, 12.9716]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "auditorium",
+      "name": "Main Auditorium",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5950, 12.9720]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "cafeteria",
+      "name": "Campus Cafeteria",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5955, 12.9725]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "student_center",
+      "name": "Student Activity Center",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5960, 12.9730]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "lab_building",
+      "name": "Science Lab Building",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5965, 12.9735]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "sports_complex",
+      "name": "Sports Complex",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5970, 12.9740]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "admin_block",
+      "name": "Administration Block",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5975, 12.9745]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "hostel",
+      "name": "Student Hostel",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5980, 12.9750]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "garden",
+      "name": "Botanical Garden",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5985, 12.9755]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "fake_location_1",
+      "name": "Parking Lot A",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5940, 12.9710]
+      },
+      "unlocksHintId": null
+    },
+    {
+      "pin_id": "fake_location_2",
+      "name": "Gate 3",
+      "location": {
+        "type": "Point",
+        "coordinates": [77.5990, 12.9760]
+      },
+      "unlocksHintId": null
+    }
+  ],
+  "hints": [
+    {
+      "hint_id": 1,
+      "folderName": "hint1",
+      "intel": "The structure has a dome-shaped roof and is surrounded by green lawns.",
+      "correctPins": ["library"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 2,
+      "folderName": "hint2",
+      "intel": "Look for a building with large glass windows and multiple entrance doors.",
+      "correctPins": ["library", "auditorium"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 3,
+      "folderName": "hint3",
+      "intel": "This location has outdoor seating and you can smell food from a distance.",
+      "correctPins": ["student_center", "cafeteria"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 4,
+      "folderName": "hint4",
+      "intel": "The building has multiple floors with laboratory equipment visible through windows.",
+      "correctPins": ["lab_building"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 5,
+      "folderName": "hint5",
+      "intel": "You'll find basketball courts and a running track near this location.",
+      "correctPins": ["sports_complex"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 6,
+      "folderName": "hint6",
+      "intel": "The main entrance has a large logo and official notice boards.",
+      "correctPins": ["admin_block"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 7,
+      "folderName": "hint7",
+      "intel": "A multi-story residential building with balconies and laundry hanging outside.",
+      "correctPins": ["hostel"],
+      "isFinalHint": false
+    },
+    {
+      "hint_id": 8,
+      "folderName": "final_hint",
+      "intel": "The final location is hidden in plain sight - check where your journey began.",
+      "correctPins": ["garden"],
+      "isFinalHint": true
+    }
+  ],
+  "folder_structure": {
+    "description": "Create folders inside server/public/hints/ with the following structure",
+    "example": "server/public/hints/hint1/image1.jpg, server/public/hints/hint1/image2.jpg, etc.",
+    "folders": [
+      "hint1/",
+      "hint2/",
+      "hint3/",
+      "hint4/",
+      "hint5/",
+      "hint6/",
+      "hint7/",
+      "final_hint/"
+    ],
+    "note": "Put multiple images (jpg, png, gif, webp) in each folder. They will be automatically sorted alphabetically. Need 7 unique locations to unlock final hint."
+  }
+}
