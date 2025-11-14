@@ -478,7 +478,7 @@ export default function Game() {
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
               <span>
-                Refresh the map continually (or website) to ensure accurate geolocation.
+                Refresh the map (or website) continually to ensure accurate geolocation.
               </span>
             </li>
             <li className="flex items-start gap-3">
