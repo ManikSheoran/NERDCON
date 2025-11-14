@@ -125,7 +125,7 @@ export default function Game() {
         setPenalties(data.penalties);
         setShowIntel(true);
         alert(
-          `✅ Clue Unlocked!\n\n+2 Penalties\n\nYou can now view this clue anytime.`
+          `Clue Unlocked!\n\n+2 Penalties\n\nYou can now view this clue anytime.`
         );
       }
     } catch (error) {
@@ -296,7 +296,6 @@ export default function Game() {
               hint.intel && (
                 <div className="mb-4 p-4 bg-blue-900/30 border-2 border-blue-500/50 rounded-lg">
                   <div className="flex items-start gap-2">
-                    <span className="text-blue-400 text-lg">💡</span>
                     <div className="flex-1">
                       <h4 className="text-blue-400 font-bold text-sm uppercase mb-2">
                         Clue:
