@@ -253,7 +253,7 @@ export default function Game() {
                         ? showIntel
                           ? "bg-blue-600 text-white border border-blue-500"
                           : "bg-blue-500/20 text-blue-400 border border-blue-500/50 hover:bg-blue-500/30"
-                        : "bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/30 active:scale-95"
+                        : "bg-brand-primary/20 text-brand-primary border border-brand-primary/50 hover:bg-brand-primary/30 active:scale-95"
                     }`}
                     title={
                       unlockedIntels.includes(currentHintId)
@@ -274,7 +274,7 @@ export default function Game() {
                         "🔓 Show Clue"
                       )
                     ) : (
-                      "🔒 Clue (-2❌)"
+                      "🔒 Clue"
                     )}
                   </button>
                 )}
@@ -478,7 +478,8 @@ export default function Game() {
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
               <span>
-                Refresh the map (or website) continually to ensure accurate geolocation.
+                Refresh the map (or website) continually to ensure accurate
+                geolocation.
               </span>
             </li>
             <li className="flex items-start gap-3">
