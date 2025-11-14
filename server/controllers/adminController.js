@@ -17,6 +17,7 @@ const getTeamsData = async (req, res) => {
 
     const teamsData = teams.map(team => {
       const completedHintIds = team.gameState?.completedHints || [];
+      const hintTimestamps = team.gameState?.hintTimestamps || [];
       
       // Create array of 1s and 0s for each hint (1 = completed, 0 = not completed)
       const hintCompletionStatus = hints.map(hint => 
@@ -29,6 +30,7 @@ const getTeamsData = async (req, res) => {
         hintsCompleted: completedHintIds.length,
         penalties: team.gameState?.penalties || 0,
         hintCompletion: hintCompletionStatus,
+        hintTimestamps: hintTimestamps,
         lastSubmission: team.gameState?.lastHintSubmittedAt 
           ? new Date(team.gameState.lastHintSubmittedAt).toLocaleString()
           : null,
@@ -56,25 +58,34 @@ const getTeamsCSV = async (req, res) => {
     // Fetch all hints to get hint names
     const hints = await Hint.find({}).sort({ hint_id: 1 }).lean();
 
-    // Create CSV header
+    // Create CSV header with timing columns
     const hintColumns = hints.map((h, i) => `Hint ${i + 1}`);
+    const timingColumns = hints.map((h, i) => `Hint ${i + 1} Time (s)`);
     const csvHeader = [
       'Team Name',
       'Current Hint',
       'Hints Completed',
       'Penalties',
       'Last Submission',
-      ...hintColumns
+      ...hintColumns,
+      ...timingColumns
     ].join(',');
 
     // Create CSV rows
     const csvRows = teams.map(team => {
       const completedHintIds = team.gameState?.completedHints || [];
+      const hintTimestamps = team.gameState?.hintTimestamps || [];
       
       // Mark which hints are completed (1 = completed, 0 = not completed)
       const hintStatus = hints.map(hint => 
         completedHintIds.includes(hint.hint_id) ? '1' : '0'
       );
+
+      // Get time taken for each hint
+      const hintTimes = hints.map(hint => {
+        const timestamp = hintTimestamps.find(ts => ts.hintId === hint.hint_id);
+        return timestamp ? timestamp.timeTaken.toString() : 'N/A';
+      });
 
       return [
         `"${team.name}"`,
@@ -88,7 +99,8 @@ const getTeamsCSV = async (req, res) => {
               second: '2-digit' 
             })
           : 'N/A',
-        ...hintStatus
+        ...hintStatus,
+        ...hintTimes
       ].join(',');
     });
 

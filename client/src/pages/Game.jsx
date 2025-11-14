@@ -467,15 +467,44 @@ export default function Game() {
           <ul className="space-y-3 text-gray-300">
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Decode hints and unlock clues to find locations.</span>
+              <span>One player (team leader) login per group.</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Move in real world & tap a pin to submit.</span>
+              <span>
+                Use of vehicles is prohibited; if you do use them, we'll know.
+              </span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Correct answers advance, wrong ones add penalties.</span>
+              <span>
+                Refresh the map continually (or website) to ensure accurate geolocation.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
+              <span>
+                Download all clues for offline access. (By tapping the image and
+                clicking the download icon)
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
+              <span>
+                Journal clues have 2 valid answers; black background clues have
+                1.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
+              <span>Locations and clues will repeat. Loops are by design.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-brand-primary mt-1 font-bold">▸</span>
+              <span>
+                +1 for each hint solved, +1 penalty for wrong answer. Ranked by
+                hints completed, penalties, then time.
+              </span>
             </li>
           </ul>
         </div>

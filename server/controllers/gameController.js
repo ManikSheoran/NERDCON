@@ -146,6 +146,20 @@ const submitAnswer = async (req, res) => {
   // Only increment completed hints if this is a new location
   if (!alreadyVisited) {
     team.gameState.completedHints.push(currentHint.hint_id);
+    
+    // Track timestamp for this hint
+    team.gameState.hintTimestamps = team.gameState.hintTimestamps || [];
+    const previousHint = team.gameState.hintTimestamps[team.gameState.hintTimestamps.length - 1];
+    const currentTime = new Date();
+    const timeTaken = previousHint 
+      ? Math.floor((currentTime - new Date(previousHint.solvedAt)) / 1000) // seconds since last hint
+      : 0;
+    
+    team.gameState.hintTimestamps.push({
+      hintId: currentHint.hint_id,
+      solvedAt: currentTime,
+      timeTaken: timeTaken
+    });
   }
   
   team.gameState.lastHintSubmittedAt = new Date();

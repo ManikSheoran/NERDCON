@@ -39,6 +39,7 @@ const register = async (req, res) => {
         completedHints: [],
         visitedLocations: [],
         unlockedIntels: [],
+        hintTimestamps: [],
         penalties: 0
       }
     });

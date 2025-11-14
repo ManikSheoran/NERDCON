@@ -5,6 +5,7 @@ export default function AdminPage() {
   const [teams, setTeams] = useState([]);
   const [totalHints, setTotalHints] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [expandedTeam, setExpandedTeam] = useState(null);
 
   useEffect(() => {
     fetchTeamsData();
@@ -160,70 +161,155 @@ export default function AdminPage() {
                       <th className="px-3 py-3 text-brand-primary font-bold bg-brand-gray-800">
                         Last Submission
                       </th>
+                      <th className="px-3 py-3 text-brand-primary font-bold bg-brand-gray-800 text-center">
+                        Timing
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {teams.map((team, index) => (
-                      <tr
-                        key={team.name}
-                        className="border-b border-brand-gray-700 hover:bg-brand-gray-700/50 transition-colors"
-                      >
-                        <td className="px-3 py-3 text-gray-300 font-bold sticky left-0 bg-brand-gray-800">
-                          {index === 0
-                            ? "🥇"
-                            : index === 1
-                            ? "🥈"
-                            : index === 2
-                            ? "🥉"
-                            : `#${index + 1}`}
-                        </td>
-                        <td className="px-3 py-3 text-gray-100 font-semibold sticky left-14 bg-brand-gray-800">
-                          {team.name}
-                        </td>
-                        <td className="px-3 py-3 text-center">
-                          <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded font-bold text-sm">
-                            {team.hintsCompleted || 0}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3 text-center">
-                          <span
-                            className={`px-2 py-1 rounded font-bold text-sm ${
-                              team.penalties >= 20
-                                ? "bg-red-500/20 text-red-400"
-                                : team.penalties >= 15
-                                ? "bg-orange-500/20 text-orange-400"
-                                : "bg-gray-500/20 text-gray-400"
-                            }`}
-                          >
-                            {team.penalties}
-                          </span>
-                        </td>
-                        {team.hintCompletion?.map((status, hintIndex) => (
-                          <td key={hintIndex} className="px-3 py-3 text-center">
-                            <span
-                              className={`font-bold text-lg ${
-                                status === 1
-                                  ? "text-green-400"
-                                  : "text-gray-600"
-                              }`}
-                            >
-                              {status}
+                      <>
+                        <tr
+                          key={team.name}
+                          className="border-b border-brand-gray-700 hover:bg-brand-gray-700/50 transition-colors"
+                        >
+                          <td className="px-3 py-3 text-gray-300 font-bold sticky left-0 bg-brand-gray-800">
+                            {index === 0
+                              ? "🥇"
+                              : index === 1
+                              ? "🥈"
+                              : index === 2
+                              ? "🥉"
+                              : `#${index + 1}`}
+                          </td>
+                          <td className="px-3 py-3 text-gray-100 font-semibold sticky left-14 bg-brand-gray-800">
+                            {team.name}
+                          </td>
+                          <td className="px-3 py-3 text-center">
+                            <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded font-bold text-sm">
+                              {team.hintsCompleted || 0}
                             </span>
                           </td>
-                        ))}
-                        <td className="px-3 py-3 text-gray-400 text-xs whitespace-nowrap">
-                          {team.lastSubmission
-                            ? new Date(team.lastSubmission).toLocaleTimeString(
-                                "en-IN",
-                                {
+                          <td className="px-3 py-3 text-center">
+                            <span
+                              className={`px-2 py-1 rounded font-bold text-sm ${
+                                team.penalties >= 20
+                                  ? "bg-red-500/20 text-red-400"
+                                  : team.penalties >= 15
+                                  ? "bg-orange-500/20 text-orange-400"
+                                  : "bg-gray-500/20 text-gray-400"
+                              }`}
+                            >
+                              {team.penalties}
+                            </span>
+                          </td>
+                          {team.hintCompletion?.map((status, hintIndex) => (
+                            <td
+                              key={hintIndex}
+                              className="px-3 py-3 text-center"
+                            >
+                              <span
+                                className={`font-bold text-lg ${
+                                  status === 1
+                                    ? "text-green-400"
+                                    : "text-gray-600"
+                                }`}
+                              >
+                                {status}
+                              </span>
+                            </td>
+                          ))}
+                          <td className="px-3 py-3 text-gray-400 text-xs whitespace-nowrap">
+                            {team.lastSubmission
+                              ? new Date(
+                                  team.lastSubmission
+                                ).toLocaleTimeString("en-IN", {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                   second: "2-digit",
-                                }
-                              )
-                            : "N/A"}
-                        </td>
-                      </tr>
+                                })
+                              : "N/A"}
+                          </td>
+                          <td className="px-3 py-3 text-center">
+                            <button
+                              onClick={() =>
+                                setExpandedTeam(
+                                  expandedTeam === team.name ? null : team.name
+                                )
+                              }
+                              className="text-brand-primary hover:text-brand-secondary text-xl font-bold"
+                            >
+                              {expandedTeam === team.name ? "▼" : "▶"}
+                            </button>
+                          </td>
+                        </tr>
+                        {expandedTeam === team.name && (
+                          <tr className="bg-brand-gray-900 border-b border-brand-gray-700">
+                            <td colSpan={totalHints + 6} className="px-6 py-4">
+                              <div className="text-gray-300">
+                                <h3 className="font-bold text-brand-primary mb-3 flex items-center gap-2">
+                                  ⏱️ Timing Data - {team.name}
+                                </h3>
+                                {team.hintTimestamps &&
+                                team.hintTimestamps.length > 0 ? (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                    {team.hintTimestamps.map((ts, idx) => {
+                                      const minutes = Math.floor(
+                                        ts.timeTaken / 60
+                                      );
+                                      const seconds = ts.timeTaken % 60;
+                                      const isFast =
+                                        ts.timeTaken > 0 && ts.timeTaken < 120;
+
+                                      return (
+                                        <div
+                                          key={idx}
+                                          className={`p-3 rounded border ${
+                                            isFast
+                                              ? "bg-yellow-500/10 border-yellow-500/50"
+                                              : "bg-brand-gray-800 border-brand-gray-700"
+                                          }`}
+                                        >
+                                          <div className="flex items-center justify-between mb-1">
+                                            <span className="font-bold text-brand-primary">
+                                              Hint {ts.hintId}
+                                            </span>
+                                            {isFast && (
+                                              <span className="text-yellow-400 text-xs font-bold">
+                                                ⚠️ FAST
+                                              </span>
+                                            )}
+                                          </div>
+                                          <div className="text-sm text-gray-400">
+                                            Time taken:{" "}
+                                            <span className="text-gray-200 font-semibold">
+                                              {minutes > 0 && `${minutes}m `}
+                                              {seconds}s
+                                            </span>
+                                          </div>
+                                          <div className="text-xs text-gray-500 mt-1">
+                                            Solved:{" "}
+                                            {new Date(
+                                              ts.solvedAt
+                                            ).toLocaleTimeString("en-IN", {
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                            })}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  <p className="text-gray-500 italic">
+                                    No timing data available yet
+                                  </p>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </>
                     ))}
                   </tbody>
                 </table>
