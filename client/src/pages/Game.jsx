@@ -278,13 +278,7 @@ export default function Game() {
                     )}
                   </button>
                 )}
-                <span
-                  className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-                    hint.isFinalHint
-                      ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50"
-                      : "bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/50"
-                  }`}
-                >
+                <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-yellow-500/20 text-yellow-400 border border-yellow-500/50">
                   {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
                 </span>
               </div>
