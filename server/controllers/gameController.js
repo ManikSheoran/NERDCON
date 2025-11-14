@@ -87,7 +87,7 @@ const submitAnswer = async (req, res) => {
   const team = req.user;
   const Team = require('../models/Team.js');
   
-  if (team.gameState.visitedLocations.length >= 7) {
+  if (team.gameState.visitedLocations.length >= 6) {
     return res.status(403).json({ 
       message: "All locations already visited. Game completed.", 
       visitedLocations: team.gameState.visitedLocations 
@@ -178,7 +178,7 @@ const submitAnswer = async (req, res) => {
     });
   }
   
-  if (team.gameState.visitedLocations.length >= 7) {
+  if (team.gameState.visitedLocations.length >= 6) {
     const finalHint = await Hint.findOne({ isFinalHint: true });
     if (finalHint) {
       team.gameState.currentHintId = finalHint.hint_id;
@@ -188,7 +188,7 @@ const submitAnswer = async (req, res) => {
         success: true,
         message: alreadyVisited 
           ? `✅ Correct! You already visited this location. Final hint unlocked!`
-          : `🎯 Amazing! 7 unique locations found! Final hint unlocked!`,
+          : `🎯 Amazing! 6 unique locations found! Final hint unlocked!`,
         penalties: team.gameState.penalties,
         currentHintId: finalHint.hint_id,
         completedHints: team.gameState.completedHints,
@@ -209,8 +209,8 @@ const submitAnswer = async (req, res) => {
     return res.json({
       success: true,
       message: alreadyVisited
-        ? `✅ Correct! You already visited this location. ${7 - team.gameState.visitedLocations.length} more unique locations needed.`
-        : `✅ Correct! ${7 - team.gameState.visitedLocations.length} more unique locations to unlock final hint.`,
+        ? `✅ Correct! You already visited this location. ${6 - team.gameState.visitedLocations.length} more unique locations needed.`
+        : `✅ Correct! ${6 - team.gameState.visitedLocations.length} more unique locations to unlock final hint.`,
       penalties: team.gameState.penalties,
       currentHintId: team.gameState.currentHintId,
       completedHints: team.gameState.completedHints,
