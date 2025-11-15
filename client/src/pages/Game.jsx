@@ -504,7 +504,7 @@ export default function Game() {
               <li className="flex items-start gap-3">
                 <span className="text-brand-primary mt-1 font-bold">▸</span>
                 <span>
-                  Scoring: +1 per correct hint, –1 per wrong answer. Ranking is
+                  Scoring: +1 per correct clue submission, 1 penalty per wrong answer. Ranking is
                   based on hints solved, penalties, then time.
                 </span>
               </li>
