@@ -19,7 +19,7 @@ function App() {
           <Navbar />
           <main className="mt-12 flex-1">
             <Routes>
-              {new Date() > new Date("2025-11-15T17:00:00Z") ? (
+              {new Date() > new Date("2025-11-15T16:00:00Z") ? (
                 <>
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route
