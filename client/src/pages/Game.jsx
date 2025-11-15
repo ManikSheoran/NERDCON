@@ -109,7 +109,7 @@ export default function Game() {
     }
 
     const confirmUnlock = window.confirm(
-      `Unlock Clue for this hint?\n\nCost: +2 Penalties\n\nOnce unlocked, you can view it anytime without additional cost.`
+      `Unlock hint for this Clue?\n\nCost: +2 Penalties\n\nOnce unlocked, you can view it anytime without additional cost.`
     );
 
     if (!confirmUnlock) return;
@@ -125,7 +125,7 @@ export default function Game() {
         setPenalties(data.penalties);
         setShowIntel(true);
         alert(
-          `Clue Unlocked!\n\n+2 Penalties\n\nYou can now view this clue anytime.`
+          `Hint Unlocked!\n\n+2 Penalties\n\nYou can now view this hint anytime.`
         );
       }
     } catch (error) {
@@ -134,7 +134,7 @@ export default function Game() {
       } else if (error.response?.data?.message) {
         alert(error.response.data.message);
       } else {
-        alert("Failed to unlock intel. Please try again.");
+        alert("Failed to unlock hint. Please try again.");
       }
     } finally {
       setUnlockingIntel(false);
@@ -240,7 +240,7 @@ export default function Game() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4 gap-2">
               <h3 className="text-lg font-bold text-brand-primary uppercase tracking-wider">
-                {hint.isFinalHint ? "🎯 Final Challenge" : `Current Hint`}
+                {hint.isFinalHint ? "🎯 Final Challenge" : `Current Clue`}
               </h3>
               <div className="flex items-center gap-2">
                 {/* Clue Button */}
@@ -251,16 +251,16 @@ export default function Game() {
                     className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all ${
                       unlockedIntels.includes(currentHintId)
                         ? showIntel
-                          ? "bg-blue-600 text-white border border-blue-500"
-                          : "bg-blue-500/20 text-blue-400 border border-blue-500/50 hover:bg-blue-500/30"
+                          ? "bg-yellow-600 text-white border border-yellow-500"
+                          : "bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 hover:bg-yellow-500/30"
                         : "bg-brand-primary/20 text-brand-primary border border-brand-primary/50 hover:bg-brand-primary/30 active:scale-95"
                     }`}
                     title={
                       unlockedIntels.includes(currentHintId)
                         ? showIntel
-                          ? "Hide Clue"
-                          : "Show Clue"
-                        : "Unlock Clue (Cost: 2 penalties)"
+                          ? "Hide Hint"
+                          : "Show Hint"
+                        : "Unlock Hint (Cost: 2 penalties)"
                     }
                   >
                     {unlockingIntel ? (
@@ -269,17 +269,17 @@ export default function Game() {
                       </span>
                     ) : unlockedIntels.includes(currentHintId) ? (
                       showIntel ? (
-                        "🔓 Hide Clue"
+                        "🔓 Hide Hint"
                       ) : (
-                        "🔓 Show Clue"
+                        "🔓 Show Hint"
                       )
                     ) : (
-                      "🔒 Clue"
+                      "🔒 Hint"
                     )}
                   </button>
                 )}
                 <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-yellow-500/20 text-yellow-400 border border-yellow-500/50">
-                  {hint.isFinalHint ? "Final" : `Hint ${currentHintId}`}
+                  {hint.isFinalHint ? "Final" : `Clue ${currentHintId}`}
                 </span>
               </div>
             </div>
@@ -288,11 +288,11 @@ export default function Game() {
             {showIntel &&
               unlockedIntels.includes(currentHintId) &&
               hint.intel && (
-                <div className="mb-4 p-4 bg-blue-900/30 border-2 border-blue-500/50 rounded-lg">
+                <div className="mb-4 p-4 bg-yellow-900/30 border-2 border-yellow-500/50 rounded-lg">
                   <div className="flex items-start gap-2">
                     <div className="flex-1">
-                      <h4 className="text-blue-400 font-bold text-sm uppercase mb-2">
-                        Clue:
+                      <h4 className="text-yellow-400 font-bold text-sm uppercase mb-2">
+                        Hint:
                       </h4>
                       <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">
                         {hint.intel}

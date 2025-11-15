@@ -28,7 +28,7 @@ export default function Leaderboard() {
               <tr className="font-pixel text-[0.7rem] uppercase tracking-[0.3em] text-brand-primary">
                 <th className="px-6 py-5 text-left">Rank</th>
                 <th className="px-6 py-5 text-left">Team</th>
-                <th className="px-6 py-5 text-left">Hints Completed</th>
+                <th className="px-6 py-5 text-left">Clues Completed</th>
                 <th className="px-6 py-5 text-left">Penalties</th>
                 <th className="px-6 py-5 text-left">Last Submission</th>
               </tr>

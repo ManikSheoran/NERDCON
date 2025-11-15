@@ -91,7 +91,7 @@ export default function AdminPage() {
             </h2>
             <p className="text-gray-300 mb-6">
               Download a CSV file containing all teams' progress, scores, and
-              completed hints.
+              completed clues.
             </p>
 
             <button
@@ -145,7 +145,7 @@ export default function AdminPage() {
                         Team
                       </th>
                       <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
-                        Hints Done
+                        Clues Done
                       </th>
                       <th className="px-3 py-3 text-brand-primary font-bold text-center bg-brand-gray-800">
                         Penalties
@@ -272,7 +272,7 @@ export default function AdminPage() {
                                         >
                                           <div className="flex items-center justify-between mb-1">
                                             <span className="font-bold text-brand-primary">
-                                              Hint {ts.hintId}
+                                              Clue {ts.hintId}
                                             </span>
                                             {isFast && (
                                               <span className="text-yellow-400 text-xs font-bold">
