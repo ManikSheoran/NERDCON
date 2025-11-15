@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const QUEST_START = new Date("2025-11-15T12:30:00Z");
+const QUEST_START = new Date("2025-11-15T12:00:00Z");
 const QUEST_END = new Date("2025-11-15T15:30:00Z");
 
 const clampRemaining = (milliseconds) => (milliseconds > 0 ? milliseconds : 0);

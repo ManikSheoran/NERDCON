@@ -13,6 +13,13 @@ const haversineMeters = (lat1, lon1, lat2, lon2) => {
 };
 
 const getHint = async (req, res) => {
+     const now = new Date();
+ const eventStart = new Date("2025-11-15T12:30:00Z");
+ if (now < eventStart) {
+   return res.status(403).json({ message: "Quest has not started yet!" });
+ }
+
+
   const team = req.user;
   const fs = require('fs').promises;
   const path = require('path');
@@ -83,7 +90,13 @@ const getNearbyPins = async (req, res) => {
 };
 
 const submitAnswer = async (req, res) => {
-  const { pinId, lat, lng } = req.body; // pinId is now custom string like "parade_ground"
+     const now = new Date();
+ const eventStart = new Date("2025-11-15T12:30:00Z");
+ if (now < eventStart) {
+   return res.status(403).json({ message: "Quest has not started yet!" });
+ }
+
+  const { pinId, lat, lng } = req.body; 
   const team = req.user;
   const Team = require('../models/Team.js');
   
