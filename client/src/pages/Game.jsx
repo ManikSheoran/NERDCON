@@ -458,50 +458,106 @@ export default function Game() {
           <h3 className="font-pixel text-lg uppercase tracking-[0.3em] text-brand-primary mb-6">
             Mission Brief
           </h3>
-          <ul className="space-y-3 text-gray-300">
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>One player (team leader) login per group.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>
-                Use of vehicles is prohibited; if you do use them, we'll know.
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>
-                Refresh the map (or website) continually to ensure accurate
-                geolocation.
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>
-                Download all clues for offline access. (By tapping the image and
-                clicking the download icon)
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>
-                Journal clues have 2 valid answers; black background clues have
-                1.
-              </span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>Locations and clues will repeat. Loops are by design.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-brand-primary mt-1 font-bold">▸</span>
-              <span>
-                +1 for each hint solved, +1 penalty for wrong answer. Ranked by
-                hints completed, penalties, then time.
-              </span>
-            </li>
-          </ul>
+
+          {/* Game Rules Section */}
+          <div className="mb-6">
+            <h4 className="text-brand-secondary font-bold text-base mb-3">
+              Game Rules
+            </h4>
+            <ul className="space-y-3 text-gray-300">
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>Only the team leader should log in.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Vehicles are not allowed—violations will be detected.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Refresh the map/website regularly for accurate geolocation.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Download all clues for offline access (tap image → download
+                  icon).
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Journal clues have 2 valid answers; black-background clues
+                  have 1.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Locations and clues may repeat—loops are intentional.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  Scoring: +1 per correct hint, –1 per wrong answer. Ranking is
+                  based on hints solved, penalties, then time.
+                </span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-brand-primary mt-1 font-bold">▸</span>
+                <span>
+                  If you face any issue during the game, send your team name and
+                  contact number in the Treasure Hunt WhatsApp group.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* How to Play Section */}
+          <div>
+            <h4 className="text-brand-secondary font-bold text-base mb-3">
+              How to Play
+            </h4>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <p className="font-semibold text-brand-primary mb-2">
+                  1. Map & Pin Visibility
+                </p>
+                <p className="ml-4">
+                  Only pins within 85 meters of your current position will
+                  appear on the map.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-brand-primary mb-2">
+                  2. Finding a Location
+                </p>
+                <ul className="ml-4 space-y-1">
+                  <li>• Move physically close to the suspected location.</li>
+                  <li>
+                    • Reload the webpage after reaching the spot to reveal its
+                    pin.
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-brand-primary mb-2">
+                  3. Submitting a Location
+                </p>
+                <ul className="ml-4 space-y-1">
+                  <li>• Tap the visible pin → Submit.</li>
+                  <li>
+                    • If correct, the next set of clues unlocks immediately.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
