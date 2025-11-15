@@ -83,6 +83,12 @@ const getNearbyPins = async (req, res) => {
 };
 
 const submitAnswer = async (req, res) => {
+     const now = new Date();
+ const eventEnd = new Date("2025-11-15T15:30:00Z");
+ if (now > eventEnd) {
+   return res.status(403).json({ message: "Quest has ended!" });
+ }
+
   const { pinId, lat, lng } = req.body; 
   const team = req.user;
   const Team = require('../models/Team.js');
