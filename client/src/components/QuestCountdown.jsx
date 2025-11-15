@@ -105,7 +105,7 @@ export default function QuestCountdown({ variant = "card" }) {
         </div>
       )}
       <p className="mt-6 text-xs text-nerd-dark/60 tracking-wider">
-        Kickoff 16 Nov 2025 · 6:00 PM IST · Closing 8:00 PM IST
+        Kickoff 16 Nov 2025 · 6:00 PM IST
       </p>
     </section>
   );
