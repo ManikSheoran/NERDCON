@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const QUEST_START = new Date("2025-11-15T12:00:00Z");
+const QUEST_START = new Date("2025-11-15T12:30:00Z");
 const QUEST_END = new Date("2025-11-15T15:30:00Z");
 
 const clampRemaining = (milliseconds) => (milliseconds > 0 ? milliseconds : 0);
@@ -81,7 +81,7 @@ export default function QuestCountdown({ variant = "card" }) {
           </span>
         )}
         <span className="text-[0.6rem] tracking-[0.3em] text-nerd-dark/60 uppercase">
-          Kickoff 15 Nov 2025 · 5:30 PM IST
+          Kickoff 15 Nov 2025 · 6:00 PM IST
         </span>
       </div>
     );
